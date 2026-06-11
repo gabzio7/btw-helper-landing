@@ -22,7 +22,7 @@ function initField() {
   camera.position.z = 60;
 
   // Instanced points with a lightweight custom shader — no geometry to speak of.
-  const COUNT = 1100;
+  const COUNT = 700;
   const positions = new Float32Array(COUNT * 3);
   const seeds = new Float32Array(COUNT);
   for (let i = 0; i < COUNT; i++) {

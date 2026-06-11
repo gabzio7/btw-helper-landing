@@ -593,11 +593,11 @@ h3 {
   border-top: 1px solid rgba(255,255,255,.1);
   padding-top: 20px;
   font-size: 12px;
-  color: rgba(255,255,255,.45);
+  color: rgba(255,255,255,.66);
 }
 .footer-fine p { margin-bottom: 10px; max-width: 100ch; }
-.footer-fine strong { color: rgba(255,255,255,.7); }
-.fine-line { color: rgba(255,255,255,.4); }
+.footer-fine strong { color: rgba(255,255,255,.88); }
+.fine-line { color: rgba(255,255,255,.66); }
 
 /* ---------------------------------------------------------------- toast */
 .toast {
