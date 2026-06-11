@@ -34,7 +34,8 @@
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
+/* anchor scrolling is driven by GSAP ScrollToPlugin (main.js) */
+section, footer { scroll-margin-top: 76px; }
 body {
   background: var(--paper);
   color: var(--ink);
@@ -244,16 +245,20 @@ h3 {
   height: 100%;
   z-index: 0;
 }
-/* static gradient fallback behind/instead of the canvas (reduced motion) */
-.hero::before {
-  content: "";
+/* gradient layer — GSAP shifts it as you scroll into the Pain section;
+   doubles as the static fallback under reduced motion */
+.hero-glow {
   position: absolute;
-  inset: 0;
+  inset: -10% 0;
   background:
-    radial-gradient(ellipse 60% 50% at 75% 20%, rgba(91,91,240,.22), transparent 70%),
-    radial-gradient(ellipse 50% 45% at 15% 85%, rgba(167,139,250,.12), transparent 70%);
+    radial-gradient(ellipse 60% 50% at 75% 20%, rgba(91,91,240,.26), transparent 70%),
+    radial-gradient(ellipse 50% 45% at 15% 85%, rgba(167,139,250,.14), transparent 70%);
   pointer-events: none;
+  will-change: transform, opacity, filter;
 }
+/* headline split units (hero.js) */
+.hero h1 .word { display: inline-block; white-space: nowrap; }
+.hero h1 .char { display: inline-block; will-change: transform; }
 .hero-inner {
   position: relative;
   z-index: 1;
@@ -332,6 +337,7 @@ h3 {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 18px;
+  perspective: 1000px; /* depth for the 3D card slide-ins */
 }
 .card {
   background: #fff;
@@ -359,6 +365,25 @@ h3 {
 }
 
 /* ---------------------------------------------------------------- steps */
+.steps-wrap { position: relative; padding-top: 26px; }
+.steps-line {
+  position: absolute;
+  top: 0; left: 6px; right: 6px;
+  height: 2px;
+  background: rgba(91,91,240,.14);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.steps-line i {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, var(--indigo), var(--violet));
+  transform: scaleX(0);
+  transform-origin: left center;
+}
+@media (max-width: 920px) { .steps-line { display: none; } }
+@media (prefers-reduced-motion: reduce) { .steps-line i { transform: none; } }
+
 .steps {
   list-style: none;
   display: grid;
@@ -396,7 +421,24 @@ h3 {
 }
 .invoice-card {
   padding: 28px;
+  position: relative;
+  overflow: hidden;
   transition: transform .25s, border-color .25s, box-shadow .25s;
+}
+/* scan-line that sweeps the card on hover */
+.invoice-card::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; top: -45%;
+  height: 36%;
+  background: linear-gradient(180deg,
+    transparent,
+    rgba(167,139,250,.07) 30%,
+    rgba(167,139,250,.20) 50%,
+    rgba(167,139,250,.07) 70%,
+    transparent);
+  opacity: 0;
+  pointer-events: none;
 }
 @media (prefers-reduced-motion: no-preference) {
   .invoice-card:hover {
@@ -404,6 +446,16 @@ h3 {
     border-color: rgba(167,139,250,.4);
     box-shadow: 0 24px 60px -24px rgba(91,91,240,.45);
   }
+  .invoice-card:hover::after { opacity: 1; animation: scan 1.7s linear infinite; }
+  .invoice-card:hover .invoice-flag { animation: flag-pulse 1.3s ease-in-out infinite; }
+}
+@keyframes scan {
+  from { transform: translateY(0); }
+  to   { transform: translateY(420%); }
+}
+@keyframes flag-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(167,139,250,.45); }
+  50%      { box-shadow: 0 0 0 7px rgba(167,139,250,0); }
 }
 .invoice-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; margin-bottom: 6px; }
 .invoice-vendor { font-family: var(--font-display); font-weight: 600; font-size: 19px; color: #fff; }
@@ -463,6 +515,14 @@ h3 {
   font-size: 15px;
   background: var(--paper-2);
 }
+/* highlight sweep painted per-row, position animated by GSAP */
+.compare-table tbody tr {
+  background-image: linear-gradient(100deg,
+    transparent 15%, rgba(91,91,240,.14) 50%, transparent 85%);
+  background-size: 55% 100%;
+  background-repeat: no-repeat;
+  background-position: -150% 0;
+}
 .compare-table tbody th {
   font-family: var(--font-mono);
   font-weight: 500;
@@ -486,10 +546,7 @@ h3 {
   display: flex;
   flex-direction: column;
   position: relative;
-  transition: transform .25s, box-shadow .25s;
-}
-@media (prefers-reduced-motion: no-preference) {
-  .price-card:hover { transform: translateY(-6px); box-shadow: 0 24px 50px -28px rgba(17,21,42,.35); }
+  /* hover lift + glow is a GSAP box-shadow tween (main.js), not a CSS transition */
 }
 .price-card.highlight {
   border-color: var(--indigo);
@@ -553,6 +610,7 @@ h3 {
   gap: 16px;
 }
 .faq-list summary::-webkit-details-marker { display: none; }
+.faq-body { overflow: hidden; } /* height is tweened by GSAP */
 .faq-list summary::after {
   content: "+";
   font-family: var(--font-mono);

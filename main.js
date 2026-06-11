@@ -1,12 +1,13 @@
 /* =========================================================================
    main.js — language switch (NL/EN/ES), content rendering from content.js,
-   ScrollTrigger reveals, FAQ accordion, inert-CTA tooltip.
+   scroll effects (ScrollTrigger), GSAP accordion, magnetic CTAs.
    No localStorage/sessionStorage: language lives in a JS variable + URL hash.
    ========================================================================= */
 
-gsap.registerPlugin(ScrollTrigger);
+gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
 const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const finePointer = window.matchMedia("(pointer: fine)").matches;
 
 /* ----------------------------------------------------------- language */
 const LANGS = ["nl", "en", "es"];
@@ -115,6 +116,7 @@ function renderPricing(c) {
     })
     .join("");
   bindInertCtas();
+  bindPricingHover();
 }
 
 function renderFaq(c) {
@@ -122,16 +124,10 @@ function renderFaq(c) {
     .map((item) =>
       `<details>
          <summary>${t(item.q)}</summary>
-         <p class="faq-a">${t(item.a)}</p>
+         <div class="faq-body"><p class="faq-a">${t(item.a)}</p></div>
        </details>`)
     .join("");
-  // accordion: opening one closes the others
-  const all = document.querySelectorAll("#faq-list details");
-  all.forEach((d) => {
-    d.addEventListener("toggle", () => {
-      if (d.open) all.forEach((o) => { if (o !== d) o.open = false; });
-    });
-  });
+  bindFaq();
 }
 
 function renderFooter(c) {
@@ -153,15 +149,7 @@ function renderBrand() {
   document.getElementById("brand-descriptor").textContent = BRAND.descriptor;
 }
 
-/* ------------------------------------------------------------- setLang */
-function setLang(lang, { initial = false } = {}) {
-  currentLang = lang;
-  const c = CONTENT[lang];
-
-  document.documentElement.lang = lang;
-  document.title = t(c.meta.title);
-  document.querySelector('meta[name="description"]').setAttribute("content", t(c.meta.description));
-
+function renderAll(c) {
   applyI18n(c);
   renderHeroMock(c);
   renderPain(c);
@@ -171,37 +159,92 @@ function setLang(lang, { initial = false } = {}) {
   renderPricing(c);
   renderFaq(c);
   renderFooter(c);
-
-  document.querySelectorAll(".lang-switch button").forEach((b) =>
-    b.setAttribute("aria-pressed", String(b.dataset.lang === lang)));
-
-  // persist in the URL only (no storage), without scrolling the page
-  if (!initial) history.replaceState(null, "", "#" + lang);
-
-  if (!initial) buildReveals(); // re-attach reveals to the re-rendered nodes
+  refreshMagnetic();
 }
 
-/* ------------------------------------------------------------- reveals */
-let revealCtx = null;
-function buildReveals() {
+/* ------------------------------------------------------------- setLang */
+function setLang(lang, { initial = false } = {}) {
+  currentLang = lang;
+  const c = CONTENT[lang];
+
+  const apply = () => {
+    document.documentElement.lang = lang;
+    document.title = t(c.meta.title);
+    document.querySelector('meta[name="description"]').setAttribute("content", t(c.meta.description));
+    renderAll(c);
+    document.querySelectorAll(".lang-switch button").forEach((b) =>
+      b.setAttribute("aria-pressed", String(b.dataset.lang === lang)));
+    if (!initial) {
+      history.replaceState(null, "", "#" + lang); // URL only — no storage
+      buildScrollFX(); // re-attach triggers to the re-rendered nodes
+    }
+  };
+
+  if (initial || reducedMotion) {
+    apply();
+    return;
+  }
+  // the active language fades/slides in, the old one fades out
+  gsap.timeline()
+    .to(["#main", ".site-footer"], { opacity: 0, y: 10, duration: 0.18, ease: "power2.in", onComplete: apply })
+    .to(["#main", ".site-footer"], { opacity: 1, y: 0, duration: 0.35, ease: "power3.out", clearProps: "transform" });
+}
+
+/* --------------------------------------------------------- scroll FX */
+let fxCtx = null;
+function buildScrollFX() {
   if (reducedMotion) return; // final state is the default state
-  if (revealCtx) revealCtx.revert();
-  revealCtx = gsap.context(() => {
-    // single elements
+
+  if (fxCtx) fxCtx.revert();
+  fxCtx = gsap.context(() => {
+
+    // generic single-element reveals
     document.querySelectorAll("[data-reveal]").forEach((el) => {
       gsap.from(el, {
         y: 20, opacity: 0, duration: 0.7, ease: "power3.out",
         scrollTrigger: { trigger: el, start: "top 85%", once: true },
       });
     });
-    // staggered groups (rendered lists)
-    [
-      ["#pain-cards", ".card"],
-      ["#how-steps", "li"],
-      ["#pricing-cards", ".price-card"],
-      ["#faq-list", "details"],
-      ["#compare-table", "tbody tr"],
-    ].forEach(([wrap, sel]) => {
+
+    // pain cards: staggered perspective slide-in
+    gsap.from("#pain-cards .card", {
+      opacity: 0, y: 34, rotationY: 18, x: -36,
+      transformOrigin: "left center", transformPerspective: 900,
+      duration: 0.85, ease: "power3.out", stagger: 0.12,
+      scrollTrigger: { trigger: "#pain-cards", start: "top 82%", once: true },
+    });
+
+    // how it works: pinned, steps revealed by scrub, connecting line draws
+    const mm = gsap.matchMedia();
+    mm.add("(min-width: 921px)", () => {
+      const steps = gsap.utils.toArray("#how-steps li");
+      const tl = gsap.timeline({
+        scrollTrigger: { trigger: "#how", start: "top 72px", end: "+=1400", pin: true, scrub: 0.6 },
+      });
+      tl.fromTo(".steps-line i", { scaleX: 0 }, { scaleX: 1, duration: 4, ease: "none" }, 0);
+      steps.forEach((s, i) => {
+        tl.from(s, { y: 70, opacity: 0, duration: 0.9, ease: "power2.out" }, i * 0.95);
+      });
+      tl.to({}, { duration: 0.4 }); // breathing room after the last step
+    });
+    mm.add("(max-width: 920px)", () => {
+      gsap.from("#how-steps li", {
+        y: 24, opacity: 0, duration: 0.7, ease: "power3.out", stagger: 0.12,
+        scrollTrigger: { trigger: "#how-steps", start: "top 85%", once: true },
+      });
+    });
+
+    // comparison rows: one at a time, with a highlight sweep across each
+    gsap.utils.toArray("#compare-table tbody tr").forEach((row, i) => {
+      const st = { trigger: "#compare-table", start: "top 80%", once: true };
+      gsap.from(row, { opacity: 0, x: -26, duration: 0.55, ease: "power3.out", delay: i * 0.14, scrollTrigger: st });
+      gsap.fromTo(row,
+        { backgroundPosition: "-150% 0" },
+        { backgroundPosition: "250% 0", duration: 1.0, ease: "power2.out", delay: 0.1 + i * 0.14, scrollTrigger: st });
+    });
+
+    // pricing cards + FAQ items: staggered rise
+    [["#pricing-cards", ".price-card"], ["#faq-list", "details"]].forEach(([wrap, sel]) => {
       const items = document.querySelectorAll(`${wrap} ${sel}`);
       if (!items.length) return;
       gsap.from(items, {
@@ -209,6 +252,111 @@ function buildReveals() {
         scrollTrigger: { trigger: wrap, start: "top 85%", once: true },
       });
     });
+  });
+
+  ScrollTrigger.refresh();
+}
+
+/* ----------------------------------------------------- FAQ accordion */
+function bindFaq() {
+  const all = document.querySelectorAll("#faq-list details");
+
+  if (reducedMotion) {
+    // native open/close, just keep one-at-a-time behaviour
+    all.forEach((d) => d.addEventListener("toggle", () => {
+      if (d.open) all.forEach((o) => { if (o !== d) o.open = false; });
+    }));
+    return;
+  }
+
+  const close = (d) => {
+    const body = d.querySelector(".faq-body");
+    gsap.to(body, {
+      height: 0, opacity: 0, duration: 0.28, ease: "power2.in",
+      onComplete: () => { d.open = false; gsap.set(body, { clearProps: "all" }); },
+    });
+  };
+
+  all.forEach((d) => {
+    d.querySelector("summary").addEventListener("click", (e) => {
+      e.preventDefault();
+      if (d.open) { close(d); return; }
+      all.forEach((o) => { if (o !== d && o.open) close(o); });
+      d.open = true;
+      const body = d.querySelector(".faq-body");
+      gsap.fromTo(body,
+        { height: 0, opacity: 0 },
+        { height: "auto", opacity: 1, duration: 0.45, ease: "power3.out",
+          onComplete: () => gsap.set(body, { clearProps: "height" }) });
+    });
+  });
+}
+
+/* ------------------------------------------------ pricing hover glow */
+function bindPricingHover() {
+  if (reducedMotion || !finePointer) return;
+  document.querySelectorAll(".price-card").forEach((card) => {
+    card.addEventListener("mouseenter", () => {
+      gsap.to(card, {
+        y: -8,
+        boxShadow: "0 0 0 1.5px rgba(91,91,240,.9), 0 26px 60px -22px rgba(91,91,240,.55)",
+        duration: 0.35, ease: "power3.out",
+      });
+    });
+    card.addEventListener("mouseleave", () => {
+      gsap.to(card, { y: 0, duration: 0.45, ease: "power3.out", clearProps: "boxShadow,transform" });
+    });
+  });
+}
+
+/* ------------------------------------------------------ magnetic CTAs */
+let magnets = [];
+function refreshMagnetic() {
+  if (reducedMotion || !finePointer) return;
+  magnets = [...document.querySelectorAll(".btn-primary")].map((el) => ({
+    el,
+    xTo: gsap.quickTo(el, "x", { duration: 0.4, ease: "power3" }),
+    yTo: gsap.quickTo(el, "y", { duration: 0.4, ease: "power3" }),
+  }));
+}
+function initMagnetic() {
+  if (reducedMotion || !finePointer) return;
+  let mx = 0, my = 0, raf = null;
+  const update = () => {
+    raf = null;
+    magnets.forEach((m) => {
+      const r = m.el.getBoundingClientRect();
+      if (!r.width) return;
+      const dx = mx - (r.left + r.width / 2);
+      const dy = my - (r.top + r.height / 2);
+      const dist = Math.hypot(dx, dy);
+      const range = Math.max(r.width, r.height) / 2 + 60; // 60px attraction radius
+      if (dist < range) {
+        const pull = (1 - dist / range) * 0.45;
+        m.xTo(dx * pull); m.yTo(dy * pull);
+      } else {
+        m.xTo(0); m.yTo(0);
+      }
+    });
+  };
+  window.addEventListener("mousemove", (e) => {
+    mx = e.clientX; my = e.clientY;
+    if (!raf) raf = requestAnimationFrame(update);
+  }, { passive: true });
+}
+
+/* ------------------------------------------------------ smooth scroll */
+function initSmoothScroll() {
+  document.addEventListener("click", (e) => {
+    const a = e.target.closest('a[href^="#"]');
+    if (!a) return;
+    const id = a.getAttribute("href");
+    if (id.length < 2) return;
+    const target = document.querySelector(id);
+    if (!target) return;
+    e.preventDefault();
+    if (reducedMotion) { target.scrollIntoView(); return; }
+    gsap.to(window, { scrollTo: { y: target, offsetY: 70 }, duration: 0.9, ease: "power3.inOut" });
   });
 }
 
@@ -235,12 +383,22 @@ function bindInertCtas() {
 
 /* ---------------------------------------------------------------- init */
 document.querySelectorAll(".lang-switch button").forEach((b) =>
-  b.addEventListener("click", () => setLang(b.dataset.lang)));
+  b.addEventListener("click", () => {
+    if (b.dataset.lang === currentLang) {
+      // already active (e.g. auto-detected): just persist it in the URL
+      history.replaceState(null, "", "#" + currentLang);
+      return;
+    }
+    setLang(b.dataset.lang);
+  }));
 
 window.addEventListener("hashchange", () => {
   const hash = location.hash.replace("#", "");
   if (LANGS.includes(hash) && hash !== currentLang) setLang(hash);
 });
 
+renderBrand();
 setLang(detectLang(), { initial: true });
-buildReveals();
+buildScrollFX();
+initMagnetic();
+initSmoothScroll();
