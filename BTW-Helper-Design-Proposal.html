@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BTW Helper — Design & Marketing Proposal</title>
+<meta name="description" content="Brand positioning, naming, visual direction and conversion copy proposal for a Dutch VAT filing assistant landing page.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#FBFAF6;--paper-2:#F2F0E8;--ink:#11152A;--ink-soft:#3A3F55;--ink-faint:#6E7287;
+    --line:#DAD7CB;--line-soft:#E7E4DA;
+    --indigo:#5B5BF0;--indigo-deep:#3E2BC9;--indigo-soft:#EEEBFF;
+    --void:#05050a;--void-2:#0c0c18;--glass:rgba(255,255,255,.04);
+    --violet:#a78bfa;
+    --maxw:940px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--paper);color:var(--ink);font-family:'Inter',system-ui,sans-serif;font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px}
+  .mono{font-family:'JetBrains Mono',monospace}
+  .disp{font-family:'Space Grotesk',sans-serif}
+
+  .docbar{border-bottom:1px solid var(--line);padding:18px 0;display:flex;justify-content:space-between;align-items:center;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.04em;color:var(--ink-faint);text-transform:uppercase}
+  .docbar .badge{border:1px solid var(--line);border-radius:100px;padding:4px 12px;color:var(--indigo);background:#fff}
+
+  /* cover */
+  .cover{padding:80px 0 60px;border-bottom:1px solid var(--line)}
+  .eyebrow{font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--indigo);margin-bottom:26px}
+  h1.title{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(38px,6.5vw,70px);line-height:1.03;letter-spacing:-.02em;margin-bottom:24px}
+  .lede{font-size:clamp(18px,2.3vw,22px);line-height:1.45;color:var(--ink-soft);max-width:660px}
+  .lede b{color:var(--ink);font-weight:600}
+
+  section{padding:62px 0;border-bottom:1px solid var(--line-soft)}
+  .sec-num{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--indigo);letter-spacing:.1em;margin-bottom:14px}
+  h2{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(27px,3.8vw,38px);line-height:1.08;letter-spacing:-.015em;margin-bottom:22px;max-width:20ch}
+  h3{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:19px;margin:32px 0 12px;letter-spacing:-.01em}
+  p{margin-bottom:16px;max-width:68ch}
+  p.big{font-size:18.5px;color:var(--ink-soft)}
+  strong{font-weight:600;color:var(--ink)}
+  em{font-style:italic}
+
+  .note{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--ink-faint);letter-spacing:.02em;text-transform:uppercase;margin-bottom:10px}
+
+  /* designer rationale block */
+  .rationale{border-left:3px solid var(--indigo);background:var(--indigo-soft);padding:18px 22px;border-radius:0 12px 12px 0;margin:22px 0}
+  .rationale .who{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--indigo-deep);margin-bottom:8px;display:flex;align-items:center;gap:8px}
+  .rationale p{margin:0;font-size:15px;color:var(--ink)}
+  .rationale p+p{margin-top:10px}
+
+  /* naming */
+  .names{display:flex;flex-direction:column;gap:14px;margin-top:8px}
+  .name{border:1px solid var(--line);border-radius:14px;padding:22px 24px;background:#fff;display:grid;grid-template-columns:auto 1fr auto;gap:22px;align-items:center}
+  .name.lead{border-color:var(--indigo);box-shadow:0 8px 30px -18px rgba(91,91,240,.55)}
+  .name .word{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:28px;letter-spacing:-.02em}
+  .name .desc{font-size:14.5px;color:var(--ink-soft)}
+  .name .desc b{color:var(--ink)}
+  .name .verdict{font-family:'JetBrains Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:.06em;padding:5px 11px;border-radius:100px;white-space:nowrap}
+  .verdict.rec{background:var(--indigo);color:#fff}
+  .verdict.alt{background:#FBF1DB;color:#9A6B00}
+  .verdict.keep{background:var(--paper-2);color:var(--ink-faint)}
+
+  /* token system */
+  .tokens{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:8px}
+  .tok{border:1px solid var(--line);border-radius:14px;background:#fff;overflow:hidden}
+  .tok .head{padding:16px 20px;font-family:'Space Grotesk';font-weight:600;font-size:15px;border-bottom:1px solid var(--line-soft);display:flex;align-items:center;gap:10px}
+  .tok .body{padding:18px 20px;font-size:14px;color:var(--ink-soft)}
+  .swatches{display:flex;gap:0;border-radius:10px;overflow:hidden;margin-bottom:14px;height:54px}
+  .sw{flex:1;display:flex;align-items:flex-end;padding:6px;font-family:'JetBrains Mono';font-size:9px;color:rgba(255,255,255,.9)}
+  .typo-row{display:flex;justify-content:space-between;align-items:baseline;padding:10px 0;border-bottom:1px solid var(--line-soft)}
+  .typo-row:last-child{border:none}
+  .typo-row .smp{font-size:22px}
+  .typo-row .meta{font-family:'JetBrains Mono';font-size:11px;color:var(--ink-faint)}
+
+  /* DARK SHOWCASE */
+  .showcase{background:var(--void);color:#fff;border-radius:20px;padding:0;overflow:hidden;margin:24px 0;position:relative;border:1px solid #1a1a2e}
+  .showcase .glow{position:absolute;width:480px;height:480px;border-radius:50%;background:radial-gradient(circle,rgba(91,91,240,.35),transparent 70%);top:-180px;right:-120px;filter:blur(20px);pointer-events:none}
+  .showcase-inner{position:relative;padding:48px 40px}
+  .sc-eyebrow{font-family:'JetBrains Mono';font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--violet);margin-bottom:18px}
+  .sc-h{font-family:'Space Grotesk';font-weight:700;font-size:clamp(30px,4.5vw,48px);line-height:1.05;letter-spacing:-.02em;color:#fff;margin-bottom:16px}
+  .sc-h .accent{background:linear-gradient(120deg,#8b8bff,#c4b5fd);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+  .sc-sub{font-size:17px;color:rgba(255,255,255,.6);max-width:46ch;margin-bottom:28px}
+  .sc-cta{display:inline-flex;align-items:center;gap:10px;background:var(--indigo);color:#fff;font-family:'Space Grotesk';font-weight:600;font-size:15px;padding:14px 26px;border-radius:100px;text-decoration:none;box-shadow:0 0 30px -6px rgba(91,91,240,.7)}
+  .sc-cta.ghost{background:transparent;border:1px solid rgba(255,255,255,.2);box-shadow:none;color:rgba(255,255,255,.85)}
+  .sc-ctas{display:flex;gap:12px;flex-wrap:wrap}
+  /* mini dashboard mock inside showcase */
+  .mock{margin-top:34px;background:var(--glass);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:22px;backdrop-filter:blur(8px);max-width:380px}
+  .mock .mlab{font-family:'JetBrains Mono';font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:6px}
+  .mock .mbig{font-family:'Space Grotesk';font-weight:700;font-size:42px;letter-spacing:-.02em;color:#fff}
+  .mock .mbig.pay{color:#fca5a5}
+  .mock .mrow{display:flex;justify-content:space-between;font-family:'JetBrains Mono';font-size:12px;color:rgba(255,255,255,.55);padding:7px 0;border-top:1px solid rgba(255,255,255,.07);margin-top:14px}
+  .mock .mrow:first-of-type{margin-top:18px}
+
+  /* trilingual copy */
+  .langtabs{display:flex;gap:8px;margin:16px 0}
+  .langtab{font-family:'JetBrains Mono';font-size:12px;letter-spacing:.06em;padding:7px 14px;border-radius:100px;border:1px solid var(--line);background:#fff;cursor:pointer;color:var(--ink-faint);transition:all .2s}
+  .langtab.active{background:var(--ink);color:#fff;border-color:var(--ink)}
+  .langpane{display:none}
+  .langpane.active{display:block}
+  .copyblock{border:1px solid var(--line);border-radius:14px;background:#fff;overflow:hidden}
+  .cb-row{padding:18px 22px;border-bottom:1px solid var(--line-soft);display:grid;grid-template-columns:120px 1fr;gap:18px;align-items:start}
+  .cb-row:last-child{border:none}
+  .cb-row .k{font-family:'JetBrains Mono';font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--indigo);padding-top:3px}
+  .cb-row .v{font-size:15.5px;color:var(--ink)}
+  .cb-row .v .h{font-family:'Space Grotesk';font-weight:600;font-size:20px;display:block;margin-bottom:4px;letter-spacing:-.01em}
+  .cb-row .v small{color:var(--ink-faint);font-size:13.5px}
+
+  /* structure list */
+  .struct{display:flex;flex-direction:column;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:14px;overflow:hidden;counter-reset:s}
+  .struct .s{background:#fff;padding:18px 22px;display:grid;grid-template-columns:auto 1fr;gap:18px;align-items:baseline}
+  .struct .s::before{counter-increment:s;content:counter(s,decimal-leading-zero);font-family:'JetBrains Mono';font-size:12px;color:var(--indigo)}
+  .struct .s .t{font-family:'Space Grotesk';font-weight:600;font-size:15.5px}
+  .struct .s .d{font-size:14px;color:var(--ink-soft);margin-top:3px}
+
+  /* faq */
+  .faq{display:flex;flex-direction:column;gap:10px}
+  details{border:1px solid var(--line);border-radius:12px;background:#fff;overflow:hidden}
+  summary{padding:18px 22px;font-family:'Space Grotesk';font-weight:600;font-size:16px;cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center}
+  summary::-webkit-details-marker{display:none}
+  summary::after{content:"+";font-family:'JetBrains Mono';color:var(--indigo);font-size:20px;transition:transform .2s}
+  details[open] summary::after{transform:rotate(45deg)}
+  details .a{padding:0 22px 20px;font-size:15px;color:var(--ink-soft);max-width:66ch}
+
+  /* legal footer */
+  .legal{background:var(--void-2);color:rgba(255,255,255,.6);border-radius:18px;padding:34px 32px;margin-top:8px;font-size:13px;line-height:1.7}
+  .legal h4{font-family:'Space Grotesk';color:#fff;font-size:15px;margin-bottom:14px;font-weight:600}
+  .legal .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-bottom:24px}
+  .legal .grid h5{font-family:'JetBrains Mono';font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--violet);margin-bottom:8px}
+  .legal a{color:rgba(255,255,255,.75)}
+  .legal .fine{border-top:1px solid rgba(255,255,255,.1);padding-top:18px;font-size:12px;color:rgba(255,255,255,.4)}
+
+  ul.clean{list-style:none;display:flex;flex-direction:column;gap:12px;margin:8px 0}
+  ul.clean li{padding-left:24px;position:relative;font-size:15px;color:var(--ink-soft)}
+  ul.clean li::before{content:"";position:absolute;left:0;top:9px;width:8px;height:8px;border-radius:2px;background:var(--indigo)}
+  ul.clean li b{color:var(--ink)}
+
+  .reveal{opacity:0;transform:translateY(16px);transition:opacity .7s ease,transform .7s ease}
+  .reveal.in{opacity:1;transform:none}
+
+  footer.end{padding:48px 0 80px;color:var(--ink-faint);font-size:13px}
+
+  @media(max-width:760px){
+    .tokens{grid-template-columns:1fr}
+    .name{grid-template-columns:1fr;gap:12px}
+    .name .verdict{justify-self:start}
+    .cb-row{grid-template-columns:1fr;gap:6px}
+    .legal .grid{grid-template-columns:1fr}
+    .showcase-inner{padding:34px 24px}
+    .cover{padding:52px 0 40px}
+  }
+  @media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="docbar">
+    <span>BTW Helper · Design &amp; Marketing Proposal</span>
+    <span class="badge">Studio pitch · v0.1</span>
+  </div>
+
+  <header class="cover">
+    <div class="eyebrow">Brand · positioning · landing direction · June 2026</div>
+    <h1 class="title">How we'd make<br>tax software feel<br>like relief.</h1>
+    <p class="lede">This is the proposal a studio would bring to win the landing page: what to <b>call</b> it, how to <b>frame</b> it, what it should <b>look like</b>, and exactly what it should <b>say</b> — in Dutch, English and Spanish. Every design choice is argued, not assumed.</p>
+  </header>
+
+  <!-- 01 POSITIONING -->
+  <section class="reveal">
+    <div class="sec-num">01 — Positioning & anti-framing</div>
+    <h2>Sell relief, not bookkeeping.</h2>
+    <p class="big">The category everyone else competes in is "boekhoudsoftware." That word does the freelancer's anxiety a favour — it tells them they're about to become an accountant. We refuse the category.</p>
+    <p>BTW Helper is positioned against admin itself. The enemy isn't MoneyBird; it's the Sunday-night dread of the deadline, the fear of the wrong box, the €600 you pay someone to make it go away. We don't promise features — we promise the feeling on the other side of "filed."</p>
+    <div class="rationale">
+      <div class="who">◆ Head of Strategy · why anti-framing</div>
+      <p>Freelancers don't aspire to do bookkeeping; they tolerate it. Positioning as "accounting software, but easier" still anchors us to a chore. Positioning as "your BTW, handled" anchors us to an outcome. Outcomes convert; chores get postponed.</p>
+      <p>Concretely: every headline leads with the result ("filed," "done," "clear"), never the mechanism ("classify," "calculate," "manage"). The mechanism is proof, shown lower on the page.</p>
+    </div>
+  </section>
+
+  <!-- 02 NAMING -->
+  <section class="reveal">
+    <div class="sec-num">02 — Naming</div>
+    <h2>A name that sounds like the end of a task.</h2>
+    <p>The name should be Dutch enough to signal "this is for the Dutch system," short enough to own, and emotionally pointed at the moment of <em>done</em>. Three candidates plus the working name, with a clear recommendation.</p>
+    <div class="names">
+      <div class="name lead">
+        <div class="word">Klaar</div>
+        <div class="desc"><b>Dutch for "done / ready."</b> The exact word a freelancer wants to say about their BTW. "Je BTW? Klaar." One syllable, emotional, ownable, and it works as an exclamation in all three markets. Risk: common word, so the brand must do the trademark/SEO lifting — solved with a wordmark and "Klaar — BTW" lockup.</div>
+        <div class="verdict rec">Recommended</div>
+      </div>
+      <div class="name">
+        <div class="word">Kwartaal</div>
+        <div class="desc"><b>Dutch for "quarter."</b> Names the filing rhythm precisely; instantly legible to the market. Slightly more functional and less emotional than Klaar — describes <em>when</em>, not the relief. Strong, safe second choice.</div>
+        <div class="verdict alt">Strong alt</div>
+      </div>
+      <div class="name">
+        <div class="word">Helder</div>
+        <div class="desc"><b>Dutch for "clear."</b> Speaks straight to the core pain (confusion → clarity) and sounds premium. Risk: used broadly in finance/insurance branding, so differentiation is harder.</div>
+        <div class="verdict alt">Alt</div>
+      </div>
+      <div class="name">
+        <div class="word">BTW Helper</div>
+        <div class="desc"><b>The working name.</b> Maximally descriptive and SEO-friendly — does exactly what it says. Keep as the explanatory tagline even if the brand name changes: <em>"Klaar — your BTW helper."</em></div>
+        <div class="verdict keep">Keep as descriptor</div>
+      </div>
+    </div>
+    <div class="rationale">
+      <div class="who">◆ Head of Strategy · recommendation</div>
+      <p>Lead with <strong>Klaar</strong>, retain "BTW Helper" as the descriptive sub-line for clarity and search. It's the only candidate that is itself the outcome we're selling. If trademark conflicts block it, fall back to <strong>Kwartaal</strong>. The landing copy below is written so either name drops in cleanly.</p>
+    </div>
+  </section>
+
+  <!-- 03 VISUAL DIRECTION -->
+  <section class="reveal">
+    <div class="sec-num">03 — Visual direction</div>
+    <h2>Calm precision with one dramatic moment.</h2>
+    <p class="big">Tax tools look either sterile (government grey) or chaotic (feature-stuffed dashboards). We want the opposite: composed, confident, quietly premium — a tool that makes you feel <em>capable</em>. The drama is spent in exactly one place: the hero.</p>
+
+    <h3>The tokens</h3>
+    <div class="tokens">
+      <div class="tok">
+        <div class="head">🎨 Colour</div>
+        <div class="body">
+          <div class="swatches">
+            <div class="sw" style="background:#05050a">#05050a</div>
+            <div class="sw" style="background:#5B5BF0">#5B5BF0</div>
+            <div class="sw" style="background:#a78bfa">#a78bfa</div>
+            <div class="sw" style="background:#0E7A4B">#0E7A4B</div>
+            <div class="sw" style="background:#FBFAF6;color:#11152A">#FBFAF6</div>
+          </div>
+          Deep void background for the hero, indigo→violet as the single signal colour, green reserved exclusively for the "money back / done" payoff, warm off-white for the calm reading sections lower down. Inherits the live app palette so landing and product feel continuous.
+        </div>
+      </div>
+      <div class="tok">
+        <div class="head">🔤 Type</div>
+        <div class="body">
+          <div class="typo-row"><span class="smp disp" style="font-weight:700">Klaar.</span><span class="meta">Space Grotesk · display</span></div>
+          <div class="typo-row"><span class="smp" style="font-family:Inter">File with confidence</span><span class="meta">Inter · body</span></div>
+          <div class="typo-row"><span class="smp mono">5g = −€22,05</span><span class="meta">JetBrains Mono · figures</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="rationale">
+      <div class="who">◆ Head of Design · why this type system</div>
+      <p><strong>Space Grotesk</strong> for display: geometric, European, slightly idiosyncratic — it reads as "made by someone with taste," which is the exact audience (creative freelancers). Every competitor defaults to Inter or DM Sans everywhere; using a characterful display face is a cheap, instant way to not look like them.</p>
+      <p><strong>JetBrains Mono</strong> for every euro figure and rubriek code is the deliberate risk: it makes the numbers feel like a <em>precision instrument</em>, like a fiscal terminal. Money in monospace signals "exact, trustworthy, machine-checked" — which is the entire promise. It also visually separates "the scary tax numbers" from "the friendly human copy," so the page guides the eye between reassurance and proof.</p>
+      <p><strong>Inter</strong> stays for body because personality should live in two places, not everywhere. Boldness spent in one spot lands harder than boldness sprayed across the page.</p>
+    </div>
+
+    <h3>The signature element</h3>
+    <div class="showcase">
+      <div class="glow"></div>
+      <div class="showcase-inner">
+        <div class="sc-eyebrow">Hero · the signature moment</div>
+        <div class="sc-h">Your quarter,<br><span class="accent">already filed.</span></div>
+        <div class="sc-sub">Not a stock illustration — a live, animated dashboard counting up to your real result. Visitors see the outcome before they read a single feature.</div>
+        <div class="sc-ctas">
+          <a href="#" class="sc-cta">Try a quarter free →</a>
+          <a href="#" class="sc-cta ghost">See how it works</a>
+        </div>
+        <div class="mock">
+          <div class="mlab">Q1 2026 · result</div>
+          <div class="mbig pay">+€24,15</div>
+          <div class="mrow"><span>1a · omzet</span><span>€46,20</span></div>
+          <div class="mrow"><span>4a · reverse charge</span><span>€25,66</span></div>
+          <div class="mrow"><span>5g · to pay</span><span>+€24,15</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="rationale">
+      <div class="who">◆ Head of Design · why the live dashboard is the hero</div>
+      <p>The most persuasive thing we can show is the product <em>doing the scary part</em>. A freelancer's stomach drops at "how much do I owe?" — so the hero answers it, on screen, with a number animating into place (GSAP count-up) over a subtle 3D ambient field (Three.js). It's the thesis of the whole product in one glance: <em>this is what relief looks like.</em></p>
+      <p>This is why we don't open with a headline-over-gradient template. The characteristic artifact of this product's world is <strong>the result of a filing</strong> — so that's the hero. Everything else on the page is evidence for that one promise.</p>
+    </div>
+  </section>
+
+  <!-- 04 COPY -->
+  <section class="reveal">
+    <div class="sec-num">04 — Conversion copy · NL / EN / ES</div>
+    <h2>What the page says, in three languages.</h2>
+    <p>Same meaning, native phrasing — not literal translation. Dutch is the primary market voice; English and Spanish serve the large expat-freelancer segment in NL.</p>
+
+    <div class="langtabs">
+      <div class="langtab active" data-l="nl">🇳🇱 Nederlands</div>
+      <div class="langtab" data-l="en">🇬🇧 English</div>
+      <div class="langtab" data-l="es">🇪🇸 Español</div>
+    </div>
+
+    <!-- NL -->
+    <div class="langpane active" data-l="nl">
+      <div class="copyblock">
+        <div class="cb-row"><div class="k">Hero</div><div class="v"><span class="h">Je BTW-aangifte? Klaar.</span><small>Sleep je facturen erin. Wij rubriceren, rekenen en vullen je aangifte voor. Jij controleert en dient in — in tien minuten.</small></div></div>
+        <div class="cb-row"><div class="k">CTA</div><div class="v">Probeer één kwartaal gratis <small>· geen creditcard nodig</small></div></div>
+        <div class="cb-row"><div class="k">Pijn</div><div class="v">Geen boekhoudcursus. Geen €600 voor de accountant. Geen paniek op de deadline.</div></div>
+        <div class="cb-row"><div class="k">Hoe</div><div class="v"><b>Upload → AI rubriceert → Controleer → Dien in.</b> Verleggingsregeling, valuta en buitenlandse facturen: automatisch goed.</div></div>
+        <div class="cb-row"><div class="k">Vertrouwen</div><div class="v">Jij blijft de baas. Wij vullen voor, jij dient zelf in bij de Belastingdienst — geen risicovolle automatische verzending.</div></div>
+        <div class="cb-row"><div class="k">Anti-frame</div><div class="v">Geen boekhoudprogramma. Eén taak, perfect gedaan.</div></div>
+      </div>
+    </div>
+    <!-- EN -->
+    <div class="langpane" data-l="en">
+      <div class="copyblock">
+        <div class="cb-row"><div class="k">Hero</div><div class="v"><span class="h">Your VAT return? Done.</span><small>Drop your invoices in. We classify, calculate and pre-fill your aangifte. You review and file — in ten minutes.</small></div></div>
+        <div class="cb-row"><div class="k">CTA</div><div class="v">Try one quarter free <small>· no card required</small></div></div>
+        <div class="cb-row"><div class="k">Pain</div><div class="v">No accounting course. No €600 accountant. No deadline-night panic.</div></div>
+        <div class="cb-row"><div class="k">How</div><div class="v"><b>Upload → AI classifies → Review → File.</b> Reverse charge, currency and foreign invoices: handled correctly, automatically.</div></div>
+        <div class="cb-row"><div class="k">Trust</div><div class="v">You stay in control. We pre-fill; you file it yourself with the Belastingdienst — no risky auto-submission.</div></div>
+        <div class="cb-row"><div class="k">Anti-frame</div><div class="v">Not bookkeeping software. One job, done perfectly.</div></div>
+      </div>
+    </div>
+    <!-- ES -->
+    <div class="langpane" data-l="es">
+      <div class="copyblock">
+        <div class="cb-row"><div class="k">Hero</div><div class="v"><span class="h">¿Tu declaración de IVA? Lista.</span><small>Arrastra tus facturas. Nosotros clasificamos, calculamos y rellenamos tu aangifte. Tú revisas y presentas — en diez minutos.</small></div></div>
+        <div class="cb-row"><div class="k">CTA</div><div class="v">Prueba un trimestre gratis <small>· sin tarjeta</small></div></div>
+        <div class="cb-row"><div class="k">Dolor</div><div class="v">Sin curso de contabilidad. Sin gestor de €600. Sin pánico el día del plazo.</div></div>
+        <div class="cb-row"><div class="k">Cómo</div><div class="v"><b>Sube → la IA clasifica → Revisa → Presenta.</b> Inversión del sujeto pasivo, divisas y facturas extranjeras: resueltas correctamente, en automático.</div></div>
+        <div class="cb-row"><div class="k">Confianza</div><div class="v">Tú tienes el control. Rellenamos por ti; tú presentas ante Hacienda holandesa — sin envíos automáticos arriesgados.</div></div>
+        <div class="cb-row"><div class="k">Anti-frame</div><div class="v">No es software de contabilidad. Una sola tarea, perfecta.</div></div>
+      </div>
+    </div>
+    <div class="rationale">
+      <div class="who">◆ Head of Copy · register notes</div>
+      <p>Dutch keeps the fiscal nouns the user will see on the real form (<span class="mono">aangifte, verleggingsregeling, Belastingdienst</span>) — translating those would break the bridge to the actual portal. English and Spanish localise the <em>feeling</em> but keep "aangifte" and "Belastingdienst" as anchors, because expats file on the same Dutch system and must recognise those words.</p>
+    </div>
+  </section>
+
+  <!-- 05 PAGE STRUCTURE -->
+  <section class="reveal">
+    <div class="sec-num">05 — Conversion structure</div>
+    <h2>The order a visitor needs to say yes.</h2>
+    <div class="struct">
+      <div class="s"><div><div class="t">Hero — the result</div><div class="d">Animated dashboard + outcome headline + primary CTA. Promise relief in one screen.</div></div></div>
+      <div class="s"><div><div class="t">The pain, named</div><div class="d">Three bad options (accountant / software / spreadsheet) and the gap between them. Visitor thinks "that's me."</div></div></div>
+      <div class="s"><div><div class="t">How it works — 4 steps</div><div class="d">Upload → classify → review → file. Scroll-revealed, with the real rubriek logic shown as proof.</div></div></div>
+      <div class="s"><div><div class="t">Proof / the engine</div><div class="d">Show a real classified invoice (reverse charge, currency conversion) — credibility through specificity.</div></div></div>
+      <div class="s"><div><div class="t">Comparison</div><div class="d">Honest table vs accountant / bookkeeping suites. We win on scope, price, learning curve.</div></div></div>
+      <div class="s"><div><div class="t">Pricing</div><div class="d">Free / Pro / Studio. Free plan files one real quarter — that's the conversion engine.</div></div></div>
+      <div class="s"><div><div class="t">FAQ</div><div class="d">Kill the objections: accuracy, control, security, "is this an accountant?"</div></div></div>
+      <div class="s"><div><div class="t">Final CTA + legal footer</div><div class="d">Repeat the promise, then the trust/legal block.</div></div></div>
+    </div>
+  </section>
+
+  <!-- 06 FAQ -->
+  <section class="reveal">
+    <div class="sec-num">06 — FAQ (objection handling)</div>
+    <h2>The five things they need answered before "yes."</h2>
+    <div class="faq">
+      <details><summary>Is this an accountant?</summary><div class="a">No — and that's the point. BTW Helper is a filing assistant, not an accountant or bookkeeping suite. It prepares your aangifte so you can file it yourself in minutes. For complex situations you'd still see a professional; for routine quarterly BTW, you won't need one.</div></details>
+      <details><summary>How do I know the classification is correct?</summary><div class="a">The AI explains every invoice in plain language — why it's a 4a reverse charge, why a US invoice gets self-assessed at 21%. Built-in consistency checks flag anything that doesn't add up, and you review every number before it goes anywhere. Nothing is hidden.</div></details>
+      <details><summary>Does it submit to the Belastingdienst automatically?</summary><div class="a">No. By design, it pre-fills and gives you copy buttons — you paste into the official portal and submit yourself. Automatic submission to a tax authority is a risk we won't take on your behalf. You stay in control of the final click.</div></details>
+      <details><summary>Is my financial data safe?</summary><div class="a">Your data is isolated to your account, encrypted in transit and at rest, and stored on EU infrastructure. One account belongs to one person and one business — no shared logins, no other user can ever see your invoices.</div></details>
+      <details><summary>What if my invoices are messy — foreign, mixed VAT, refunds?</summary><div class="a">That's exactly what it's built for. EU and non-EU vendors, currency conversion, reverse charge, foreign VAT and credit notes are all handled. Edge cases get flagged for your review rather than silently guessed.</div></details>
+    </div>
+  </section>
+
+  <!-- 07 LEGAL FOOTER -->
+  <section class="reveal" style="border-bottom:none">
+    <div class="sec-num">07 — Suggested legal footer</div>
+    <h2>Trust block + the disclaimers a tax tool needs.</h2>
+    <p>Draft language for the landing footer. <strong>Not legal advice</strong> — have a Dutch jurist review before any public launch, especially the tax-disclaimer and AVG/GDPR wording.</p>
+    <div class="legal">
+      <h4>Klaar — your BTW helper</h4>
+      <div class="grid">
+        <div>
+          <h5>Product</h5>
+          How it works<br>Pricing<br>Security<br>Roadmap<br>Status
+        </div>
+        <div>
+          <h5>Company</h5>
+          About<br>Contact<br>Built by Many-Worlds Studio<br>KVK · [number]<br>BTW · [number]
+        </div>
+        <div>
+          <h5>Legal</h5>
+          <a href="#">Privacy &amp; cookies (AVG/GDPR)</a><br><a href="#">Terms of service</a><br><a href="#">Data processing (DPA)</a><br><a href="#">Disclaimer</a>
+        </div>
+      </div>
+      <div class="fine">
+        <p style="color:rgba(255,255,255,.45);margin-bottom:10px"><strong style="color:rgba(255,255,255,.7)">Tax disclaimer.</strong> BTW Helper is a software tool that helps prepare your Dutch VAT return. It is not a tax advisor, accountant, or administrative office, and it does not provide tax, legal, or financial advice. You remain solely responsible for the accuracy and timely submission of your aangifte to the Belastingdienst. Always verify figures before filing; consult a qualified professional for your specific situation.</p>
+        <p style="color:rgba(255,255,255,.45);margin-bottom:10px"><strong style="color:rgba(255,255,255,.7)">Data.</strong> We process your data under the GDPR/AVG. Data is stored on EU servers, isolated per account, and never sold or shared with advertisers. See our Privacy Policy and Data Processing Agreement.</p>
+        <p style="color:rgba(255,255,255,.4)">© 2026 Many-Worlds Studio · Groningen, Netherlands · This is a preview prototype and is not yet available for production use. "Belastingdienst" is referenced for identification only; BTW Helper is not affiliated with or endorsed by the Dutch Tax Administration.</p>
+      </div>
+    </div>
+    <div class="rationale">
+      <div class="who">◆ Head of Strategy · footer intent</div>
+      <p>For a tax tool, the footer is a trust surface, not an afterthought. Three messages must be unmissable: <strong>you stay responsible</strong> (limits liability and is honest), <strong>your data is safe and EU-bound</strong> (the #1 unspoken fear), and <strong>we are not the Belastingdienst</strong> (avoids any implied official affiliation). The "preview prototype" line is mandatory until launch.</p>
+    </div>
+  </section>
+
+  <footer class="end">
+    <div class="disp" style="font-size:18px;color:var(--ink);font-weight:600;margin-bottom:6px">Design &amp; Marketing Proposal</div>
+    <p style="font-size:13px;max-width:60ch">Prepared as a studio-style pitch for the BTW Helper landing prototype. Naming, copy and legal language are proposals for iteration, not final or legally reviewed. Pair with the Fable 5 build brief for implementation.</p>
+  </footer>
+
+</div>
+
+<script>
+  // language tabs
+  document.querySelectorAll('.langtab').forEach(t=>{
+    t.addEventListener('click',()=>{
+      const l=t.dataset.l;
+      document.querySelectorAll('.langtab').forEach(x=>x.classList.toggle('active',x.dataset.l===l));
+      document.querySelectorAll('.langpane').forEach(p=>p.classList.toggle('active',p.dataset.l===l));
+    });
+  });
+  // reveal
+  const io=new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{threshold:.1});
+  document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+</script>
+</body>
+</html>

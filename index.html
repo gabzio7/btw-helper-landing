@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Klaar — Je BTW-aangifte? Klaar.</title>
+  <meta name="description" content="Sleep je facturen erin. AI rubriceert, rekent en vult je BTW-aangifte voor. Jij controleert en dient zelf in bij de Belastingdienst — in tien minuten.">
+
+  <!-- OpenGraph -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Klaar — Je BTW-aangifte? Klaar.">
+  <meta property="og:description" content="Sleep je facturen erin. AI rubriceert, rekent en vult je BTW-aangifte voor. Jij controleert en dient zelf in — in tien minuten.">
+  <meta property="og:locale" content="nl_NL">
+  <meta property="og:site_name" content="Klaar — BTW Helper">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="styles.css">
+
+  <!-- Three.js via import map (hero.js is a module) -->
+  <script type="importmap">
+    { "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.module.js" } }
+  </script>
+</head>
+<body>
+
+  <!-- Persistent preview marker (visible at all times) -->
+  <div class="preview-badge mono" role="note" aria-label="Preview prototype" data-i18n="badge">Preview · nog niet live</div>
+
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="#hero" class="wordmark disp" aria-label="Klaar — BTW Helper, naar boven">
+        <span id="brand-word">Klaar</span><span class="wordmark-dot">.</span>
+        <span class="wordmark-sub mono" id="brand-descriptor">BTW Helper</span>
+      </a>
+      <nav class="site-nav" aria-label="Hoofdnavigatie">
+        <a href="#how" data-i18n="nav.how">Hoe het werkt</a>
+        <a href="#proof" data-i18n="nav.proof">De motor</a>
+        <a href="#pricing" data-i18n="nav.pricing">Prijzen</a>
+        <a href="#faq" data-i18n="nav.faq">FAQ</a>
+      </nav>
+      <div class="header-actions">
+        <div class="lang-switch mono" role="group" aria-label="Taal / Language / Idioma">
+          <button type="button" data-lang="nl" aria-pressed="true" lang="nl" aria-label="Nederlands">NL</button>
+          <button type="button" data-lang="en" aria-pressed="false" lang="en" aria-label="English">EN</button>
+          <button type="button" data-lang="es" aria-pressed="false" lang="es" aria-label="Español">ES</button>
+        </div>
+        <a href="#pricing" class="btn btn-primary btn-sm" data-i18n="nav.cta">Probeer gratis</a>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+
+    <!-- 1 · HERO -->
+    <section id="hero" class="hero dark" aria-labelledby="hero-h">
+      <canvas id="hero-canvas" aria-hidden="true"></canvas>
+      <div class="container hero-inner">
+        <div class="hero-copy">
+          <p class="eyebrow mono" data-i18n="hero.eyebrow">BTW-aangifte voor zzp'ers</p>
+          <h1 id="hero-h">
+            <span class="mask"><span class="line" data-i18n="hero.h1a">Je BTW-aangifte?</span></span>
+            <span class="mask"><span class="line accent" data-i18n="hero.h1b">Klaar.</span></span>
+          </h1>
+          <p class="hero-sub" data-i18n="hero.sub">Sleep je facturen erin. Wij rubriceren, rekenen en vullen je aangifte voor. Jij controleert en dient in — in tien minuten.</p>
+          <div class="hero-ctas">
+            <a href="#pricing" class="btn btn-primary"><span data-i18n="hero.ctaPrimary">Probeer één kwartaal gratis</span> <span aria-hidden="true">→</span></a>
+            <a href="#how" class="btn btn-ghost" data-i18n="hero.ctaGhost">Bekijk hoe het werkt</a>
+          </div>
+          <p class="cta-note mono" data-i18n="hero.ctaNote">geen creditcard nodig</p>
+        </div>
+
+        <!-- Signature element: the live result dashboard -->
+        <div class="mock glass" id="hero-mock" aria-label="Voorbeeld van een aangifte-resultaat">
+          <p class="mock-label mono" data-i18n="hero.mockLabel">Q1 2026 · resultaat</p>
+          <p class="mock-big mono" id="mock-result" data-target="24.15">+€24,15</p>
+          <div id="mock-rows">
+            <div class="mock-row mono"><span>1a · omzet</span><span>€46,20</span></div>
+            <div class="mock-row mono"><span>4a · verleggingsregeling</span><span>€25,66</span></div>
+            <div class="mock-row mono"><span>5g · te betalen</span><span>+€24,15</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2 · PAIN -->
+    <section id="pain" class="light" aria-labelledby="pain-h">
+      <div class="container">
+        <p class="eyebrow mono" data-i18n="pain.eyebrow" data-reveal>Het probleem</p>
+        <h2 id="pain-h" data-i18n="pain.h" data-reveal>Drie slechte opties. Eén gat.</h2>
+        <p class="section-intro" data-i18n="pain.intro" data-reveal>Geen boekhoudcursus. Geen €600 voor de accountant. Geen paniek op de deadline.</p>
+        <div class="cards-3" id="pain-cards"><!-- rendered from content.js --></div>
+        <p class="gap-line disp" data-i18n="pain.gap" data-reveal>Er ontbreekt iets tussen die drie: één tool die precies één taak perfect doet. Je BTW-aangifte. Klaar.</p>
+      </div>
+    </section>
+
+    <!-- 3 · HOW IT WORKS -->
+    <section id="how" class="light alt" aria-labelledby="how-h">
+      <div class="container">
+        <p class="eyebrow mono" data-i18n="how.eyebrow" data-reveal>Hoe het werkt</p>
+        <h2 id="how-h" data-i18n="how.h" data-reveal>Van schoenendoos naar aangifte in vier stappen.</h2>
+        <ol class="steps" id="how-steps"><!-- rendered from content.js --></ol>
+      </div>
+    </section>
+
+    <!-- 4 · THE ENGINE / PROOF -->
+    <section id="proof" class="dark" aria-labelledby="proof-h">
+      <div class="container">
+        <p class="eyebrow mono" data-i18n="proof.eyebrow" data-reveal>De motor</p>
+        <h2 id="proof-h" data-i18n="proof.h" data-reveal>Geen demo-data. Dit is een echte factuur.</h2>
+        <p class="section-intro" data-i18n="proof.sub" data-reveal>Uit de Q1 2026 proefrit: een Amerikaanse factuur, automatisch verlegd en omgerekend.</p>
+        <div class="proof-grid" data-reveal>
+          <div class="invoice-card glass" id="invoice-card"><!-- rendered from content.js --></div>
+          <p class="invoice-explain" id="invoice-explain"></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5 · COMPARISON -->
+    <section id="compare" class="light" aria-labelledby="compare-h">
+      <div class="container">
+        <p class="eyebrow mono" data-i18n="compare.eyebrow" data-reveal>Eerlijke vergelijking</p>
+        <h2 id="compare-h" data-i18n="compare.h" data-reveal>Waar we winnen — en waar niet.</h2>
+        <div class="table-wrap" data-reveal>
+          <table class="compare-table" id="compare-table"><!-- rendered from content.js --></table>
+        </div>
+        <p class="compare-note" data-i18n="compare.note" data-reveal></p>
+      </div>
+    </section>
+
+    <!-- 6 · PRICING -->
+    <section id="pricing" class="light alt" aria-labelledby="pricing-h">
+      <div class="container">
+        <p class="eyebrow mono" data-i18n="pricing.eyebrow" data-reveal>Prijzen</p>
+        <h2 id="pricing-h" data-i18n="pricing.h" data-reveal>Begin gratis. Blijf voor de rust.</h2>
+        <p class="section-intro" data-i18n="pricing.sub" data-reveal>Het gratis plan doet één écht kwartaal — geen demo, je echte aangifte.</p>
+        <div class="cards-3 pricing-cards" id="pricing-cards"><!-- rendered from content.js --></div>
+      </div>
+    </section>
+
+    <!-- 7 · FAQ -->
+    <section id="faq" class="light" aria-labelledby="faq-h">
+      <div class="container narrow">
+        <p class="eyebrow mono" data-i18n="faq.eyebrow" data-reveal>FAQ</p>
+        <h2 id="faq-h" data-i18n="faq.h" data-reveal>Vijf vragen vóór je ja zegt.</h2>
+        <div class="faq-list" id="faq-list"><!-- rendered from content.js --></div>
+      </div>
+    </section>
+
+    <!-- 8 · FINAL CTA -->
+    <section id="final" class="dark final" aria-labelledby="final-h">
+      <div class="container narrow center">
+        <h2 id="final-h" data-i18n="final.h" data-reveal>Volgend kwartaal: tien minuten.</h2>
+        <p class="section-intro" data-i18n="final.sub" data-reveal>Probeer één echt kwartaal gratis. Geen creditcard, geen abonnement — gewoon je aangifte, klaar.</p>
+        <a href="#pricing" class="btn btn-primary btn-lg" data-reveal><span data-i18n="final.cta">Probeer één kwartaal gratis</span> <span aria-hidden="true">→</span></a>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- 8b · LEGAL FOOTER -->
+  <footer class="site-footer dark2">
+    <div class="container">
+      <p class="footer-tagline disp" id="footer-tagline">Klaar — your BTW helper</p>
+      <div class="footer-grid" id="footer-cols"><!-- rendered from content.js --></div>
+      <div class="footer-fine">
+        <p><strong id="footer-tax-title">Belasting-disclaimer.</strong> <span id="footer-tax"></span></p>
+        <p><strong id="footer-data-title">Data.</strong> <span id="footer-data"></span></p>
+        <p class="fine-line" id="footer-fine-line"></p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Copy & data -->
+  <script src="content.js"></script>
+  <!-- GSAP + ScrollTrigger -->
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+  <!-- Page behaviour -->
+  <script src="main.js"></script>
+  <!-- Hero: Three.js ambient field + GSAP load timeline -->
+  <script type="module" src="hero.js"></script>
+</body>
+</html>

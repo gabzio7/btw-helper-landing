@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BTW Helper — Pitch Deck</title>
+<meta name="description" content="Seed pitch deck for BTW Helper, an AI VAT-filing assistant for Dutch freelancers.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --void:#05050a;--void-2:#0b0b16;--panel:rgba(255,255,255,.035);--panel-2:rgba(255,255,255,.06);
+    --line:rgba(255,255,255,.1);--line-2:rgba(255,255,255,.16);
+    --ink:#f4f4fb;--ink-soft:rgba(244,244,251,.62);--ink-faint:rgba(244,244,251,.4);
+    --indigo:#6d6dff;--indigo-2:#5B5BF0;--violet:#b39bff;
+    --green:#34d399;--green-deep:#10b981;--red:#fb7185;--amber:#fbbf24;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    background:var(--void);color:var(--ink);
+    font-family:'Inter',system-ui,sans-serif;line-height:1.55;-webkit-font-smoothing:antialiased;
+    overflow:hidden;
+  }
+  .mono{font-family:'JetBrains Mono',monospace}
+  .disp{font-family:'Space Grotesk',sans-serif}
+
+  /* DECK */
+  .deck{display:flex;height:100dvh;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;scroll-behavior:smooth;scrollbar-width:none}
+  .deck::-webkit-scrollbar{display:none}
+  .slide{
+    min-width:100%;height:100dvh;scroll-snap-align:start;flex:0 0 100%;
+    display:flex;overflow-y:auto;scrollbar-width:none;
+    padding:64px clamp(22px,6vw,96px) 104px;position:relative;
+  }
+  .slide::-webkit-scrollbar{display:none}
+  .inner{margin:auto;width:100%;max-width:1040px}
+
+  /* ambient glow per slide */
+  .glow{position:absolute;width:60vw;max-width:680px;height:60vw;max-height:680px;border-radius:50%;
+    background:radial-gradient(circle,rgba(109,109,255,.16),transparent 68%);
+    top:-22%;right:-12%;pointer-events:none;filter:blur(8px)}
+  .glow.g2{background:radial-gradient(circle,rgba(179,155,255,.13),transparent 68%);top:auto;bottom:-26%;right:auto;left:-14%}
+
+  .eyebrow{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--violet);margin-bottom:22px;display:flex;align-items:center;gap:12px}
+  .eyebrow .step{color:var(--ink-faint)}
+  .eyebrow::before{content:"";width:26px;height:1px;background:var(--violet);opacity:.6}
+
+  h1{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(40px,7.5vw,88px);line-height:1;letter-spacing:-.03em}
+  h2{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(28px,4.6vw,54px);line-height:1.05;letter-spacing:-.02em;margin-bottom:24px;max-width:18ch}
+  h2 .ac{background:linear-gradient(110deg,var(--indigo),var(--violet));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+  .lead{font-size:clamp(17px,2.1vw,21px);color:var(--ink-soft);max-width:62ch;line-height:1.5}
+  .lead b{color:var(--ink);font-weight:600}
+  p{margin-bottom:14px;max-width:62ch;color:var(--ink-soft)}
+  strong{color:var(--ink);font-weight:600}
+
+  /* title slide */
+  .title-wordmark{display:flex;align-items:center;gap:14px;margin-bottom:40px}
+  .logo{width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,var(--indigo),var(--violet));display:grid;place-items:center;font-family:'Space Grotesk';font-weight:700;font-size:20px;color:#fff;box-shadow:0 0 30px -6px rgba(109,109,255,.7)}
+  .title-wordmark span{font-family:'Space Grotesk';font-weight:600;font-size:20px;letter-spacing:-.01em}
+  .tagline{font-size:clamp(18px,2.4vw,24px);color:var(--ink-soft);margin-top:26px;max-width:48ch}
+  .title-meta{display:flex;flex-wrap:wrap;gap:30px;margin-top:54px;font-family:'JetBrains Mono';font-size:12px;color:var(--ink-faint)}
+  .title-meta span{display:block;color:var(--ink-soft);font-size:13px;margin-top:5px;font-family:'Inter'}
+
+  /* generic grids */
+  .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:8px}
+  .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:8px}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:24px}
+  .card h3{font-family:'Space Grotesk';font-weight:600;font-size:17px;margin-bottom:10px;display:flex;align-items:center;gap:10px}
+  .card p{font-size:14.5px;margin:0;color:var(--ink-soft)}
+  .dot{width:9px;height:9px;border-radius:50%;flex:0 0 auto}
+  .dot.r{background:var(--red)}.dot.a{background:var(--amber)}.dot.i{background:var(--indigo)}.dot.g{background:var(--green)}
+
+  .big-stat{display:flex;flex-wrap:wrap;gap:40px;margin:30px 0 6px}
+  .big-stat .n{font-family:'Space Grotesk';font-weight:700;font-size:clamp(34px,5vw,56px);letter-spacing:-.02em;line-height:1}
+  .big-stat .n.green{color:var(--green)}
+  .big-stat .l{font-size:13px;color:var(--ink-faint);margin-top:8px;max-width:22ch}
+
+  /* steps */
+  .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:10px}
+  .step-c{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px;position:relative}
+  .step-c .k{font-family:'JetBrains Mono';font-size:11px;color:var(--indigo);margin-bottom:10px}
+  .step-c .t{font-family:'Space Grotesk';font-weight:600;font-size:16px;margin-bottom:6px}
+  .step-c .d{font-size:13px;color:var(--ink-soft)}
+
+  /* dashboard mock */
+  .mock{background:var(--panel);border:1px solid var(--line-2);border-radius:18px;padding:26px;max-width:360px;backdrop-filter:blur(8px)}
+  .mock .mlab{font-family:'JetBrains Mono';font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:6px}
+  .mock .mbig{font-family:'Space Grotesk';font-weight:700;font-size:48px;letter-spacing:-.02em;color:var(--green)}
+  .mock .mrow{display:flex;justify-content:space-between;font-family:'JetBrains Mono';font-size:12.5px;color:var(--ink-soft);padding:9px 0;border-top:1px solid var(--line);margin-top:4px}
+  .mock .mrow:first-of-type{margin-top:18px}
+
+  /* funnel */
+  .funnel{display:flex;flex-direction:column;gap:10px;margin-top:10px}
+  .tier{border:1px solid var(--line);border-radius:13px;padding:18px 22px;display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}
+  .tier.tam{background:rgba(109,109,255,.1);border-color:rgba(109,109,255,.3)}
+  .tier.som{background:rgba(52,211,153,.08);border-color:rgba(52,211,153,.28)}
+  .tier .lab{font-family:'Space Grotesk';font-weight:600;font-size:15px}
+  .tier .lab small{display:block;font-family:'Inter';font-weight:400;color:var(--ink-faint);font-size:12.5px;margin-top:3px;max-width:48ch}
+  .tier .val{font-family:'JetBrains Mono';font-weight:700;font-size:20px;white-space:nowrap}
+  .tier .val span{display:block;font-size:11px;font-weight:400;color:var(--ink-faint);text-align:right;margin-top:2px}
+
+  /* pricing */
+  .pricing{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:8px}
+  .plan{border:1px solid var(--line);border-radius:16px;padding:22px;display:flex;flex-direction:column;background:var(--panel)}
+  .plan.feat{border-color:var(--indigo);box-shadow:0 0 40px -16px rgba(109,109,255,.7);position:relative}
+  .plan.feat::before{content:"Wedge";position:absolute;top:-10px;left:20px;background:var(--indigo);color:#fff;font-family:'JetBrains Mono';font-size:10px;letter-spacing:.08em;text-transform:uppercase;padding:3px 10px;border-radius:100px}
+  .plan .pn{font-family:'Space Grotesk';font-weight:600;font-size:16px}
+  .plan .pr{font-family:'Space Grotesk';font-weight:700;font-size:34px;margin:10px 0 0;letter-spacing:-.02em}
+  .plan .pr small{font-size:14px;font-weight:400;color:var(--ink-faint)}
+  .plan .per{font-size:12px;color:var(--ink-faint);margin-bottom:14px}
+  .plan ul{list-style:none;font-size:13px;color:var(--ink-soft);display:flex;flex-direction:column;gap:7px}
+  .plan li{padding-left:18px;position:relative}
+  .plan li::before{content:"→";position:absolute;left:0;color:var(--indigo)}
+
+  /* table */
+  .tbl{width:100%;border-collapse:collapse;font-size:14px;margin-top:6px}
+  .tbl th,.tbl td{padding:12px 14px;text-align:left;border-bottom:1px solid var(--line)}
+  .tbl th{font-family:'JetBrains Mono';font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-faint)}
+  .tbl .hl td{background:rgba(109,109,255,.12);font-weight:600}
+  .tbl td.mono{font-family:'JetBrains Mono'}
+  .tag{font-family:'JetBrains Mono';font-size:10.5px;padding:2px 8px;border-radius:6px}
+  .tag.no{background:rgba(251,113,133,.16);color:var(--red)}
+  .tag.yes{background:rgba(52,211,153,.16);color:var(--green)}
+
+  /* gtm / lists */
+  .chan{display:flex;flex-direction:column;gap:12px;margin-top:6px}
+  .chan li{list-style:none;padding:16px 20px;background:var(--panel);border:1px solid var(--line);border-radius:13px;font-size:14.5px;color:var(--ink-soft)}
+  .chan li b{color:var(--ink);font-family:'Space Grotesk';font-weight:600;display:block;margin-bottom:3px;font-size:15px}
+
+  /* roadmap */
+  .road{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:8px}
+  .road .col{border:1px solid var(--line);border-radius:16px;padding:22px;background:var(--panel)}
+  .road .col h3{font-family:'JetBrains Mono';font-size:12px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:16px}
+  .road .now h3{color:var(--green)} .road .next h3{color:var(--indigo)} .road .later h3{color:var(--ink-faint)}
+  .road ul{list-style:none;display:flex;flex-direction:column;gap:11px}
+  .road li{font-size:13.5px;color:var(--ink-soft);padding-left:16px;position:relative}
+  .road li::before{content:"";position:absolute;left:0;top:8px;width:6px;height:6px;border-radius:50%;background:var(--line-2)}
+
+  /* team */
+  .team-head{display:flex;align-items:center;gap:18px;margin-bottom:24px}
+  .avatar{width:64px;height:64px;border-radius:18px;background:linear-gradient(135deg,var(--indigo),var(--violet));display:grid;place-items:center;font-family:'Space Grotesk';font-weight:700;font-size:26px;color:#fff;flex:0 0 auto}
+  .team-head .who{font-family:'Space Grotesk';font-weight:600;font-size:20px}
+  .team-head .who small{display:block;font-family:'Inter';font-weight:400;color:var(--ink-faint);font-size:13.5px;margin-top:3px}
+  .creds{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .cred{background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:18px}
+  .cred .ct{font-family:'Space Grotesk';font-weight:600;font-size:14.5px;margin-bottom:5px}
+  .cred .cd{font-size:13px;color:var(--ink-soft)}
+
+  /* ask */
+  .ask-num{font-family:'Space Grotesk';font-weight:700;font-size:clamp(50px,9vw,104px);letter-spacing:-.03em;line-height:1;background:linear-gradient(110deg,var(--indigo),var(--violet));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+  .alloc{display:flex;flex-direction:column;gap:10px;margin-top:24px;max-width:560px}
+  .alloc .row{display:grid;grid-template-columns:42px 1fr auto;gap:14px;align-items:center}
+  .alloc .pct{font-family:'JetBrains Mono';font-weight:700;font-size:14px;color:var(--violet)}
+  .alloc .bar{height:8px;border-radius:100px;background:linear-gradient(90deg,var(--indigo),var(--violet))}
+  .alloc .nm{font-size:14px;color:var(--ink-soft)}
+
+  .note{font-family:'JetBrains Mono';font-size:11.5px;color:var(--ink-faint);margin-top:22px}
+  .closing h1{max-width:16ch}
+
+  /* NAV */
+  .nav{position:fixed;bottom:0;left:0;right:0;height:64px;display:flex;align-items:center;justify-content:center;gap:18px;background:linear-gradient(0deg,var(--void),transparent);z-index:50}
+  .nav button{width:40px;height:40px;border-radius:50%;border:1px solid var(--line-2);background:var(--panel-2);color:var(--ink);font-size:16px;cursor:pointer;display:grid;place-items:center;transition:all .2s;backdrop-filter:blur(8px)}
+  .nav button:hover{background:var(--indigo);border-color:var(--indigo)}
+  .nav button:disabled{opacity:.3;cursor:default}
+  .counter{font-family:'JetBrains Mono';font-size:12px;color:var(--ink-faint);min-width:54px;text-align:center}
+  .counter b{color:var(--ink)}
+  .progress{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--indigo),var(--violet));z-index:60;transition:width .35s ease;width:0}
+  .badge-prev{position:fixed;top:16px;right:18px;z-index:55;font-family:'JetBrains Mono';font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--amber);border:1px solid var(--line);background:var(--panel-2);padding:4px 11px;border-radius:100px;backdrop-filter:blur(8px)}
+  .hint{position:fixed;bottom:74px;left:50%;transform:translateX(-50%);font-family:'JetBrains Mono';font-size:10.5px;color:var(--ink-faint);z-index:50;opacity:.8;transition:opacity .4s}
+
+  @media(max-width:780px){
+    .grid-2,.grid-3,.steps,.pricing,.road,.creds{grid-template-columns:1fr}
+    .steps{grid-template-columns:1fr 1fr}
+    .slide{padding:56px 20px 96px}
+    .big-stat{gap:24px}
+    .title-meta{gap:18px}
+  }
+  @media(prefers-reduced-motion:reduce){.deck{scroll-behavior:auto}.progress{transition:none}}
+</style>
+</head>
+<body>
+
+<div class="progress" id="prog"></div>
+<div class="badge-prev">Preview · seed conversation</div>
+
+<div class="deck" id="deck">
+
+  <!-- 1 TITLE -->
+  <section class="slide">
+    <div class="glow"></div><div class="glow g2"></div>
+    <div class="inner">
+      <div class="title-wordmark"><div class="logo">B</div><span>BTW Helper</span></div>
+      <h1>File your VAT,<br>not your books.</h1>
+      <p class="tagline">An AI assistant that turns a folder of invoices into a ready-to-file Dutch BTW return — in ten minutes, no accountant, no bookkeeping software.</p>
+      <div class="title-meta">
+        <div>Stage<span>Working prototype · in testing</span></div>
+        <div>Market<span>1.8M Dutch freelancers</span></div>
+        <div>Raising<span>Pre-seed</span></div>
+        <div>Founder<span>Many-Worlds Studio · Groningen</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2 PROBLEM -->
+  <section class="slide">
+    <div class="glow"></div>
+    <div class="inner">
+      <div class="eyebrow">Problem <span class="step">02</span></div>
+      <h2>Every quarter, filing BTW is small, frequent, and <span class="ac">quietly terrifying.</span></h2>
+      <p class="lead">1.8M Dutch zzp'ers must report their VAT four times a year on a government portal that speaks in coded boxes — reverse charge, self-assessed tax, EU rules — that nobody taught them. Get a box wrong and you overpay or invite a correction. So they pick one of three bad options:</p>
+      <div class="grid-3" style="margin-top:24px">
+        <div class="card"><h3><span class="dot r"></span>Pay an accountant</h3><p>€600–€2,500/year for 30 minutes of quarterly work. Overkill for one person with 20 invoices.</p></div>
+        <div class="card"><h3><span class="dot a"></span>Bookkeeping software</h3><p>MoneyBird &amp; co are full accounting suites. They ask you to become a bookkeeper to use them.</p></div>
+        <div class="card"><h3><span class="dot i"></span>Wing it in Excel</h3><p>Manual VAT math at 23:00 on deadline day. Free, error-prone, stressful every quarter.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3 SOLUTION -->
+  <section class="slide">
+    <div class="glow g2"></div>
+    <div class="inner">
+      <div class="eyebrow">Solution <span class="step">03</span></div>
+      <h2>Drop your invoices in.<br><span class="ac">We hand back a filed return.</span></h2>
+      <p class="lead">BTW Helper reads each invoice with AI, assigns the correct <span class="mono">rubriek</span>, handles reverse-charge and currency conversion, and pre-fills a simulator that mirrors the official Belastingdienst form. You review, copy across, and file. Done.</p>
+      <div class="grid-2" style="margin-top:26px">
+        <div class="card"><h3>One job, done end to end</h3><p>Not a ledger, not line items — invoices in, a correct return out. The thing freelancers actually need, and nothing they don't.</p></div>
+        <div class="card"><h3>You stay in control</h3><p>We pre-fill; you submit yourself. No risky auto-filing to a tax authority, and every classification is explained in plain language.</p></div>
+      </div>
+      <p class="note">Positioning: we sell <strong style="color:var(--violet)">relief</strong>, not bookkeeping. The enemy is deadline-night dread — not a competitor.</p>
+    </div>
+  </section>
+
+  <!-- 4 PRODUCT DEMO -->
+  <section class="slide">
+    <div class="glow"></div>
+    <div class="inner">
+      <div class="eyebrow">Product · live today <span class="step">04</span></div>
+      <h2>This already works.</h2>
+      <div class="steps" style="margin-bottom:28px">
+        <div class="step-c"><div class="k">01</div><div class="t">Upload</div><div class="d">Drag in a quarter of PDFs, all types at once.</div></div>
+        <div class="step-c"><div class="k">02</div><div class="t">AI classifies</div><div class="d">Rubriek, reverse charge, FX — automatically.</div></div>
+        <div class="step-c"><div class="k">03</div><div class="t">Review</div><div class="d">Check every number, flagged if inconsistent.</div></div>
+        <div class="step-c"><div class="k">04</div><div class="t">File</div><div class="d">Copy into the portal. Filed in 10 minutes.</div></div>
+      </div>
+      <div style="display:flex;gap:30px;align-items:center;flex-wrap:wrap">
+        <div class="mock">
+          <div class="mlab">Q1 2026 · real dry-run result</div>
+          <div class="mbig">+€24,15</div>
+          <div class="mrow"><span>1a · omzet</span><span>€46,20</span></div>
+          <div class="mrow"><span>4a · reverse charge</span><span>€25,66</span></div>
+          <div class="mrow"><span>5g · te betalen</span><span>+€24,15</span></div>
+        </div>
+        <p class="lead" style="flex:1;min-width:240px">A full Q1 2026 filing has run end to end on the live prototype — invoices in, correct rubrieken out, totals matching the manual calculation <strong>to the cent</strong>.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5 MARKET -->
+  <section class="slide">
+    <div class="glow g2"></div>
+    <div class="inner">
+      <div class="eyebrow">Market <span class="step">05</span></div>
+      <h2>A focused beachhead inside a <span class="ac">structural market.</span></h2>
+      <div class="big-stat">
+        <div><div class="n mono">1.79M</div><div class="l">zzp'ers registered at the KVK (Q1 2026)</div></div>
+        <div><div class="n mono">1.2M</div><div class="l">with self-employment as main income (CBS)</div></div>
+        <div><div class="n mono">€600+</div><div class="l">typical annual accountant cost we displace</div></div>
+      </div>
+      <div class="funnel" style="margin-top:24px">
+        <div class="tier tam"><div class="lab">TAM — VAT-filing solo entrepreneurs<small>Registered zzp'ers filing quarterly BTW</small></div><div class="val">~1.5M<span>≈ €150M/yr</span></div></div>
+        <div class="tier"><div class="lab">SAM — underserved self-filers<small>On free plans, spreadsheets, or reluctant accountant users</small></div><div class="val">~500K<span>≈ €50M/yr</span></div></div>
+        <div class="tier som"><div class="lab">SOM — 3-yr beachhead<small>~1% of SAM via community + content</small></div><div class="val">~5K<span>≈ €400K ARR</span></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6 BUSINESS MODEL -->
+  <section class="slide">
+    <div class="glow"></div>
+    <div class="inner">
+      <div class="eyebrow">Business model <span class="step">06</span></div>
+      <h2>Free to file one real quarter. Cheap to keep.</h2>
+      <p class="lead" style="margin-bottom:20px">Per-account SaaS, priced under one MoneyBird tier. The free plan files a full quarter — that's the demo that converts. ~90% gross margin; AI parsing costs cents per user.</p>
+      <div class="pricing">
+        <div class="plan"><div class="pn">Starter</div><div class="pr">€0</div><div class="per">forever</div><ul><li>1 eenmanszaak</li><li>15 invoices / quarter</li><li>AI classify + simulator</li><li>Copy-to-Belastingdienst</li></ul></div>
+        <div class="plan feat"><div class="pn">Pro</div><div class="pr">€7<small>/mo</small></div><div class="per">€69 / year</div><ul><li>Unlimited + bulk upload</li><li>PDF export</li><li>Deadline reminders</li><li>NL · EN · ES</li></ul></div>
+        <div class="plan"><div class="pn">Studio</div><div class="pr">€14<small>/mo</small></div><div class="per">€149 / year</div><ul><li>Everything in Pro</li><li>Annual report (IB prep)</li><li>Accountant export</li><li>Priority support</li></ul></div>
+      </div>
+      <p class="note">The cost of being wrong on a tax form dwarfs €7/month. One correct filed quarter inside the tool makes renewal a no-brainer.</p>
+    </div>
+  </section>
+
+  <!-- 7 GO TO MARKET -->
+  <section class="slide">
+    <div class="glow g2"></div>
+    <div class="inner">
+      <div class="eyebrow">Go-to-market <span class="step">07</span></div>
+      <h2>Win the niche that <span class="ac">already trusts the founder.</span></h2>
+      <ul class="chan">
+        <li><b>Beachhead: creative, dev &amp; expat freelancers</b>The people with the messiest reverse-charge invoices (US SaaS, EU tools) and the least patience for accounting software — and the founder's own community.</li>
+        <li><b>Warm network first</b>A 102-member film association and 50+ Spanish-speaking expat &amp; family groups are direct lines to the first hundred users — exactly the beachhead profile.</li>
+        <li><b>Content &amp; SEO</b>Own the long-tail "how do I file rubriek 4a" queries freelancers Google at deadline. Each answer ends at the product.</li>
+        <li><b>Product-led growth</b>The free quarter is the funnel; the simulator is the demo. Land at the moment of pain, four times a year.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 8 COMPETITION -->
+  <section class="slide">
+    <div class="glow"></div>
+    <div class="inner">
+      <div class="eyebrow">Competition / differentiation <span class="step">08</span></div>
+      <h2>Everyone else sells more than the freelancer needs.</h2>
+      <table class="tbl">
+        <thead><tr><th>Option</th><th>Entry</th><th>Scope</th><th>Learning curve</th><th>AI</th></tr></thead>
+        <tbody>
+          <tr><td>Accountant</td><td class="mono">€49+/mo</td><td>Full service</td><td>None (costly)</td><td><span class="tag no">No</span></td></tr>
+          <tr><td>MoneyBird</td><td class="mono">€15/mo</td><td>Full bookkeeping</td><td>Medium</td><td><span class="tag no">No</span></td></tr>
+          <tr><td>e-Boekhouden</td><td class="mono">~€12/mo</td><td>Full, dated UI</td><td>High</td><td><span class="tag no">No</span></td></tr>
+          <tr><td>Spreadsheet</td><td class="mono">€0</td><td>DIY</td><td>High &amp; manual</td><td><span class="tag no">No</span></td></tr>
+          <tr class="hl"><td>BTW Helper</td><td class="mono">€0 → €7</td><td>VAT filing only</td><td><span class="tag yes">Near-zero</span></td><td><span class="tag yes">Yes</span></td></tr>
+        </tbody>
+      </table>
+      <p class="lead" style="margin-top:22px">Incumbents win the freelancer who wants to <em>run their whole admin</em>. We win the far larger group who resent admin and just want the scary form to be over. <strong>Different buyer, same KVK number.</strong></p>
+    </div>
+  </section>
+
+  <!-- 9 TRACTION -->
+  <section class="slide">
+    <div class="glow g2"></div>
+    <div class="inner">
+      <div class="eyebrow">Traction <span class="step">09</span></div>
+      <h2>Early, real, and <span class="ac">validated by use.</span></h2>
+      <div class="big-stat">
+        <div><div class="n mono">15</div><div class="l">founder-freelancers testing the app as design partners</div></div>
+        <div><div class="n green">Q1'26</div><div class="l">full filing dry-run completed, verified to the cent</div></div>
+        <div><div class="n mono">150+</div><div class="l">warm potential users in the founder's network</div></div>
+      </div>
+      <div class="grid-2" style="margin-top:24px">
+        <div class="card"><h3>What's proven</h3><p>The hard part works: AI classification, reverse-charge logic, and the full filing flow run live. A real freelancer (the founder) files real quarters with it today.</p></div>
+        <div class="card"><h3>What we're instrumenting</h3><p>Pre-revenue by design. The metrics that matter next: <strong>activation</strong> (first filed quarter), <strong>retention</strong> (quarter-over-quarter return), <strong>willingness to pay</strong>, and <strong>MRR / monthly growth</strong> once Pro opens.</p></div>
+      </div>
+      <p class="note">Honest stage: this is a working prototype with design partners, not a revenue business yet — the raise turns validated pain into paying users.</p>
+    </div>
+  </section>
+
+  <!-- 10 ROADMAP -->
+  <section class="slide">
+    <div class="glow"></div>
+    <div class="inner">
+      <div class="eyebrow">Roadmap <span class="step">10</span></div>
+      <h2>Now, next, later.</h2>
+      <div class="road">
+        <div class="col now"><h3>● Now</h3><ul>
+          <li>Harden multi-user isolation &amp; storage</li>
+          <li>Public signup + billing</li>
+          <li>Ship the marketing landing</li>
+          <li>Onboard the 15 design partners</li>
+        </ul></div>
+        <div class="col next"><h3>● Next</h3><ul>
+          <li>PDF export &amp; deadline reminders</li>
+          <li>NL · EN · ES launch</li>
+          <li>Annual report builder (IB prep)</li>
+          <li>Convert pilots to paid Pro</li>
+        </ul></div>
+        <div class="col later"><h3>● Later</h3><ul>
+          <li>Multi-country VAT (BE, DE)</li>
+          <li>Accountant export package</li>
+          <li>Agent-native distribution</li>
+          <li>Partnerships with freelancer platforms</li>
+        </ul></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 11 TEAM -->
+  <section class="slide">
+    <div class="glow g2"></div>
+    <div class="inner">
+      <div class="eyebrow">Team <span class="step">11</span></div>
+      <div class="team-head">
+        <div class="avatar">G</div>
+        <div class="who">Solo founder<small>Many-Worlds Studio / Dymaxion · Groningen, NL</small></div>
+      </div>
+      <h2 style="font-size:clamp(22px,3vw,32px);margin-bottom:20px">A founder who is the customer, the builder, and the channel.</h2>
+      <div class="creds">
+        <div class="cred"><div class="ct">⚙ Technical</div><div class="cd">Designed and shipped the full product solo — Next.js, Supabase, AI parsing pipeline, live in production.</div></div>
+        <div class="cred"><div class="ct">◇ Product</div><div class="cd">Built it for his own eenmanszaak first. Dogfooded every quarter — the product earns its keep before anyone else sees it.</div></div>
+        <div class="cred"><div class="ct">◈ Market knowledge</div><div class="cd">Lives the exact pain as a Dutch freelancer. No guesswork about the problem — it's a personal one.</div></div>
+        <div class="cred"><div class="ct">◆ Unfair distribution</div><div class="cd">Direct access to the beachhead: a 102-member film association and Spanish-speaking expat &amp; family communities — warm channels competitors can't buy.</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 12 FINANCIALS -->
+  <section class="slide">
+    <div class="glow"></div>
+    <div class="inner">
+      <div class="eyebrow">Financials · directional <span class="step">12</span></div>
+      <h2>Software margins, penny-scale cost.</h2>
+      <div class="big-stat">
+        <div><div class="n mono">~90%+</div><div class="l">gross margin (thin-vertical SaaS)</div></div>
+        <div><div class="n mono">€3–6</div><div class="l">AI + infra cost per user / year</div></div>
+        <div><div class="n mono">&lt;6mo</div><div class="l">CAC payback (community-led, CAC &lt;€25)</div></div>
+      </div>
+      <table class="tbl" style="margin-top:22px">
+        <thead><tr><th>Directional path</th><th>Paying users</th><th>Indicative ARR</th></tr></thead>
+        <tbody>
+          <tr><td>Year 1 — pilots → first paid</td><td class="mono">~50–150</td><td class="mono">≈ €5–15K</td></tr>
+          <tr><td>Year 2 — beachhead</td><td class="mono">~800–1.5K</td><td class="mono">≈ €80–120K</td></tr>
+          <tr class="hl"><td>Year 3 — SOM</td><td class="mono">~5K</td><td class="mono">≈ €400K</td></tr>
+        </tbody>
+      </table>
+      <p class="note">Illustrative, not a forecast. Seasonal business: four filing spikes a year; retention strategy turns panic-purchases into a habit.</p>
+    </div>
+  </section>
+
+  <!-- 13 ASK -->
+  <section class="slide">
+    <div class="glow g2"></div>
+    <div class="inner">
+      <div class="eyebrow">The ask · use of funds <span class="step">13</span></div>
+      <h2 style="margin-bottom:14px">Raising</h2>
+      <div class="ask-num">€100K<span style="font-size:.3em;color:var(--ink-faint);-webkit-text-fill-color:var(--ink-faint)"> &nbsp;pre-seed</span></div>
+      <p class="lead" style="margin-top:18px">To turn a validated prototype into paying users — 12–18 months of runway focused on growth, not survival.</p>
+      <div class="alloc">
+        <div class="row"><span class="pct">45%</span><div class="bar" style="width:100%"></div><span class="nm">Growth marketing &amp; content</span></div>
+        <div class="row"><span class="pct">25%</span><div class="bar" style="width:58%"></div><span class="nm">Sales &amp; partnerships</span></div>
+        <div class="row"><span class="pct">20%</span><div class="bar" style="width:46%"></div><span class="nm">Product — multi-language &amp; multi-country</span></div>
+        <div class="row"><span class="pct">10%</span><div class="bar" style="width:24%"></div><span class="nm">Runway &amp; operations</span></div>
+      </div>
+      <p class="note">Amount is a placeholder to set with your real runway plan. Allocation reflects the priority: distribution, not engineering.</p>
+    </div>
+  </section>
+
+  <!-- 14 CLOSING -->
+  <section class="slide closing">
+    <div class="glow"></div><div class="glow g2"></div>
+    <div class="inner">
+      <div class="eyebrow">BTW Helper <span class="step">14</span></div>
+      <h1>Four times a year,<br>1.8 million people<br>dread one form.<br><span class="ac">We make it vanish.</span></h1>
+      <p class="tagline" style="margin-top:28px">File your VAT, not your books.</p>
+    </div>
+  </section>
+
+</div>
+
+<div class="hint" id="hint">← → or swipe to navigate</div>
+<nav class="nav">
+  <button id="prev" aria-label="Previous">‹</button>
+  <div class="counter"><b id="cur">1</b> / <span id="total">14</span></div>
+  <button id="next" aria-label="Next">›</button>
+</nav>
+
+<script>
+  const deck=document.getElementById('deck');
+  const slides=[...deck.querySelectorAll('.slide')];
+  const total=slides.length;
+  const prog=document.getElementById('prog');
+  const cur=document.getElementById('cur');
+  document.getElementById('total').textContent=total;
+  const prev=document.getElementById('prev');
+  const next=document.getElementById('next');
+  const hint=document.getElementById('hint');
+  let i=0;
+
+  function go(n){
+    i=Math.max(0,Math.min(total-1,n));
+    deck.scrollTo({left:i*deck.clientWidth,behavior:'smooth'});
+    update();
+  }
+  function update(){
+    cur.textContent=i+1;
+    prog.style.width=((i)/(total-1)*100)+'%';
+    prev.disabled=i===0; next.disabled=i===total-1;
+  }
+  // sync index on manual scroll/swipe
+  let t;
+  deck.addEventListener('scroll',()=>{
+    clearTimeout(t);
+    t=setTimeout(()=>{
+      const n=Math.round(deck.scrollLeft/deck.clientWidth);
+      if(n!==i){i=n;update();}
+    },80);
+  });
+  prev.onclick=()=>go(i-1);
+  next.onclick=()=>{go(i+1);hint.style.opacity=0;};
+  window.addEventListener('keydown',e=>{
+    if(e.key==='ArrowRight'||e.key===' '){e.preventDefault();go(i+1);hint.style.opacity=0;}
+    if(e.key==='ArrowLeft'){e.preventDefault();go(i-1);}
+    if(e.key==='Home')go(0); if(e.key==='End')go(total-1);
+  });
+  window.addEventListener('resize',()=>deck.scrollTo({left:i*deck.clientWidth}));
+  setTimeout(()=>hint.style.opacity=0,5000);
+  update();
+</script>
+</body>
+</html>
