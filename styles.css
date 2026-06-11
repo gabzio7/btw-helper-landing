@@ -364,6 +364,173 @@ h3 {
   line-height: 1.3;
 }
 
+/* ---------------------------------------------------------------- builder */
+.builder { padding: clamp(56px, 7vw, 84px) 0; }
+.builder-note { max-width: 520px; margin: 0 auto; }
+.builder-avatar {
+  width: 48px; height: 48px;
+  border-radius: 50%;
+  margin: 0 auto 18px;
+  background: linear-gradient(135deg, var(--indigo), var(--violet));
+  color: #fff;
+  font-weight: 700;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.builder-text {
+  font-size: clamp(16.5px, 1.9vw, 19px);
+  line-height: 1.65;
+  color: var(--ink-soft);
+}
+.builder-sig {
+  margin-top: 14px;
+  font-weight: 600;
+  font-size: 15.5px;
+  color: var(--ink);
+}
+.builder-label {
+  margin-top: 10px;
+  font-size: 11px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+/* ---------------------------------------------------------------- pain (dark glass) */
+.cards-4 {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+  perspective: 1000px;
+}
+.pain-card { padding: 26px 24px; }
+.pain-card h3 { color: #fff; margin-bottom: 8px; }
+.pain-card p { font-size: 14.5px; color: rgba(255,255,255,.62); }
+.card-icon { font-size: 30px; line-height: 1; display: block; margin-bottom: 16px; }
+.dark .gap-line, .dark2 .gap-line { color: #fff; }
+
+/* ---------------------------------------------------------------- stats */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+  margin-top: clamp(28px, 4vw, 44px);
+}
+.stat-card { padding: 32px 28px; }
+.stat-num {
+  font-weight: 700;
+  font-size: clamp(44px, 5vw, 60px);
+  letter-spacing: -.02em;
+  line-height: 1;
+  color: #fff;
+  text-shadow: 0 0 28px rgba(91,91,240,.65); /* indigo glow */
+  font-variant-numeric: tabular-nums;
+  margin-bottom: 16px;
+}
+.stat-green .stat-num {
+  color: #4ade80;
+  text-shadow: 0 0 28px rgba(22,163,74,.55); /* green reserved: the payoff */
+}
+.stat-sub { font-size: 15px; color: rgba(255,255,255,.7); margin-bottom: 14px; }
+.stat-foot {
+  font-size: 11.5px;
+  letter-spacing: .03em;
+  color: rgba(255,255,255,.42);
+  border-top: 1px solid rgba(255,255,255,.09);
+  padding-top: 12px;
+}
+
+/* ---------------------------------------------------------------- audience */
+.aud-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 18px;
+  margin-top: clamp(28px, 4vw, 44px);
+  perspective: 1000px;
+}
+.aud-card { padding: 28px 26px; transition: transform .3s, border-color .3s; }
+.aud-card p { font-size: 15.5px; color: rgba(255,255,255,.72); line-height: 1.6; }
+.aud-card .card-icon { font-size: 32px; }
+@media (prefers-reduced-motion: no-preference) {
+  .aud-card:hover {
+    transform: perspective(900px) rotateX(2.5deg) rotateY(-3deg) translateY(-4px);
+    border-color: rgba(167,139,250,.35);
+  }
+}
+
+/* ---------------------------------------------------------------- sim demo */
+.demo { padding-top: 0; }
+.demo-caption {
+  font-size: clamp(16px, 1.8vw, 18px);
+  color: var(--ink-soft);
+  max-width: 52ch;
+  margin-bottom: 26px;
+}
+.sim-demo {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 96px minmax(0, 1fr);
+  gap: 0;
+  align-items: stretch;
+  max-width: 880px;
+}
+.sim-win {
+  background: var(--void-2);
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: var(--radius);
+  padding: 22px 24px;
+  color: #fff;
+  box-shadow: 0 20px 50px -28px rgba(17,21,42,.5);
+}
+.sim-title {
+  font-size: 10.5px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--violet);
+  margin-bottom: 14px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.sim-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  font-size: 13px;
+  color: rgba(255,255,255,.6);
+  padding: 9px 0;
+  border-top: 1px solid rgba(255,255,255,.08);
+  font-variant-numeric: tabular-nums;
+}
+.sim-row span:last-child { color: #fff; }
+.sim-src span:last-child { color: var(--violet); }
+.sim-dim { opacity: .55; }
+.sim-target { opacity: .25; } /* fills in as the chip "copies" it over */
+.sim-gap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  color: var(--indigo);
+}
+.sim-chip {
+  position: absolute;
+  background: var(--indigo);
+  color: #fff;
+  font-size: 11px;
+  padding: 5px 10px;
+  border-radius: 100px;
+  white-space: nowrap;
+  opacity: 0;
+  box-shadow: 0 0 18px -2px rgba(91,91,240,.8);
+}
+.sim-arrow-head { font-size: 20px; opacity: .5; }
+@media (prefers-reduced-motion: reduce) {
+  .sim-target { opacity: 1; }
+  .sim-chip { display: none; }
+}
+
 /* ---------------------------------------------------------------- steps */
 .steps-wrap { position: relative; padding-top: 26px; }
 .steps-line {
@@ -580,7 +747,30 @@ h3 {
   border-radius: 2px;
   background: var(--indigo);
 }
+.price-copy { font-size: 15px; color: var(--ink-soft); line-height: 1.6; margin-bottom: 26px; }
 .price-card .btn { margin-top: auto; justify-content: center; }
+.pricing-nudge {
+  margin-top: 28px;
+  max-width: 460px;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--indigo);
+  border-radius: 0 12px 12px 0;
+  padding: 18px 22px;
+}
+.nudge-label {
+  font-size: 10.5px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin-bottom: 8px;
+}
+.nudge-quote {
+  font-style: italic;
+  font-size: 13.5px;
+  line-height: 1.65;
+  color: var(--ink-soft);
+}
 .price-card:not(.highlight) .btn {
   background: transparent;
   border: 1px solid var(--line);
@@ -679,15 +869,22 @@ h3 {
 /* ---------------------------------------------------------------- responsive */
 @media (max-width: 1024px) {
   .steps { grid-template-columns: repeat(2, 1fr); }
+  .cards-4 { grid-template-columns: repeat(2, 1fr); }
 }
 @media (max-width: 920px) {
   .site-nav { display: none; }
   .hero-inner { grid-template-columns: 1fr; }
   .mock { justify-self: start; }
   .proof-grid { grid-template-columns: 1fr; }
+  .stats-grid { grid-template-columns: 1fr; }
+  .sim-demo { grid-template-columns: 1fr; }
+  .sim-gap { height: 72px; }
+  .sim-gap .sim-arrow-head { transform: rotate(90deg); }
 }
 @media (max-width: 760px) {
   .cards-3 { grid-template-columns: 1fr; }
+  .cards-4 { grid-template-columns: 1fr; }
+  .aud-grid { grid-template-columns: 1fr; }
   .footer-grid { grid-template-columns: 1fr; gap: 22px; }
   .header-inner { height: 58px; }
   .wordmark-sub { display: none; }

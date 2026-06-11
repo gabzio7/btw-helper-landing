@@ -3,15 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Klaar — Je BTW-aangifte? Klaar.</title>
-  <meta name="description" content="Sleep je facturen erin. AI rubriceert, rekent en vult je BTW-aangifte voor. Jij controleert en dient zelf in bij de Belastingdienst — in tien minuten.">
+  <title>BTWklaar — BTW aangifte voor zzp'ers</title>
+  <meta name="description" content="Je facturen erin. Klaar eruit. BTWklaar rubriceert je facturen, regelt reverse charge en valuta, en vult je BTW-aangifte voor. Jij controleert en dient zelf in — in 10 minuten.">
+  <link rel="canonical" href="https://btwklaar.nl/">
 
   <!-- OpenGraph -->
   <meta property="og:type" content="website">
-  <meta property="og:title" content="Klaar — Je BTW-aangifte? Klaar.">
-  <meta property="og:description" content="Sleep je facturen erin. AI rubriceert, rekent en vult je BTW-aangifte voor. Jij controleert en dient zelf in — in tien minuten.">
+  <meta property="og:url" content="https://btwklaar.nl/">
+  <meta property="og:title" content="BTWklaar — BTW aangifte voor zzp'ers">
+  <meta property="og:description" content="Je facturen erin. Klaar eruit. BTWklaar rubriceert je facturen, regelt reverse charge en valuta, en vult je BTW-aangifte voor. Jij controleert en dient zelf in — in 10 minuten.">
   <meta property="og:locale" content="nl_NL">
-  <meta property="og:site_name" content="Klaar — BTW Helper">
+  <meta property="og:site_name" content="BTWklaar">
 
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%235B5BF0'/%3E%3Ctext x='32' y='44' font-family='sans-serif' font-size='36' font-weight='700' fill='%23fff' text-anchor='middle'%3EK%3C/text%3E%3C/svg%3E">
 
@@ -35,9 +37,9 @@
 
   <header class="site-header">
     <div class="container header-inner">
-      <a href="#hero" class="wordmark disp" aria-label="Klaar — BTW Helper, naar boven">
-        <span id="brand-word">Klaar</span><span class="wordmark-dot">.</span>
-        <span class="wordmark-sub mono" id="brand-descriptor">BTW Helper</span>
+      <a href="#hero" class="wordmark disp" aria-label="BTWklaar, naar boven">
+        <span id="brand-word">BTWklaar</span><span class="wordmark-dot">.</span>
+        <span class="wordmark-sub mono" id="brand-descriptor">BTW filing assistant for zzp'ers</span>
       </a>
       <nav class="site-nav" aria-label="Hoofdnavigatie">
         <a href="#how" data-i18n="nav.how">Hoe het werkt</a>
@@ -64,17 +66,17 @@
       <canvas id="hero-canvas" aria-hidden="true"></canvas>
       <div class="container hero-inner">
         <div class="hero-copy">
-          <p class="eyebrow mono" data-i18n="hero.eyebrow">BTW-aangifte voor zzp'ers</p>
+          <p class="eyebrow mono" data-i18n="hero.eyebrow">Je facturen erin. Klaar eruit.</p>
           <h1 id="hero-h">
             <span class="mask"><span class="line" data-i18n="hero.h1a">Je BTW-aangifte?</span></span>
             <span class="mask"><span class="line accent" data-i18n="hero.h1b">Klaar.</span></span>
           </h1>
-          <p class="hero-sub" data-i18n="hero.sub">Sleep je facturen erin. Wij rubriceren, rekenen en vullen je aangifte voor. Jij controleert en dient in — in tien minuten.</p>
+          <p class="hero-sub" data-i18n="hero.sub">Sleep je facturen erin. Klaar rubriceert ze, regelt reverse charge en buitenlandse valuta. Jij controleert. Jij dient in. 10 minuten — geen 3 uur.</p>
           <div class="hero-ctas">
-            <a href="#pricing" class="btn btn-primary"><span data-i18n="hero.ctaPrimary">Probeer één kwartaal gratis</span> <span aria-hidden="true">→</span></a>
+            <a href="#pricing" class="btn btn-primary"><span data-i18n="hero.ctaPrimary">Probeer je eerste kwartaal — gratis</span> <span aria-hidden="true">→</span></a>
             <a href="#how" class="btn btn-ghost" data-i18n="hero.ctaGhost">Bekijk hoe het werkt</a>
           </div>
-          <p class="cta-note mono" data-i18n="hero.ctaNote">geen creditcard nodig</p>
+          <p class="cta-note mono" data-i18n="hero.ctaNote">Geen creditcard. Geen Nederlands nodig. Geen accountant nodig.</p>
         </div>
 
         <!-- Signature element: the live result dashboard -->
@@ -90,18 +92,39 @@
       </div>
     </section>
 
-    <!-- 2 · PAIN -->
-    <section id="pain" class="light" aria-labelledby="pain-h">
-      <div class="container">
-        <p class="eyebrow mono" data-i18n="pain.eyebrow" data-reveal>Het probleem</p>
-        <h2 id="pain-h" data-i18n="pain.h" data-reveal>Drie slechte opties. Eén gat.</h2>
-        <p class="section-intro" data-i18n="pain.intro" data-reveal>Geen boekhoudcursus. Geen €600 voor de accountant. Geen paniek op de deadline.</p>
-        <div class="cards-3" id="pain-cards"><!-- rendered from content.js --></div>
-        <p class="gap-line disp" data-i18n="pain.gap" data-reveal>Er ontbreekt iets tussen die drie: één tool die precies één taak perfect doet. Je BTW-aangifte. Klaar.</p>
+    <!-- 2 · BUILDER NOTE -->
+    <section id="builder" class="light builder">
+      <div class="container narrow center">
+        <div class="builder-note" data-reveal>
+          <div class="builder-avatar disp" aria-hidden="true">G</div>
+          <p class="builder-text" data-i18n="builder.text">Ik bouwde BTWklaar omdat ik zelf elk kwartaal uren kwijt was. Het formulier, de rubrieken, de buitenlandse facturen — niemand legt het je uit als je begint. Als het mij heeft geholpen, helpt het jou ook.</p>
+          <p class="builder-sig disp" data-i18n="builder.sig">— Gabz, zzp'er &amp; maker</p>
+          <p class="builder-label mono" data-i18n="builder.label">Gemaakt door één persoon in 🇳🇱</p>
+        </div>
       </div>
     </section>
 
-    <!-- 3 · HOW IT WORKS -->
+    <!-- 3 · PAIN — four layers -->
+    <section id="pain" class="dark" aria-labelledby="pain-h">
+      <div class="container">
+        <p class="eyebrow mono" data-i18n="pain.eyebrow" data-reveal>Het probleem</p>
+        <h2 id="pain-h" data-i18n="pain.h" data-reveal>De vijand is niet de accountant. Het is die middag per kwartaal.</h2>
+        <p class="section-intro" data-i18n="pain.intro" data-reveal>Vier dingen maken die middag langer dan nodig.</p>
+        <div class="cards-4" id="pain-cards"><!-- rendered from content.js --></div>
+        <p class="gap-line disp" data-i18n="pain.gap" data-reveal>BTWklaar haalt alle vier weg. Je facturen erin. Klaar eruit.</p>
+      </div>
+    </section>
+
+    <!-- 4 · STATS -->
+    <section id="stats" class="dark2" aria-labelledby="stats-h">
+      <div class="container">
+        <p class="eyebrow mono" data-i18n="stats.eyebrow" data-reveal>De besparing</p>
+        <h2 id="stats-h" data-i18n="stats.h" data-reveal>Wat BTWklaar je bespaart</h2>
+        <div class="stats-grid" id="stats-cards"><!-- rendered from content.js --></div>
+      </div>
+    </section>
+
+    <!-- 5 · HOW IT WORKS -->
     <section id="how" class="light alt" aria-labelledby="how-h">
       <div class="container">
         <p class="eyebrow mono" data-i18n="how.eyebrow" data-reveal>Hoe het werkt</p>
@@ -113,7 +136,29 @@
       </div>
     </section>
 
-    <!-- 4 · THE ENGINE / PROOF -->
+    <!-- 5b · TWO-WINDOW SIMULATOR DEMO -->
+    <section id="demo" class="light alt demo" aria-label="Simulator demo">
+      <div class="container">
+        <p class="demo-caption" data-i18n="how.simCaption" data-reveal>Zelfde velden, naast elkaar. Kopieer de getallen — je dient in, je gokt niet.</p>
+        <div class="sim-demo" data-reveal>
+          <div class="sim-win">
+            <p class="sim-title mono" data-i18n="how.simLeft">BTWklaar · simulator</p>
+            <div class="sim-row mono"><span>1a</span><span>€46,20</span></div>
+            <div class="sim-row mono"><span>4a</span><span>€25,66</span></div>
+            <div class="sim-row mono sim-src"><span>5g</span><span>+€24,15</span></div>
+          </div>
+          <div class="sim-gap" aria-hidden="true"><span class="sim-chip mono">+€24,15</span><span class="sim-arrow-head">→</span></div>
+          <div class="sim-win">
+            <p class="sim-title mono" data-i18n="how.simRight">Mijn Belastingdienst Zakelijk</p>
+            <div class="sim-row mono"><span>1a</span><span class="sim-dim">€46,20</span></div>
+            <div class="sim-row mono"><span>4a</span><span class="sim-dim">€25,66</span></div>
+            <div class="sim-row mono"><span>5g</span><span class="sim-target">+€24,15</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6 · THE ENGINE / PROOF -->
     <section id="proof" class="dark" aria-labelledby="proof-h">
       <div class="container">
         <p class="eyebrow mono" data-i18n="proof.eyebrow" data-reveal>De motor</p>
@@ -126,7 +171,16 @@
       </div>
     </section>
 
-    <!-- 5 · COMPARISON -->
+    <!-- 7 · AUDIENCE — mirrors, not testimonials -->
+    <section id="audience" class="dark2" aria-labelledby="aud-h">
+      <div class="container">
+        <p class="eyebrow mono" data-i18n="audience.eyebrow" data-reveal>Voor wie</p>
+        <h2 id="aud-h" data-i18n="audience.h" data-reveal>Herken je dit?</h2>
+        <div class="aud-grid" id="aud-cards"><!-- rendered from content.js --></div>
+      </div>
+    </section>
+
+    <!-- 8 · COMPARISON -->
     <section id="compare" class="light" aria-labelledby="compare-h">
       <div class="container">
         <p class="eyebrow mono" data-i18n="compare.eyebrow" data-reveal>Eerlijke vergelijking</p>
@@ -138,17 +192,18 @@
       </div>
     </section>
 
-    <!-- 6 · PRICING -->
+    <!-- 9 · PRICING -->
     <section id="pricing" class="light alt" aria-labelledby="pricing-h">
       <div class="container">
         <p class="eyebrow mono" data-i18n="pricing.eyebrow" data-reveal>Prijzen</p>
-        <h2 id="pricing-h" data-i18n="pricing.h" data-reveal>Begin gratis. Blijf voor de rust.</h2>
-        <p class="section-intro" data-i18n="pricing.sub" data-reveal>Het gratis plan doet één écht kwartaal — geen demo, je echte aangifte.</p>
+        <h2 id="pricing-h" data-i18n="pricing.h" data-reveal>Je eerste kwartaal is gratis.</h2>
+        <p class="section-intro" data-i18n="pricing.sub" data-reveal>De volledige ervaring — geen demo, je echte aangifte.</p>
         <div class="cards-3 pricing-cards" id="pricing-cards"><!-- rendered from content.js --></div>
+        <div class="pricing-nudge" id="pricing-nudge" data-reveal><!-- rendered from content.js --></div>
       </div>
     </section>
 
-    <!-- 7 · FAQ -->
+    <!-- 10 · FAQ -->
     <section id="faq" class="light" aria-labelledby="faq-h">
       <div class="container narrow">
         <p class="eyebrow mono" data-i18n="faq.eyebrow" data-reveal>FAQ</p>
@@ -157,21 +212,21 @@
       </div>
     </section>
 
-    <!-- 8 · FINAL CTA -->
+    <!-- 11 · FINAL CTA -->
     <section id="final" class="dark final" aria-labelledby="final-h">
       <div class="container narrow center">
         <h2 id="final-h" data-i18n="final.h" data-reveal>Volgend kwartaal: tien minuten.</h2>
-        <p class="section-intro" data-i18n="final.sub" data-reveal>Probeer één echt kwartaal gratis. Geen creditcard, geen abonnement — gewoon je aangifte, klaar.</p>
-        <a href="#pricing" class="btn btn-primary btn-lg" data-reveal><span data-i18n="final.cta">Probeer één kwartaal gratis</span> <span aria-hidden="true">→</span></a>
+        <p class="section-intro" data-i18n="final.sub" data-reveal>Probeer je eerste kwartaal gratis. Geen creditcard, geen abonnement — gewoon je aangifte, klaar.</p>
+        <a href="#pricing" class="btn btn-primary btn-lg" data-reveal><span data-i18n="final.cta">Probeer je eerste kwartaal — gratis</span> <span aria-hidden="true">→</span></a>
       </div>
     </section>
 
   </main>
 
-  <!-- 8b · LEGAL FOOTER -->
+  <!-- LEGAL FOOTER -->
   <footer class="site-footer dark2">
     <div class="container">
-      <p class="footer-tagline disp" id="footer-tagline">Klaar — your BTW helper</p>
+      <p class="footer-tagline disp" id="footer-tagline">BTWklaar — Je facturen erin. Klaar eruit.</p>
       <div class="footer-grid" id="footer-cols"><!-- rendered from content.js --></div>
       <div class="footer-fine">
         <p><strong id="footer-tax-title">Belasting-disclaimer.</strong> <span id="footer-tax"></span></p>
@@ -183,7 +238,7 @@
 
   <!-- Copy & data -->
   <script src="content.js"></script>
-  <!-- GSAP + ScrollTrigger -->
+  <!-- GSAP + ScrollTrigger + ScrollTo -->
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollToPlugin.min.js"></script>

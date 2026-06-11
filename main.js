@@ -24,6 +24,8 @@ function detectLang() {
 function t(str) {
   return str
     .replaceAll("{brand}", BRAND.name)
+    .replaceAll("{agent}", BRAND.agent)
+    .replaceAll("{domain}", BRAND.domain)
     .replaceAll("{descriptor}", BRAND.descriptor)
     .replaceAll("{studio}", BRAND.studio)
     .replaceAll("{city}", BRAND.city)
@@ -53,10 +55,31 @@ function renderHeroMock(c) {
 
 function renderPain(c) {
   document.getElementById("pain-cards").innerHTML = c.pain.cards
-    .map((card, i) =>
-      `<article class="card">
-        <span class="card-num" aria-hidden="true">0${i + 1}</span>
+    .map((card) =>
+      `<article class="pain-card glass">
+        <span class="card-icon" aria-hidden="true">${card.icon}</span>
         <h3>${t(card.t)}</h3><p>${t(card.d)}</p>
+      </article>`)
+    .join("");
+}
+
+function renderStats(c) {
+  document.getElementById("stats-cards").innerHTML = c.stats.items
+    .map((s) =>
+      `<article class="stat-card glass${s.green ? " stat-green" : ""}">
+        <p class="stat-num mono" data-num="${s.num}" data-prefix="${s.prefix || ""}" data-suffix="${s.suffix || ""}">${s.prefix || ""}${s.num}${s.suffix || ""}</p>
+        <p class="stat-sub">${t(s.sub)}</p>
+        <p class="stat-foot mono">${t(s.foot)}</p>
+      </article>`)
+    .join("");
+}
+
+function renderAudience(c) {
+  document.getElementById("aud-cards").innerHTML = c.audience.cards
+    .map((card) =>
+      `<article class="aud-card glass">
+        <span class="card-icon" aria-hidden="true">${card.icon}</span>
+        <p>${t(card.d)}</p>
       </article>`)
     .join("");
 }
@@ -104,17 +127,24 @@ function renderPricing(c) {
       const year = tier.yearly > 0
         ? `${p.perYearPrefix} €${tier.yearly} ${p.perYearSuffix}`
         : "&nbsp;";
+      // free tier shows a copy paragraph instead of a feature wall
+      const body = copy.features
+        ? `<ul class="price-features">${copy.features.map((f) => `<li>${t(f)}</li>`).join("")}</ul>`
+        : `<p class="price-copy">${t(copy.copy)}</p>`;
       return `<article class="price-card${tier.highlight ? " highlight" : ""}">
         ${tier.highlight ? `<span class="price-pop mono">${p.popular}</span>` : ""}
         <h3 class="price-name">${copy.name}</h3>
         <p class="price-tagline">${t(copy.tagline)}</p>
         <p class="price-amount mono">${amount}</p>
         <p class="price-year">${year}</p>
-        <ul class="price-features">${copy.features.map((f) => `<li>${t(f)}</li>`).join("")}</ul>
+        ${body}
         <button type="button" class="btn btn-primary inert-cta">${copy.cta}</button>
       </article>`;
     })
     .join("");
+  document.getElementById("pricing-nudge").innerHTML =
+    `<p class="nudge-label mono">${t(p.nudgeLabel)}</p>
+     <blockquote class="nudge-quote mono">${t(p.nudgeQuote)}</blockquote>`;
   bindInertCtas();
   bindPricingHover();
 }
@@ -153,8 +183,10 @@ function renderAll(c) {
   applyI18n(c);
   renderHeroMock(c);
   renderPain(c);
+  renderStats(c);
   renderHow(c);
   renderProof(c);
+  renderAudience(c);
   renderCompare(c);
   renderPricing(c);
   renderFaq(c);
@@ -198,23 +230,10 @@ function buildScrollFX() {
   if (fxCtx) fxCtx.revert();
   fxCtx = gsap.context(() => {
 
-    // generic single-element reveals
-    document.querySelectorAll("[data-reveal]").forEach((el) => {
-      gsap.from(el, {
-        y: 20, opacity: 0, duration: 0.7, ease: "power3.out",
-        scrollTrigger: { trigger: el, start: "top 85%", once: true },
-      });
-    });
-
-    // pain cards: staggered perspective slide-in
-    gsap.from("#pain-cards .card", {
-      opacity: 0, y: 34, rotationY: 18, x: -36,
-      transformOrigin: "left center", transformPerspective: 900,
-      duration: 0.85, ease: "power3.out", stagger: 0.12,
-      scrollTrigger: { trigger: "#pain-cards", start: "top 82%", once: true },
-    });
-
-    // how it works: pinned, steps revealed by scrub, connecting line draws
+    // how it works: pinned, steps revealed by scrub, connecting line draws.
+    // IMPORTANT: the pin must be created FIRST — triggers created after a pin
+    // get the pin distance added to their positions; triggers created before
+    // it keep stale, uncompensated positions (even after refresh).
     const mm = gsap.matchMedia();
     mm.add("(min-width: 921px)", () => {
       const steps = gsap.utils.toArray("#how-steps li");
@@ -233,6 +252,64 @@ function buildScrollFX() {
         scrollTrigger: { trigger: "#how-steps", start: "top 85%", once: true },
       });
     });
+
+    // generic single-element reveals
+    document.querySelectorAll("[data-reveal]").forEach((el) => {
+      gsap.from(el, {
+        y: 20, opacity: 0, duration: 0.7, ease: "power3.out",
+        scrollTrigger: { trigger: el, start: "top 85%", once: true },
+      });
+    });
+
+    // pain cards: staggered perspective slide-in
+    gsap.from("#pain-cards .pain-card", {
+      opacity: 0, y: 34, rotationY: 18, x: -36,
+      transformOrigin: "left center", transformPerspective: 900,
+      duration: 0.85, ease: "power3.out", stagger: 0.12,
+      scrollTrigger: { trigger: "#pain-cards", start: "top 82%", once: true },
+    });
+
+    // audience cards: same 3D family, alternating tilt direction
+    // (x offsets stay within the 24px container padding — no page overflow)
+    gsap.utils.toArray("#aud-cards .aud-card").forEach((card, i) => {
+      gsap.from(card, {
+        opacity: 0, y: 34, rotationY: i % 2 ? -14 : 14, x: i % 2 ? 20 : -20,
+        transformOrigin: i % 2 ? "right center" : "left center", transformPerspective: 900,
+        duration: 0.85, ease: "power3.out", delay: (i % 2) * 0.1,
+        scrollTrigger: { trigger: "#aud-cards", start: "top 82%", once: true },
+      });
+    });
+
+    // stat numbers: count up on scroll entry
+    gsap.utils.toArray(".stat-num").forEach((el) => {
+      const target = parseFloat(el.dataset.num);
+      const prefix = el.dataset.prefix || "";
+      const suffix = el.dataset.suffix || "";
+      const obj = { v: 0 };
+      const st = { trigger: el.closest(".stat-card"), start: "top 85%", once: true };
+      gsap.from(el.closest(".stat-card"), { opacity: 0, y: 24, duration: 0.6, ease: "power3.out", scrollTrigger: st });
+      gsap.to(obj, {
+        v: target, duration: 1.3, ease: "power2.out", scrollTrigger: st,
+        onUpdate: () => { el.textContent = prefix + Math.round(obj.v) + suffix; },
+        onComplete: () => { el.textContent = prefix + el.dataset.num + suffix; },
+      });
+    });
+
+    // simulator demo: a value gets "copied" from the BTWklaar window
+    // into the Belastingdienst window, on loop while in view
+    const chip = document.querySelector(".sim-chip");
+    if (chip) {
+      gsap.timeline({
+        repeat: -1, repeatDelay: 1.6,
+        scrollTrigger: { trigger: ".sim-demo", start: "top 85%", toggleActions: "play pause resume pause" },
+      })
+        .set(".sim-target", { opacity: 0.25 })
+        .fromTo(chip, { x: -34, opacity: 0 }, { x: -34, opacity: 1, duration: 0.3, ease: "power2.out" })
+        .to(chip, { x: 34, duration: 0.8, ease: "power2.inOut" })
+        .to(".sim-target", { opacity: 1, duration: 0.35, ease: "power2.out" }, "-=0.2")
+        .to(chip, { opacity: 0, duration: 0.3 }, "-=0.2")
+        .to({}, { duration: 0.4 });
+    }
 
     // comparison rows: one at a time, with a highlight sweep across each
     gsap.utils.toArray("#compare-table tbody tr").forEach((row, i) => {
