@@ -23,8 +23,9 @@ python3 -m http.server 4173
 | `index.html` | Semantic shell (landmarks, meta/OG, fonts, script mounts). NL copy inline as default. |
 | `content.js` | **Edit copy here.** `CONTENT` (NL/EN/ES), `PRICING`, `FIGURES`, `BRAND`. |
 | `styles.css` | Design tokens + all layout. |
-| `hero.js` | Three.js mouse-reactive particle field + GSAP hero timeline + count-up to `+€24,15`. |
-| `main.js` | Language switch, content rendering, scroll effects, GSAP accordion, magnetic CTAs. |
+| `hero.js` | Three.js mouse-reactive particle field + GSAP hero timeline + count-up to `+€24,15` + hero parallax layers. |
+| `main.js` | Language switch, content rendering, scroll effects (incl. horizontal pinned steps), smart nav, custom cursor, card tilt, GSAP accordion, magnetic CTAs. |
+| `assets/` | Gabz photo + real app screenshots (WebP served, PNG sources). |
 
 Dependencies (CDN, no install): GSAP 3.12 (+ScrollTrigger, +ScrollToPlugin), Three.js 0.165 (import map).
 
@@ -47,8 +48,9 @@ works (pinned 4 steps) → Two-window simulator demo (copy-chip loop) → Proof
   One change updates wordmark, copy, footer, meta.
 - **Pricing:** `content.js` → `PRICING.tiers` (numbers) + `CONTENT.<lang>.pricing.tiers`
   (strings). The free tier uses `copy` (paragraph) instead of `features` on purpose.
-- **Builder avatar:** `index.html` → `.builder-avatar` (placeholder circle —
-  swap for a real photo of Gabz later).
+- **Images:** `assets/` — `gabz.jpg` (builder photo), `app-dashboard.webp` +
+  `app-simulator.webp` (real app screenshots; the `.png` versions are the
+  editable sources — re-encode to WebP after changes).
 - **Colours:** `styles.css` `:root` tokens. Indigo is the only signal colour;
   `--green`/the green glow is reserved for the payoff (the €0 stat).
 - **Hero figures:** `content.js` → `FIGURES` + `data-target` on `#mock-result`.

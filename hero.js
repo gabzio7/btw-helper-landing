@@ -219,8 +219,8 @@ function initTimeline() {
     .from(".hero-sub", { opacity: 0, y: 16, duration: 0.6 }, "-=0.35")
     .from([".hero-ctas .btn", ".cta-note"], { opacity: 0, y: 18, duration: 0.55, stagger: 0.08 }, "-=0.3");
 
-  // dashboard: 3D perspective tilt entrance
-  tl.from("#hero-mock", {
+  // dashboard visual (screenshot + live card): 3D perspective tilt entrance
+  tl.from("#hero-visual", {
     opacity: 0, y: 46, rotationY: -14, rotationX: 9,
     transformPerspective: 1000, duration: 1.1,
   }, "-=0.5");
@@ -242,12 +242,13 @@ function initTimeline() {
   // rubriek rows tick in beneath the number
   tl.from("#mock-rows .mock-row", { opacity: 0, y: 10, duration: 0.4, stagger: 0.12 }, "-=0.9");
 
-  // subtle parallax on the dashboard card while scrolling the hero
-  gsap.to("#hero-mock", {
-    y: -40,
-    ease: "none",
-    scrollTrigger: { trigger: "#hero", start: "top top", end: "bottom top", scrub: true },
-  });
+  // parallax layers while scrolling the hero (factors of the scroll distance):
+  // headline −0.15 · visual −0.08 · canvas +0.05 (background depth)
+  const heroST = { trigger: "#hero", start: "top top", end: "bottom top", scrub: 0.5 };
+  const heroH = () => document.getElementById("hero").offsetHeight;
+  gsap.to(".hero h1", { y: () => -0.15 * heroH(), ease: "none", scrollTrigger: { ...heroST, invalidateOnRefresh: true } });
+  gsap.to("#hero-visual", { y: () => -0.08 * heroH(), ease: "none", scrollTrigger: { ...heroST, invalidateOnRefresh: true } });
+  gsap.to("#hero-canvas", { y: () => 0.05 * heroH(), ease: "none", scrollTrigger: { ...heroST, invalidateOnRefresh: true } });
 
   // the gradient behind the hero shifts as you scroll into the Pain section
   gsap.to(".hero-glow", {

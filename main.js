@@ -55,9 +55,9 @@ function renderHeroMock(c) {
 
 function renderPain(c) {
   document.getElementById("pain-cards").innerHTML = c.pain.cards
-    .map((card) =>
+    .map((card, i) =>
       `<article class="pain-card glass">
-        <span class="card-icon" aria-hidden="true">${card.icon}</span>
+        <span class="card-num mono" aria-hidden="true">0${i + 1}</span>
         <h3>${t(card.t)}</h3><p>${t(card.d)}</p>
       </article>`)
     .join("");
@@ -76,11 +76,7 @@ function renderStats(c) {
 
 function renderAudience(c) {
   document.getElementById("aud-cards").innerHTML = c.audience.cards
-    .map((card) =>
-      `<article class="aud-card glass">
-        <span class="card-icon" aria-hidden="true">${card.icon}</span>
-        <p>${t(card.d)}</p>
-      </article>`)
+    .map((card) => `<article class="aud-card glass"><p>${t(card.d)}</p></article>`)
     .join("");
 }
 
@@ -162,21 +158,33 @@ function renderFaq(c) {
 
 function renderFooter(c) {
   const f = c.footer;
+  const soon = t(f.soon);
   document.getElementById("footer-tagline").textContent = t(f.tagline);
-  document.getElementById("footer-cols").innerHTML = f.cols
-    .map((col) =>
-      `<div><h3>${col.h}</h3><ul>${col.items.map((i) => `<li>${t(i)}</li>`).join("")}</ul></div>`)
+  document.getElementById("footer-madeby").textContent = t(f.madeBy);
+  document.getElementById("soon-chip-gh").textContent = soon;
+  document.getElementById("footer-links-h").textContent = f.linksH;
+  document.getElementById("footer-legal-h").textContent = f.legalH;
+  document.getElementById("footer-links").innerHTML =
+    [["#how", c.nav.how], ["#proof", c.nav.proof], ["#pricing", c.nav.pricing], ["#faq", c.nav.faq]]
+      .map(([href, label]) => `<li><a href="${href}">${t(label)}</a></li>`)
+      .join("") +
+    `<li><a href="mailto:${t(f.contact)}">${t(f.contact)}</a></li>`;
+  document.getElementById("footer-legal").innerHTML = f.legal
+    .map((label) =>
+      `<li><a href="#" data-soon aria-label="${label} — ${soon}">${label}<span class="soon-chip mono" aria-hidden="true">${soon}</span></a></li>`)
     .join("");
   document.getElementById("footer-tax-title").textContent = f.taxTitle;
   document.getElementById("footer-tax").textContent = t(f.tax);
   document.getElementById("footer-data-title").textContent = f.dataTitle;
   document.getElementById("footer-data").textContent = t(f.data);
-  document.getElementById("footer-fine-line").textContent = t(f.fine);
+  document.getElementById("footer-bar-left").textContent = t(f.barLeft);
+  document.getElementById("footer-bar-right").textContent = t(f.barRight);
 }
 
 function renderBrand() {
   document.getElementById("brand-word").textContent = BRAND.name;
   document.getElementById("brand-descriptor").textContent = BRAND.descriptor;
+  document.getElementById("footer-brand-word").textContent = BRAND.name;
 }
 
 function renderAll(c) {
@@ -192,6 +200,7 @@ function renderAll(c) {
   renderFaq(c);
   renderFooter(c);
   refreshMagnetic();
+  bindCardTilt(); // re-rendered cards need fresh tilt bindings
 }
 
 /* ------------------------------------------------------------- setLang */
@@ -235,18 +244,21 @@ function buildScrollFX() {
     // get the pin distance added to their positions; triggers created before
     // it keep stale, uncompensated positions (even after refresh).
     const mm = gsap.matchMedia();
-    mm.add("(min-width: 921px)", () => {
-      const steps = gsap.utils.toArray("#how-steps li");
+    mm.add("(min-width: 1025px)", () => {
+      // horizontal scroll: section pins, steps travel right-to-left while
+      // the connecting line draws — user scrolls down, steps reveal left-to-right
+      const row = document.getElementById("how-steps");
+      const wrap = document.querySelector(".steps-wrap");
+      const dist = () => Math.max(0, row.scrollWidth - wrap.clientWidth);
       const tl = gsap.timeline({
-        scrollTrigger: { trigger: "#how", start: "top 72px", end: "+=1400", pin: true, scrub: 0.6 },
+        scrollTrigger: { trigger: "#how", start: "top 72px", end: "+=1400", pin: true, scrub: 0.6, invalidateOnRefresh: true },
       });
-      tl.fromTo(".steps-line i", { scaleX: 0 }, { scaleX: 1, duration: 4, ease: "none" }, 0);
-      steps.forEach((s, i) => {
-        tl.from(s, { y: 70, opacity: 0, duration: 0.9, ease: "power2.out" }, i * 0.95);
-      });
-      tl.to({}, { duration: 0.4 }); // breathing room after the last step
+      tl.fromTo(".steps-line i", { scaleX: 0 }, { scaleX: 1, duration: 4, ease: "none" }, 0)
+        .to(row, { x: () => -dist(), duration: 4, ease: "none" }, 0)
+        .from("#how-steps li", { opacity: 0.2, duration: 1.2, ease: "none", stagger: 0.9 }, 0)
+        .to({}, { duration: 0.4 }); // breathing room after the last step
     });
-    mm.add("(max-width: 920px)", () => {
+    mm.add("(max-width: 1024px)", () => {
       gsap.from("#how-steps li", {
         y: 24, opacity: 0, duration: 0.7, ease: "power3.out", stagger: 0.12,
         scrollTrigger: { trigger: "#how-steps", start: "top 85%", once: true },
@@ -319,6 +331,26 @@ function buildScrollFX() {
         { backgroundPosition: "-150% 0" },
         { backgroundPosition: "250% 0", duration: 1.0, ease: "power2.out", delay: 0.1 + i * 0.14, scrollTrigger: st });
     });
+
+    // app screenshots: gentle parallax as they cross the viewport
+    gsap.utils.toArray(".app-shot").forEach((img) => {
+      gsap.fromTo(img, { y: 36 }, {
+        y: -36, ease: "none",
+        scrollTrigger: { trigger: img, start: "top bottom", end: "bottom top", scrub: 0.5 },
+      });
+    });
+
+    // background hue shift across the whole page: 0° → +8° at half — back to 0°.
+    // Drives a fixed body::before overlay (mix-blend-mode: color). Felt, not seen.
+    const hue = { v: 0 };
+    gsap.timeline({
+      scrollTrigger: { trigger: document.body, start: "top top", end: "bottom bottom", scrub: 0.5 },
+    })
+      .to(hue, { v: 8, duration: 1, ease: "none", onUpdate: setHue }, 0)
+      .to(hue, { v: 0, duration: 1, ease: "none", onUpdate: setHue }, 1);
+    function setHue() {
+      document.documentElement.style.setProperty("--bg-hue", hue.v.toFixed(2) + "deg");
+    }
 
     // pricing cards + FAQ items: staggered rise
     [["#pricing-cards", ".price-card"], ["#faq-list", "details"]].forEach(([wrap, sel]) => {
@@ -407,7 +439,7 @@ function initMagnetic() {
       const dx = mx - (r.left + r.width / 2);
       const dy = my - (r.top + r.height / 2);
       const dist = Math.hypot(dx, dy);
-      const range = Math.max(r.width, r.height) / 2 + 60; // 60px attraction radius
+      const range = Math.max(r.width, r.height) / 2 + 80; // 80px attraction radius
       if (dist < range) {
         const pull = (1 - dist / range) * 0.45;
         m.xTo(dx * pull); m.yTo(dy * pull);
@@ -458,6 +490,119 @@ function bindInertCtas() {
   });
 }
 
+/* ------------------------------------------------------ smart nav */
+function initSmartNav() {
+  const nav = document.querySelector(".site-header");
+  let lastY = 0;
+  window.addEventListener("scroll", () => {
+    const y = window.scrollY;
+    nav.classList.toggle("scrolled", y > 40);
+    if (reducedMotion) return; // keep nav always visible
+    if (y > lastY && y > 80) {
+      nav.style.transform = "translateY(-100%)"; // scrolling down → hide
+    } else {
+      nav.style.transform = "translateY(0)"; // scrolling up → show
+    }
+    lastY = y;
+  }, { passive: true });
+}
+
+/* --------------------------------------------------- custom cursor */
+function initCursor() {
+  if (reducedMotion || !finePointer) return;
+  document.body.classList.add("has-cursor");
+
+  const ring = document.createElement("div");
+  ring.id = "cursor-ring";
+  ring.innerHTML = `<span id="cursor-label" class="mono">VIEW</span>`;
+  const dot = document.createElement("div");
+  dot.id = "cursor-dot";
+  const cross = document.createElement("div");
+  cross.id = "cursor-cross";
+  cross.innerHTML = "<i></i><i></i>";
+  document.body.append(ring, dot, cross);
+  gsap.set([ring, dot, cross], { xPercent: -50, yPercent: -50, x: -100, y: -100 });
+
+  const move = {
+    rx: gsap.quickTo(ring, "x", { duration: 0.35, ease: "power3" }),
+    ry: gsap.quickTo(ring, "y", { duration: 0.35, ease: "power3" }),
+    dx: gsap.quickTo(dot, "x", { duration: 0.12, ease: "power2" }),
+    dy: gsap.quickTo(dot, "y", { duration: 0.12, ease: "power2" }),
+    cx: gsap.quickTo(cross, "x", { duration: 0.2, ease: "power2" }),
+    cy: gsap.quickTo(cross, "y", { duration: 0.2, ease: "power2" }),
+  };
+  window.addEventListener("mousemove", (e) => {
+    move.rx(e.clientX); move.ry(e.clientY);
+    move.dx(e.clientX); move.dy(e.clientY);
+    move.cx(e.clientX); move.cy(e.clientY);
+  }, { passive: true });
+  document.addEventListener("mouseleave", () => gsap.to([ring, dot, cross], { opacity: 0, duration: 0.2 }));
+  document.addEventListener("mouseenter", () => gsap.to([ring, dot], { opacity: 1, duration: 0.2 }));
+
+  const CARD_SEL = ".pain-card, .aud-card, .stat-card, .price-card, #hero-mock, .shot-frame";
+  const setState = (s, linkEl) => {
+    const label = ring.querySelector("#cursor-label");
+    gsap.killTweensOf(ring, "width,height,borderRadius");
+    cross.style.opacity = "0";
+    dot.style.opacity = "1";
+    label.style.opacity = "0";
+    if (s === "card") {
+      gsap.to(ring, { width: 56, height: 56, borderRadius: 100, opacity: 1, duration: 0.25 });
+      label.style.opacity = "1";
+    } else if (s === "cross") {
+      gsap.to(ring, { opacity: 0, duration: 0.15 });
+      cross.style.opacity = "1";
+    } else if (s === "cta") {
+      gsap.to(ring, { opacity: 0, duration: 0.15 });
+      gsap.to(dot, { width: 6, height: 6, duration: 0.2 });
+    } else if (s === "nav" && linkEl) {
+      // the ring collapses to a 2px underline matching the link width
+      gsap.to(ring, { width: linkEl.getBoundingClientRect().width, height: 2, borderRadius: 1, opacity: 1, duration: 0.25 });
+    } else {
+      gsap.to(ring, { width: 28, height: 28, borderRadius: 100, opacity: 1, duration: 0.25 });
+      gsap.to(dot, { width: 4, height: 4, duration: 0.2 });
+    }
+  };
+  document.addEventListener("mouseover", (e) => {
+    const el = e.target;
+    if (el.closest(".invoice-card")) return setState("cross");
+    if (el.closest(".btn")) return setState("cta");
+    if (el.closest(".site-nav a")) return setState("nav", el.closest(".site-nav a"));
+    if (el.closest(CARD_SEL)) return setState("card");
+    setState("default");
+  }, { passive: true });
+}
+
+/* ------------------------------------------------- card hover tilt */
+function bindCardTilt() {
+  if (reducedMotion || !finePointer) return;
+  document.querySelectorAll(".pain-card, .aud-card, .stat-card, .invoice-card, #hero-mock").forEach((card) => {
+    if (card.dataset.tiltBound) return;
+    card.dataset.tiltBound = "1";
+    const rx = gsap.quickTo(card, "rotationX", { duration: 0.4, ease: "power3" });
+    const ry = gsap.quickTo(card, "rotationY", { duration: 0.4, ease: "power3" });
+    const sc = gsap.quickTo(card, "scale", { duration: 0.4, ease: "power3" });
+    gsap.set(card, { transformPerspective: 800 });
+    card.addEventListener("mousemove", (e) => {
+      const r = card.getBoundingClientRect();
+      const px = (e.clientX - r.left) / r.width - 0.5;  // -0.5 … 0.5
+      const py = (e.clientY - r.top) / r.height - 0.5;
+      rx(-py * 12); ry(px * 12); sc(1.025);              // ±6° both axes
+      card.classList.add("is-tilting");
+    }, { passive: true });
+    card.addEventListener("mouseleave", () => {
+      rx(0); ry(0); sc(1);
+      card.classList.remove("is-tilting");
+    }, { passive: true });
+  });
+}
+
+/* ---------------------------------------- "coming soon" footer links */
+document.addEventListener("click", (e) => {
+  const soon = e.target.closest("a[data-soon]");
+  if (soon) e.preventDefault();
+});
+
 /* ---------------------------------------------------------------- init */
 document.querySelectorAll(".lang-switch button").forEach((b) =>
   b.addEventListener("click", () => {
@@ -479,3 +624,5 @@ setLang(detectLang(), { initial: true });
 buildScrollFX();
 initMagnetic();
 initSmoothScroll();
+initSmartNav();
+initCursor();

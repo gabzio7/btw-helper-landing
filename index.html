@@ -24,6 +24,8 @@
   <noscript><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet"></noscript>
 
   <link rel="stylesheet" href="styles.css">
+  <!-- hero screenshot is the LCP element -->
+  <link rel="preload" as="image" href="assets/app-dashboard.webp" fetchpriority="high">
 
   <!-- Three.js via import map (hero.js is a module) -->
   <script type="importmap">
@@ -72,21 +74,29 @@
             <span class="mask"><span class="line accent" data-i18n="hero.h1b">Klaar.</span></span>
           </h1>
           <p class="hero-sub" data-i18n="hero.sub">Sleep je facturen erin. Klaar rubriceert ze, regelt reverse charge en buitenlandse valuta. Jij controleert. Jij dient in. 10 minuten — geen 3 uur.</p>
-          <div class="hero-ctas">
-            <a href="#pricing" class="btn btn-primary"><span data-i18n="hero.ctaPrimary">Probeer je eerste kwartaal — gratis</span> <span aria-hidden="true">→</span></a>
-            <a href="#how" class="btn btn-ghost" data-i18n="hero.ctaGhost">Bekijk hoe het werkt</a>
+          <div class="cta-group">
+            <div class="cta-row hero-ctas">
+              <a href="#pricing" class="btn btn-primary"><span data-i18n="hero.ctaPrimary">Probeer je eerste kwartaal — gratis</span> <span aria-hidden="true">→</span></a>
+              <a href="#how" class="btn btn-ghost" data-i18n="hero.ctaGhost">Bekijk hoe het werkt</a>
+            </div>
+            <p class="cta-note mono" data-i18n="hero.ctaNote">Geen creditcard. Geen Nederlands nodig. Geen accountant nodig.</p>
           </div>
-          <p class="cta-note mono" data-i18n="hero.ctaNote">Geen creditcard. Geen Nederlands nodig. Geen accountant nodig.</p>
         </div>
 
-        <!-- Signature element: the live result dashboard -->
-        <div class="mock glass" id="hero-mock" aria-label="Voorbeeld van een aangifte-resultaat">
-          <p class="mock-label mono" data-i18n="hero.mockLabel">Q1 2026 · resultaat</p>
-          <p class="mock-big mono" id="mock-result" data-target="24.15">+€24,15</p>
-          <div id="mock-rows">
-            <div class="mock-row mono"><span>1a · omzet</span><span>€46,20</span></div>
-            <div class="mock-row mono"><span>4a · verleggingsregeling</span><span>€25,66</span></div>
-            <div class="mock-row mono"><span>5g · te betalen</span><span>+€24,15</span></div>
+        <!-- Signature element: real app screenshot + the live result card on top -->
+        <div class="hero-visual" id="hero-visual">
+          <span class="shot-frame">
+            <img src="assets/app-dashboard.webp" alt="BTWklaar dashboard — kwartaaloverzicht" class="app-shot" width="1200" height="539" fetchpriority="high">
+            <span class="shot-label mono" aria-hidden="true">↗ Open app</span>
+          </span>
+          <div class="mock glass" id="hero-mock" aria-label="Voorbeeld van een aangifte-resultaat">
+            <p class="mock-label mono" data-i18n="hero.mockLabel">Q1 2026 · resultaat</p>
+            <p class="mock-big mono" id="mock-result" data-target="24.15">+€24,15</p>
+            <div id="mock-rows">
+              <div class="mock-row mono"><span>1a · omzet</span><span>€46,20</span></div>
+              <div class="mock-row mono"><span>4a · verleggingsregeling</span><span>€25,66</span></div>
+              <div class="mock-row mono"><span>5g · te betalen</span><span>+€24,15</span></div>
+            </div>
           </div>
         </div>
       </div>
@@ -96,10 +106,10 @@
     <section id="builder" class="light builder">
       <div class="container narrow center">
         <div class="builder-note" data-reveal>
-          <div class="builder-avatar disp" aria-hidden="true">G</div>
+          <img src="assets/gabz.jpg" alt="Gabz" class="avatar-photo">
           <p class="builder-text" data-i18n="builder.text">Ik bouwde BTWklaar omdat ik zelf elk kwartaal uren kwijt was. Het formulier, de rubrieken, de buitenlandse facturen — niemand legt het je uit als je begint. Als het mij heeft geholpen, helpt het jou ook.</p>
           <p class="builder-sig disp" data-i18n="builder.sig">— Gabz, zzp'er &amp; maker</p>
-          <p class="builder-label mono" data-i18n="builder.label">Gemaakt door één persoon in 🇳🇱</p>
+          <p class="builder-label mono" data-i18n="builder.label">Gemaakt door één persoon in Nederland</p>
         </div>
       </div>
     </section>
@@ -141,12 +151,13 @@
       <div class="container">
         <p class="demo-caption" data-i18n="how.simCaption" data-reveal>Zelfde velden, naast elkaar. Kopieer de getallen — je dient in, je gokt niet.</p>
         <div class="sim-demo" data-reveal>
-          <div class="sim-win">
-            <p class="sim-title mono" data-i18n="how.simLeft">BTWklaar · simulator</p>
-            <div class="sim-row mono"><span>1a</span><span>€46,20</span></div>
-            <div class="sim-row mono"><span>4a</span><span>€25,66</span></div>
-            <div class="sim-row mono sim-src"><span>5g</span><span>+€24,15</span></div>
-          </div>
+          <figure class="sim-win sim-win-shot">
+            <span class="shot-frame">
+              <img src="assets/app-simulator.webp" alt="BTWklaar simulator — stap 2 van 7" class="app-shot" width="1100" height="503" loading="lazy">
+              <span class="shot-label mono" aria-hidden="true">↗ Open app</span>
+            </span>
+            <figcaption class="sim-title mono" data-i18n="how.simLeft">BTWklaar · simulator</figcaption>
+          </figure>
           <div class="sim-gap" aria-hidden="true"><span class="sim-chip mono">+€24,15</span><span class="sim-arrow-head">→</span></div>
           <div class="sim-win">
             <p class="sim-title mono" data-i18n="how.simRight">Mijn Belastingdienst Zakelijk</p>
@@ -223,15 +234,38 @@
 
   </main>
 
-  <!-- LEGAL FOOTER -->
-  <footer class="site-footer dark2">
+  <!-- FOOTER -->
+  <footer class="site-footer">
     <div class="container">
-      <p class="footer-tagline disp" id="footer-tagline">BTWklaar — Je facturen erin. Klaar eruit.</p>
-      <div class="footer-grid" id="footer-cols"><!-- rendered from content.js --></div>
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="#hero" class="wordmark disp" aria-label="BTWklaar, naar boven">
+            <span id="footer-brand-word">BTWklaar</span><span class="wordmark-dot">.</span>
+          </a>
+          <p class="footer-tagline" id="footer-tagline">Je facturen erin. Klaar.</p>
+          <p class="footer-madeby mono" id="footer-madeby">Gemaakt door Gabz in Groningen, NL</p>
+          <a class="footer-gh" href="#" data-soon aria-label="GitHub">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
+            <span>GitHub</span>
+            <span class="soon-chip mono" id="soon-chip-gh" aria-hidden="true">Beschikbaar bij lancering</span>
+          </a>
+        </div>
+        <nav aria-label="Footer links">
+          <h3 class="footer-h mono" id="footer-links-h">Links</h3>
+          <ul class="footer-list" id="footer-links"><!-- rendered from content.js --></ul>
+        </nav>
+        <div>
+          <h3 class="footer-h mono" id="footer-legal-h">Legal</h3>
+          <ul class="footer-list" id="footer-legal"><!-- rendered from content.js --></ul>
+        </div>
+      </div>
       <div class="footer-fine">
         <p><strong id="footer-tax-title">Belasting-disclaimer.</strong> <span id="footer-tax"></span></p>
         <p><strong id="footer-data-title">Data.</strong> <span id="footer-data"></span></p>
-        <p class="fine-line" id="footer-fine-line"></p>
+      </div>
+      <div class="footer-bar mono">
+        <span id="footer-bar-left">© 2026 BTWklaar. Alle rechten voorbehouden.</span>
+        <span id="footer-bar-right">BTWklaar · Niet verbonden aan de Belastingdienst · Preview-prototype</span>
       </div>
     </div>
   </footer>
