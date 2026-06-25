@@ -2,7 +2,6 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>BTW Helper — design v3 · fintech</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -44,10 +43,17 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;backdrop-filter:blur(22px);b
 .wordmark span{color:var(--indigo)}
 .nav-links{display:flex;gap:26px;align-items:center}
 .nav-links a{color:var(--white-soft);text-decoration:none;font-size:14px;font-weight:500;position:relative}
-.nav-links a:not(.nav-cta)::after{content:"";position:absolute;left:0;bottom:-4px;width:100%;height:1.5px;background:var(--violet);transform:scaleX(0);transform-origin:left;transition:transform .3s}
-.nav-links a:not(.nav-cta):hover::after{transform:scaleX(1)}
+.nav-links a:not(.nav-cta):not(.nav-dash)::after{content:"";position:absolute;left:0;bottom:-4px;width:100%;height:1.5px;background:var(--violet);transform:scaleX(0);transform-origin:left;transition:transform .3s}
+.nav-links a:not(.nav-cta):not(.nav-dash):hover::after{transform:scaleX(1)}
 .nav-cta{background:var(--indigo);color:#fff;padding:9px 18px;border-radius:100px;font-size:14px;font-weight:600;text-decoration:none;transition:transform .2s,box-shadow .2s}
 .nav-cta:hover{transform:translateY(-1px);box-shadow:0 8px 24px -8px rgba(91,91,240,.7)}
+.nav-lang{display:flex;gap:2px;align-items:center;margin-right:4px}
+.lang-btn{font-family:var(--fm);font-size:11px;letter-spacing:.08em;color:var(--white-faint);background:none;border:none;padding:5px 8px;border-radius:6px;cursor:pointer;transition:color .2s,background .2s;font-weight:400}
+.lang-btn:hover{color:var(--white)}
+.lang-btn.active{color:var(--violet);background:rgba(91,91,240,.12);font-weight:500}
+.lang-sep{color:rgba(255,255,255,.15);font-size:10px;user-select:none}
+.nav-dash{color:var(--white-soft);border:1px solid rgba(255,255,255,.18);padding:9px 18px;border-radius:100px;font-size:14px;font-weight:500;text-decoration:none;transition:border-color .2s,color .2s,background .2s;background:transparent}
+.nav-dash:hover{border-color:rgba(255,255,255,.4);color:var(--white)}
 .nav-burger{display:none;width:36px;height:36px;border-radius:8px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.04);align-items:center;justify-content:center;flex-direction:column;gap:4px;cursor:pointer}
 .nav-burger span{width:16px;height:1.5px;background:var(--white);transition:transform .3s,opacity .3s}
 .nav-burger.open span:nth-child(1){transform:translateY(5.5px) rotate(45deg)}
@@ -61,6 +67,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;backdrop-filter:blur(22px);b
 @media(max-width:780px){
   .nav-links a:not(.nav-cta){display:none}
   .nav-links .nav-cta{display:none}
+  .nav-links .nav-dash{display:none}
   .nav-burger{display:flex}
 }
 
@@ -485,21 +492,37 @@ footer{border-top:1px solid rgba(255,255,255,.06);background:var(--void);padding
   <div class="nav-inner">
     <a href="#" class="wordmark" data-hover>BTW<span> Helper</span>.</a>
     <div class="nav-links">
-      <a href="#how" data-hover>How it works</a>
-      <a href="#features" data-hover>Features</a>
-      <a href="#pricing" data-hover>Pricing</a>
-      <a href="#pricing" class="nav-cta" data-hover>Get started</a>
+      <a href="#how" data-hover data-i18n="nav.how">How it works</a>
+      <a href="#features" data-hover data-i18n="nav.features">Features</a>
+      <a href="#pricing" data-hover data-i18n="nav.pricing">Pricing</a>
+      <div class="nav-lang">
+        <button class="lang-btn" data-lang="nl" onclick="setLang('nl')">NL</button>
+        <span class="lang-sep">·</span>
+        <button class="lang-btn active" data-lang="en" onclick="setLang('en')">EN</button>
+        <span class="lang-sep">·</span>
+        <button class="lang-btn" data-lang="es" onclick="setLang('es')">ES</button>
+      </div>
+      <a href="https://app.btw-helper.nl/login" class="nav-dash" data-hover data-i18n="nav.dashboard">Log in</a>
+      <a href="https://app.btw-helper.nl/signup" class="nav-cta" data-hover data-i18n="nav.cta">Get started</a>
     </div>
     <button class="nav-burger" id="navBurger" aria-label="Open menu" aria-expanded="false">
       <span></span><span></span><span></span>
     </button>
   </div>
   <div class="nav-mobile-panel" id="navMobilePanel">
-    <a href="#how">How it works</a>
-    <a href="#features">Features</a>
-    <a href="#pricing">Pricing</a>
+    <a href="#how" data-i18n="nav.how">How it works</a>
+    <a href="#features" data-i18n="nav.features">Features</a>
+    <a href="#pricing" data-i18n="nav.pricing">Pricing</a>
     <a href="#faq">FAQ</a>
-    <a href="#pricing" class="nav-cta">Get started</a>
+    <div style="display:flex;gap:8px;padding:10px 4px">
+      <button class="lang-btn" data-lang="nl" onclick="setLang('nl');document.getElementById('navMobilePanel').classList.remove('open');document.getElementById('navBurger').classList.remove('open')">NL</button>
+      <span class="lang-sep" style="line-height:2">·</span>
+      <button class="lang-btn active" data-lang="en" onclick="setLang('en');document.getElementById('navMobilePanel').classList.remove('open');document.getElementById('navBurger').classList.remove('open')">EN</button>
+      <span class="lang-sep" style="line-height:2">·</span>
+      <button class="lang-btn" data-lang="es" onclick="setLang('es');document.getElementById('navMobilePanel').classList.remove('open');document.getElementById('navBurger').classList.remove('open')">ES</button>
+    </div>
+    <a href="https://app.btw-helper.nl/login" data-i18n="nav.dashboard">Log in →</a>
+    <a href="https://app.btw-helper.nl/signup" class="nav-cta" data-i18n="nav.cta">Get started</a>
   </div>
 </nav>
 
@@ -508,21 +531,21 @@ footer{border-top:1px solid rgba(255,255,255,.06);background:var(--void);padding
   <canvas id="field"></canvas>
   <div class="container hero-grid">
     <div>
-      <div class="eyebrow reveal">Drop your invoices. Get your BTW return. Done.</div>
+      <div class="eyebrow reveal" data-i18n="hero.eyebrow">Drop your invoices. Get your BTW return. Done.</div>
       <h1>
-        <span class="title-line"><span>File your BTW before</span></span>
-        <span class="title-line"><span class="out">your coffee gets cold.</span></span>
+        <span class="title-line"><span data-i18n="hero.h1a">File your BTW before</span></span>
+        <span class="title-line"><span class="out" data-i18n="hero.h1b">your coffee gets cold.</span></span>
       </h1>
       <ul class="hero-checks">
-        <li class="reveal"><span class="tick"><svg viewBox="0 0 12 12"><path d="M2 6.5 4.8 9 10 3.2"/></svg></span>AI reads every invoice and assigns the right rubriek</li>
-        <li class="reveal"><span class="tick"><svg viewBox="0 0 12 12"><path d="M2 6.5 4.8 9 10 3.2"/></svg></span>Reverse charge &amp; foreign currency — handled, explained</li>
-        <li class="reveal"><span class="tick"><svg viewBox="0 0 12 12"><path d="M2 6.5 4.8 9 10 3.2"/></svg></span>Same layout as the Belastingdienst form. You review, you file.</li>
+        <li class="reveal"><span class="tick"><svg viewBox="0 0 12 12"><path d="M2 6.5 4.8 9 10 3.2"/></svg></span><span data-i18n="hero.check1">AI reads every invoice and assigns the right rubriek</span></li>
+        <li class="reveal"><span class="tick"><svg viewBox="0 0 12 12"><path d="M2 6.5 4.8 9 10 3.2"/></svg></span><span data-i18n="hero.check2">Reverse charge &amp; foreign currency — handled, explained</span></li>
+        <li class="reveal"><span class="tick"><svg viewBox="0 0 12 12"><path d="M2 6.5 4.8 9 10 3.2"/></svg></span><span data-i18n="hero.check3">Same layout as the Belastingdienst form. You review, you file.</span></li>
       </ul>
       <div class="cta-row reveal">
-        <a href="#pricing" class="btn btn-primary" data-hover>See plans</a>
-        <a href="#how" class="btn btn-ghost" data-hover>See how it works</a>
+        <a href="https://app.btw-helper.nl/signup" class="btn btn-primary" data-hover data-i18n="hero.cta1">Start for free</a>
+        <a href="#how" class="btn btn-ghost" data-hover data-i18n="hero.cta2">See how it works</a>
       </div>
-      <p class="cta-sub reveal">Built for eenmanszaak · You stay in control · Cancel anytime</p>
+      <p class="cta-sub reveal" data-i18n="hero.sub">Built for eenmanszaak · You stay in control · Cancel anytime</p>
     </div>
 
     <div class="appshot reveal" aria-label="BTW Helper dashboard preview">
@@ -574,22 +597,22 @@ footer{border-top:1px solid rgba(255,255,255,.06);background:var(--void);padding
 <section class="problem" id="problem">
   <div class="container">
     <div class="sec-head">
-      <div class="eyebrow reveal">The problem</div>
+      <div class="eyebrow reveal" data-i18n="problem.eyebrow">The problem</div>
       <h2>
-        <span class="title-line"><span>The aangifte is short.</span></span>
-        <span class="title-line"><span>Getting it right isn't.</span></span>
+        <span class="title-line"><span data-i18n="problem.h1">The aangifte is short.</span></span>
+        <span class="title-line"><span data-i18n="problem.h2">Getting it right isn't.</span></span>
       </h2>
-      <p class="problem-prose reveal">Nine boxes. Simple enough — until an afternoon disappears into <span class="ph">sorting invoices</span>, a foreign supplier triggers a <span class="ph">reverse-charge rule you've never heard of</span>, and you press "Akkoord" <span class="ph">hoping you got it right</span>. A wrong box isn't a typo. It's a correction letter from the Belastingdienst.</p>
+      <p class="problem-prose reveal" data-i18n-html="problem.prose">Nine boxes. Simple enough — until an afternoon disappears into <span class="ph">sorting invoices</span>, a foreign supplier triggers a <span class="ph">reverse-charge rule you've never heard of</span>, and you press "Akkoord" <span class="ph">hoping you got it right</span>. A wrong box isn't a typo. It's a correction letter from the Belastingdienst.</p>
     </div>
 
     <div class="problem-closer reveal">
-      <h3>BTW Helper handles all of it. And when you're not sure — just ask the AI.</h3>
+      <h3 data-i18n="problem.closer">BTW Helper handles all of it. And when you're not sure — just ask the AI.</h3>
       <div>
-        <span class="chat-bubble tw" data-text="Why is this invoice rubriek 4a?"></span>
-        <span class="chat-bubble tw" data-text="Did I miss something this quarter?"></span>
-        <span class="chat-bubble tw" data-text="What's my next step?"></span>
+        <span class="chat-bubble tw" data-text="Why is this invoice rubriek 4a?" data-i18n-tw="chat.q1"></span>
+        <span class="chat-bubble tw" data-text="Did I miss something this quarter?" data-i18n-tw="chat.q2"></span>
+        <span class="chat-bubble tw" data-text="What's my next step?" data-i18n-tw="chat.q3"></span>
       </div>
-      <p class="chat-answer"><span class="k-dot ai-dot">AI</span><span>The built-in AI assistant answers — in Dutch, English, or Spanish. It reads your invoices, explains every classification, and never leaves you guessing.</span></p>
+      <p class="chat-answer"><span class="k-dot ai-dot">AI</span><span data-i18n="problem.chatanswer">The built-in AI assistant answers — in Dutch, English, or Spanish. It reads your invoices, explains every classification, and never leaves you guessing.</span></p>
     </div>
   </div>
 </section>
@@ -599,21 +622,21 @@ footer{border-top:1px solid rgba(255,255,255,.06);background:var(--void);padding
   <div class="container">
     <div class="klaar-grid">
       <div class="klaar-left">
-        <div class="eyebrow reveal">Your AI companion</div>
-        <h2 class="reveal">Not just software.<br><span style="color:var(--violet)">A BTW specialist.</span></h2>
-        <p class="sec-big-sub reveal" style="margin-bottom:32px">Built on a frontier AI model. It reads your invoices, learns your business, explains every decision — and is always one question away.</p>
+        <div class="eyebrow reveal" data-i18n="ai.eyebrow">Your AI companion</div>
+        <h2 class="reveal"><span data-i18n="ai.h1a">Not just software.</span><br><span style="color:var(--violet)" data-i18n="ai.h1b">A BTW specialist.</span></h2>
+        <p class="sec-big-sub reveal" style="margin-bottom:32px" data-i18n="ai.sub">Built on a frontier AI model. It reads your invoices, learns your business, explains every decision — and is always one question away.</p>
         <div class="klaar-attrs">
           <div class="kattr reveal">
             <div class="kattr-dot"><svg viewBox="0 0 16 16"><path d="M8 2C5 2 3 4.5 3 7.5S5.5 13 8 13s5-2.5 5-5.5S11 2 8 2z"/><path d="M8 6v2.5l1.5 1.5"/></svg></div>
-            <div class="kattr-text"><h4>Learns your business over time</h4><p>It recognizes the vendors you use every quarter and remembers how they're classified. The more you file, the fewer questions it needs to ask.</p></div>
+            <div class="kattr-text"><h4 data-i18n="ai.attr1h">Learns your business over time</h4><p data-i18n="ai.attr1p">It recognizes the vendors you use every quarter and remembers how they're classified. The more you file, the fewer questions it needs to ask.</p></div>
           </div>
           <div class="kattr reveal">
             <div class="kattr-dot"><svg viewBox="0 0 16 16"><path d="M2 4h12M2 8h8M2 12h5"/></svg></div>
-            <div class="kattr-text"><h4>Groups, classifies, flags — automatically</h4><p>Recurring invoices grouped. Reverse charge applied. Anything unusual flagged for your review. You see the reasoning, not just the result.</p></div>
+            <div class="kattr-text"><h4 data-i18n="ai.attr2h">Groups, classifies, flags — automatically</h4><p data-i18n="ai.attr2p">Recurring invoices grouped. Reverse charge applied. Anything unusual flagged for your review. You see the reasoning, not just the result.</p></div>
           </div>
           <div class="kattr reveal">
             <div class="kattr-dot"><svg viewBox="0 0 16 16"><path d="M3 13l2-5 3 2 3-7 2 4"/></svg></div>
-            <div class="kattr-text"><h4>Answers in your language</h4><p>"Why this rubriek?" "What's next?" "Did I miss anything?" — ask in Dutch, English, or Spanish. It explains, you decide.</p></div>
+            <div class="kattr-text"><h4 data-i18n="ai.attr3h">Answers in your language</h4><p data-i18n="ai.attr3p">"Why this rubriek?" "What's next?" "Did I miss anything?" — ask in Dutch, English, or Spanish. It explains, you decide.</p></div>
           </div>
         </div>
       </div>
@@ -644,25 +667,25 @@ footer{border-top:1px solid rgba(255,255,255,.06);background:var(--void);padding
 <section class="how" id="how">
   <div class="container">
     <div class="sec-head">
-      <div class="eyebrow reveal">How it works</div>
+      <div class="eyebrow reveal" data-i18n="how.eyebrow">How it works</div>
       <h2>
-        <span class="title-line"><span>Four steps.</span></span>
-        <span class="title-line"><span>Most of them aren't yours.</span></span>
+        <span class="title-line"><span data-i18n="how.h1">Four steps.</span></span>
+        <span class="title-line"><span data-i18n="how.h2">The AI does the heavy lifting.</span></span>
       </h2>
-      <p class="sec-big-sub reveal">The AI does the heavy lifting. You just review and file.</p>
+      <p class="sec-big-sub reveal" data-i18n="how.sub">You just review and file.</p>
     </div>
 
     <div class="steps" id="steps">
       <div class="step-card reveal">
         <span class="step-num">01</span>
-        <h3>Drop the whole quarter</h3>
-        <p>Drag in all your invoices at once — bulk upload, PDFs or email forwards. No one-by-one, no manual entry.</p>
+        <h3 data-i18n="how.s1h">Drop the whole quarter</h3>
+        <p data-i18n="how.s1p">Drag in all your invoices at once — bulk upload, PDFs or email forwards. No one-by-one, no manual entry.</p>
         <div class="step-visual"><div class="v-drop"><span class="v-pdf">14 invoices.pdf</span></div></div>
       </div>
       <div class="step-card reveal">
         <span class="step-num">02</span>
-        <h3>AI reads &amp; classifies</h3>
-        <p>14 invoices read, rubriek-tagged and vendor-grouped in ~20 seconds. Smart filters and a double-check pass flag anything unusual.</p>
+        <h3 data-i18n="how.s2h">AI reads &amp; classifies</h3>
+        <p data-i18n="how.s2p">14 invoices read, rubriek-tagged and vendor-grouped in ~20 seconds. Smart filters and a double-check pass flag anything unusual.</p>
         <div class="step-visual"><div class="v-chips">
           <span class="v-chip">1a<span class="ok">✓</span></span>
           <span class="v-chip">4a<span class="ok">✓</span></span>
@@ -671,8 +694,8 @@ footer{border-top:1px solid rgba(255,255,255,.06);background:var(--void);padding
       </div>
       <div class="step-card reveal">
         <span class="step-num">03</span>
-        <h3>Review &amp; ask</h3>
-        <p>A frontier AI model explains every call in plain language and learns your business over time — fewer questions, fewer errors, each quarter.</p>
+        <h3 data-i18n="how.s3h">Review &amp; ask</h3>
+        <p data-i18n="how.s3p">A frontier AI model explains every call in plain language and learns your business over time — fewer questions, fewer errors, each quarter.</p>
         <div class="step-visual"><div class="v-chat">
           <span class="v-q">Why 4a?</span>
           <span class="v-a">US vendor, no VAT → reverse charge</span>
@@ -680,8 +703,8 @@ footer{border-top:1px solid rgba(255,255,255,.06);background:var(--void);padding
       </div>
       <div class="step-card reveal">
         <span class="step-num">04</span>
-        <h3>Copy into the portal</h3>
-        <p>The one manual step: 9 boxes in Mijn Belastingdienst Zakelijk. The simulator mirrors it field for field — copy across, you can't get lost.</p>
+        <h3 data-i18n="how.s4h">Copy into the portal</h3>
+        <p data-i18n="how.s4p">The one manual step: 9 boxes in Mijn Belastingdienst Zakelijk. The simulator mirrors it field for field — copy across, you can't get lost.</p>
         <div class="step-visual"><div class="v-win">
           <span class="v-w"></span><span class="v-val">€46,20</span><span class="v-w"></span>
         </div></div>
@@ -694,12 +717,12 @@ footer{border-top:1px solid rgba(255,255,255,.06);background:var(--void);padding
 <section class="engine" id="engine">
   <div class="container">
     <div class="sec-head">
-      <div class="eyebrow reveal">The engine</div>
+      <div class="eyebrow reveal" data-i18n="engine.eyebrow">The engine</div>
       <h2>
-        <span class="title-line"><span>Watch the AI</span></span>
-        <span class="title-line"><span>read an invoice.</span></span>
+        <span class="title-line"><span data-i18n="engine.h1">Watch the AI</span></span>
+        <span class="title-line"><span data-i18n="engine.h2">read an invoice.</span></span>
       </h2>
-      <p class="sec-big-sub reveal">A real US invoice — reverse-charged and currency-converted. Every field, classified and explained.</p>
+      <p class="sec-big-sub reveal" data-i18n="engine.sub">A real US invoice — reverse-charged and currency-converted. Every field, classified and explained.</p>
     </div>
 
     <div class="engine-stage">
@@ -726,7 +749,7 @@ footer{border-top:1px solid rgba(255,255,255,.06);background:var(--void);padding
       </div>
     </div>
 
-    <p class="engine-close reveal">Every invoice, explained like this. You see the reasoning — not just the result.</p>
+    <p class="engine-close reveal" data-i18n="engine.close">Every invoice, explained like this. You see the reasoning — not just the result.</p>
   </div>
 </section>
 
@@ -734,40 +757,40 @@ footer{border-top:1px solid rgba(255,255,255,.06);background:var(--void);padding
 <section class="features" id="features">
   <div class="container">
     <div class="sec-head">
-      <div class="eyebrow reveal">Everything in one place</div>
-      <h2><span class="title-line"><span>Built for the whole quarter.</span></span></h2>
-      <p class="sec-big-sub reveal">Not just a classifier — the full workflow, from invoice to filed.</p>
+      <div class="eyebrow reveal" data-i18n="feat.eyebrow">Everything in one place</div>
+      <h2><span class="title-line"><span data-i18n="feat.h1">Built for the whole quarter.</span></span></h2>
+      <p class="sec-big-sub reveal" data-i18n="feat.sub">Not just a classifier — the full workflow, from invoice to filed.</p>
     </div>
     <div class="feat-grid">
       <div class="feat-item reveal">
         <div class="feat-ic"><svg viewBox="0 0 18 18"><path d="M9 2v14M2 9h14"/><circle cx="9" cy="9" r="3"/></svg></div>
-        <h4>AI invoice parsing</h4>
-        <p>Drop a quarter's PDFs at once. The AI reads each one and assigns the correct rubriek — bulk upload, no manual entry.</p>
+        <h4 data-i18n="feat.1h">AI invoice parsing</h4>
+        <p data-i18n="feat.1p">Drop a quarter's PDFs at once. The AI reads each one and assigns the correct rubriek — bulk upload, no manual entry.</p>
       </div>
       <div class="feat-item reveal">
         <div class="feat-ic"><svg viewBox="0 0 18 18"><path d="M2 14l4-5 3 3 5-7"/><path d="M2 16h14"/></svg></div>
-        <h4>Dashboard with alerts</h4>
-        <p>Quarterly KPIs, trends, and what you owe — at a glance. Flags reverse-charge mismatches and unusual invoices before you file.</p>
+        <h4 data-i18n="feat.2h">Dashboard with alerts</h4>
+        <p data-i18n="feat.2p">Quarterly KPIs, trends, and what you owe — at a glance. Flags reverse-charge mismatches and unusual invoices before you file.</p>
       </div>
       <div class="feat-item reveal">
         <div class="feat-ic"><svg viewBox="0 0 18 18"><path d="M3 4h12M5 9h8M7 14h4"/></svg></div>
-        <h4>Filters &amp; invoice count</h4>
-        <p>Filter by rubriek, quarter, vendor, or type. See exactly how many invoices are in, classified, and ready — no surprises at the deadline.</p>
+        <h4 data-i18n="feat.3h">Filters &amp; invoice count</h4>
+        <p data-i18n="feat.3p">Filter by rubriek, quarter, vendor, or type. See exactly how many invoices are in, classified, and ready — no surprises at the deadline.</p>
       </div>
       <div class="feat-item reveal">
         <div class="feat-ic"><svg viewBox="0 0 18 18"><rect x="2" y="3" width="14" height="12" rx="1.5"/><path d="M2 7h14M6 11h6"/></svg></div>
-        <h4>Simulator = the real form</h4>
-        <p>Same field order, same rubriek structure as Mijn Belastingdienst Zakelijk — just clearer, with explanations and copy buttons per field.</p>
+        <h4 data-i18n="feat.4h">Simulator = the real form</h4>
+        <p data-i18n="feat.4p">Same field order, same rubriek structure as Mijn Belastingdienst Zakelijk — just clearer, with explanations and copy buttons per field.</p>
       </div>
       <div class="feat-item reveal">
         <div class="feat-ic"><svg viewBox="0 0 18 18"><path d="M9 2a4 4 0 0 0-4 4v3l-1.5 2.5h11L13 9V6a4 4 0 0 0-4-4z"/><path d="M7.5 14a1.5 1.5 0 0 0 3 0"/></svg></div>
-        <h4>Deadline reminders</h4>
-        <p>The quarter sneaks up on everyone. A nudge before the BTW deadline means no more last-evening panic.</p>
+        <h4 data-i18n="feat.5h">Deadline reminders</h4>
+        <p data-i18n="feat.5p">The quarter sneaks up on everyone. A nudge before the BTW deadline means no more last-evening panic.</p>
       </div>
       <div class="feat-item reveal">
         <div class="feat-ic"><svg viewBox="0 0 18 18"><path d="M3 9l4 4 8-9"/></svg></div>
-        <h4>You file, you control</h4>
-        <p>BTW Helper prepares every number. You copy them into the portal under your own DigiD. Nothing gets submitted without you.</p>
+        <h4 data-i18n="feat.6h">You file, you control</h4>
+        <p data-i18n="feat.6p">BTW Helper prepares every number. You copy them into the portal under your own DigiD. Nothing gets submitted without you.</p>
       </div>
     </div>
   </div>
@@ -777,9 +800,9 @@ footer{border-top:1px solid rgba(255,255,255,.06);background:var(--void);padding
 <section class="savings" id="savings">
   <div class="container">
     <div class="sec-head">
-      <div class="eyebrow reveal">What you get back</div>
-      <h2><span class="title-line"><span>Faster. Cheaper. In control.</span></span></h2>
-      <p class="sec-big-sub reveal">The AI does the sorting and the math. You do the deciding.</p>
+      <div class="eyebrow reveal" data-i18n="stat.eyebrow">What you get back</div>
+      <h2><span class="title-line"><span data-i18n="stat.h1">Faster. Cheaper. In control.</span></span></h2>
+      <p class="sec-big-sub reveal" data-i18n="stat.sub">The AI does the sorting and the math. You do the deciding.</p>
     </div>
 
     <div class="stat-grid">
@@ -788,8 +811,8 @@ footer{border-top:1px solid rgba(255,255,255,.06);background:var(--void);padding
         <div class="mini-bars" id="barsTime">
           <i style="height:100%"></i><i style="height:78%"></i><i style="height:52%"></i><i style="height:30%"></i><i style="height:14%" class="gr"></i><i style="height:7%" class="gr"></i>
         </div>
-        <div class="stat-check"><svg viewBox="0 0 16 16"><path d="M3 8.5 6.5 12 13 4"/></svg>Filing time cut from hours to minutes</div>
-        <div class="stat-sub2">One quick review. One click to copy. Done.</div>
+        <div class="stat-check"><svg viewBox="0 0 16 16"><path d="M3 8.5 6.5 12 13 4"/></svg data-i18n="stat.s1check">Filing time cut from hours to minutes</div>
+        <div class="stat-sub2" data-i18n="stat.s1sub">One quick review. One click to copy. Done.</div>
       </div>
 
       <div class="stat-card reveal">
@@ -797,8 +820,8 @@ footer{border-top:1px solid rgba(255,255,255,.06);background:var(--void);padding
         <div class="mini-bars" id="barsAcc">
           <i style="height:90%"></i><i style="height:96%"></i><i style="height:88%"></i><i style="height:100%"></i><i style="height:94%" class="gr"></i><i style="height:98%" class="gr"></i>
         </div>
-        <div class="stat-check"><svg viewBox="0 0 16 16"><path d="M3 8.5 6.5 12 13 4"/></svg>Guesswork removed from every classification</div>
-        <div class="stat-sub2">The AI shows its reasoning. You confirm, then file.</div>
+        <div class="stat-check"><svg viewBox="0 0 16 16"><path d="M3 8.5 6.5 12 13 4"/></svg data-i18n="stat.s2check">Guesswork removed from every classification</div>
+        <div class="stat-sub2" data-i18n="stat.s2sub">The AI shows its reasoning. You confirm, then file.</div>
       </div>
 
       <div class="stat-card reveal">
@@ -808,8 +831,8 @@ footer{border-top:1px solid rgba(255,255,255,.06);background:var(--void);padding
           <span class="lang-flag" data-hover>EN</span>
           <span class="lang-flag" data-hover>ES</span>
         </div>
-        <div class="stat-check"><svg viewBox="0 0 16 16"><path d="M3 8.5 6.5 12 13 4"/></svg>Every rubriek explained in plain language</div>
-        <div class="stat-sub2">Reverse charge, ICP, voorbelasting — no jargon.</div>
+        <div class="stat-check"><svg viewBox="0 0 16 16"><path d="M3 8.5 6.5 12 13 4"/></svg data-i18n="stat.s3check">Every rubriek explained in plain language</div>
+        <div class="stat-sub2" data-i18n="stat.s3sub">Reverse charge, ICP, voorbelasting — no jargon.</div>
       </div>
     </div>
   </div>
@@ -819,12 +842,12 @@ footer{border-top:1px solid rgba(255,255,255,.06);background:var(--void);padding
 <section class="compare" id="compare">
   <div class="container">
     <div class="sec-head">
-      <div class="eyebrow reveal">Where BTW Helper fits</div>
+      <div class="eyebrow reveal" data-i18n="cmp.eyebrow">Where BTW Helper fits</div>
       <h2>
-        <span class="title-line"><span>One job.</span></span>
-        <span class="title-line"><span>Done properly.</span></span>
+        <span class="title-line"><span data-i18n="cmp.h1">One job.</span></span>
+        <span class="title-line"><span data-i18n="cmp.h2">Done properly.</span></span>
       </h2>
-      <p class="sec-big-sub reveal">A full bookkeeping suite does everything — and asks you to become a bookkeeper to use it. A spreadsheet does nothing until you build it. BTW Helper does exactly one thing: your BTW, done right.</p>
+      <p class="sec-big-sub reveal" data-i18n="cmp.sub">A full bookkeeping suite does everything — and asks you to become a bookkeeper to use it. A spreadsheet does nothing until you build it. BTW Helper does exactly one thing: your BTW, done right.</p>
     </div>
     <div class="cmp-wrap reveal">
       <table class="cmp">
@@ -832,22 +855,22 @@ footer{border-top:1px solid rgba(255,255,255,.06);background:var(--void);padding
           <tr>
             <th></th>
             <th class="us">BTW Helper</th>
-            <th>Full bookkeeping suite</th>
-            <th>Spreadsheet</th>
+            <th data-i18n="cmp.col2">Full bookkeeping suite</th>
+            <th data-i18n="cmp.col3">Spreadsheet</th>
           </tr>
         </thead>
         <tbody>
-          <tr><th>Built for</th><td class="us">BTW filing, end to end</td><td>Running your whole admin</td><td>Whatever you set up yourself</td></tr>
-          <tr><th>Learning curve</th><td class="us">Minutes</td><td>Steep — it's a full ledger</td><td>Steep &amp; error-prone</td></tr>
-          <tr><th>AI that explains every call</th><td class="us yes">Yes</td><td class="no">No</td><td class="no">No</td></tr>
-          <tr><th>Looks like the official form</th><td class="us yes">Yes</td><td class="no">No</td><td class="no">No</td></tr>
-          <tr><th>Plain language · NL/EN/ES</th><td class="us yes">Yes</td><td>Partly</td><td class="no">No</td></tr>
-          <tr><th>No invoice caps</th><td class="us yes">Yes</td><td class="no">Priced by volume</td><td>Yes</td></tr>
+          <tr><th data-i18n="cmp.r1">Built for</th><td class="us" data-i18n="cmp.r1a">BTW filing, end to end</td><td data-i18n="cmp.r1b">Running your whole admin</td><td data-i18n="cmp.r1c">Whatever you set up yourself</td></tr>
+          <tr><th data-i18n="cmp.r2">Learning curve</th><td class="us" data-i18n="cmp.r2a">Minutes</td><td data-i18n="cmp.r2b">Steep — it's a full ledger</td><td data-i18n="cmp.r2c">Steep &amp; error-prone</td></tr>
+          <tr><th data-i18n="cmp.r3">AI that explains every call</th><td class="us yes">Yes</td><td class="no">No</td><td class="no">No</td></tr>
+          <tr><th data-i18n="cmp.r4">Looks like the official form</th><td class="us yes">Yes</td><td class="no">No</td><td class="no">No</td></tr>
+          <tr><th data-i18n="cmp.r5">Plain language · NL/EN/ES</th><td class="us yes">Yes</td><td data-i18n="cmp.r5b">Partly</td><td class="no">No</td></tr>
+          <tr><th data-i18n="cmp.r6">No invoice caps</th><td class="us yes">Yes</td><td class="no" data-i18n="cmp.r6b">Priced by volume</td><td>Yes</td></tr>
         </tbody>
       </table>
     </div>
     <p class="cmp-scroll-hint">&larr; Swipe to see all columns &rarr;</p>
-    <p class="cmp-close reveal">BTW Helper isn't trying to replace your whole admin. It does one job — your BTW — better than a tool built for everything, and clearer than a spreadsheet built for nothing. And at year-end, it hands you a clean export of everything your accountant needs for your income-tax filing.</p>
+    <p class="cmp-close reveal" data-i18n="cmp.close">BTW Helper isn't trying to replace your whole admin. It does one job — your BTW — better than a tool built for everything, and clearer than a spreadsheet built for nothing. And at year-end, it hands you a clean export of everything your accountant needs for your income-tax filing.</p>
   </div>
 </section>
 
@@ -872,75 +895,75 @@ footer{border-top:1px solid rgba(255,255,255,.06);background:var(--void);padding
   <div class="container">
     <div class="sec-head" style="margin-left:auto;margin-right:auto;text-align:center;max-width:640px">
       <div class="eyebrow reveal" style="justify-content:center">Pricing</div>
-      <h2><span class="title-line"><span>One job, done right.</span></span></h2>
-      <p class="sec-big-sub reveal">No invoice caps, no per-filing fees. Pick the plan that matches how much you want the AI to do for you.</p>
+      <h2><span class="title-line"><span data-i18n="pricing.h1">One job, done right.</span></span></h2>
+      <p class="sec-big-sub reveal" data-i18n="pricing.sub">No invoice caps, no per-filing fees. Pick the plan that matches how much you want the AI to do for you.</p>
     </div>
 
-    <div class="launch-note reveal">Rates will increase soon &mdash; lock in today's price.</div>
+    <div class="launch-note reveal" data-i18n="pricing.launch">Rates will increase soon — lock in today's price.</div>
 
     <div class="plans">
       <!-- STARTER -->
       <div class="plan reveal">
-        <div class="plan-label">Start here</div>
+        <div class="plan-label" data-i18n="pl.s.label">Start here</div>
         <div class="plan-name">Starter</div>
-        <div class="plan-target">Ideal for freelancers and startups handling their own BTW.</div>
+        <div class="plan-target" data-i18n="pricing.t1">Ideal for freelancers and startups handling their own BTW.</div>
         <div class="plan-price-block">
           <div class="plan-price">&euro;8<small>/mo</small></div>
         </div>
         <ul class="plan-feats">
-          <li><svg viewBox="0 0 16 16"><path d="M3 8.5 6.5 12 13 4"/></svg>Unlimited invoice uploads &amp; AI classification</li>
-          <li><svg viewBox="0 0 16 16"><path d="M3 8.5 6.5 12 13 4"/></svg>Dashboard, simulator, document library</li>
-          <li><svg viewBox="0 0 16 16"><path d="M3 8.5 6.5 12 13 4"/></svg>AI assistant &mdash; ask anything, in your language</li>
-          <li class="dim"><svg viewBox="0 0 16 16"><path d="M3 8.5 6.5 12 13 4"/></svg>AI learns your business</li>
-          <li class="dim"><svg viewBox="0 0 16 16"><path d="M3 8.5 6.5 12 13 4"/></svg>Multi-quarter history &amp; trends</li>
+          <li><svg viewBox="0 0 16 16"><path d="M3 8.5 6.5 12 13 4"/></svg><span data-i18n="pf.s.1">Unlimited invoice uploads &amp; AI classification</span></li>
+          <li><svg viewBox="0 0 16 16"><path d="M3 8.5 6.5 12 13 4"/></svg><span data-i18n="pf.s.2">Dashboard, simulator, document library</span></li>
+          <li><svg viewBox="0 0 16 16"><path d="M3 8.5 6.5 12 13 4"/></svg><span data-i18n="pf.s.3">AI assistant &mdash; ask anything, in your language</span></li>
+          <li class="dim"><svg viewBox="0 0 16 16"><path d="M3 8.5 6.5 12 13 4"/></svg><span data-i18n="pf.s.dim1">AI learns your business</span></li>
+          <li class="dim"><svg viewBox="0 0 16 16"><path d="M3 8.5 6.5 12 13 4"/></svg><span data-i18n="pf.s.dim2">Multi-quarter history &amp; trends</span></li>
         </ul>
-        <a href="#" class="plan-cta ghost" data-hover>Get Starter</a>
+        <a href="https://app.btw-helper.nl/signup" class="plan-cta ghost" data-hover data-i18n="pl.s.cta">Get Starter</a>
       </div>
 
       <!-- PRO -->
       <div class="plan feat reveal">
-        <div class="plan-badge">Most popular</div>
-        <div class="plan-label">Every quarter</div>
+        <div class="plan-badge" data-i18n="pl.p.badge">Most popular</div>
+        <div class="plan-label" data-i18n="pl.p.label">Every quarter</div>
         <div class="plan-name">Pro</div>
-        <div class="plan-target">For entrepreneurs and startups who file every quarter and want the AI to improve with use.</div>
+        <div class="plan-target" data-i18n="pricing.t2">For entrepreneurs and startups who file every quarter and want the AI to improve with use.</div>
         <div class="plan-price-block">
           <div class="plan-price">&euro;18<small>/mo</small></div>
         </div>
         <ul class="plan-feats">
-          <li><svg viewBox="0 0 16 16"><path d="M3 8.5 6.5 12 13 4"/></svg>Everything in Starter</li>
-          <li><svg viewBox="0 0 16 16"><path d="M3 8.5 6.5 12 13 4"/></svg><span><b style="color:var(--white);display:block">AI learns your business</b><span class="feat-desc">Vendor recognition, auto-classification</span></span></li>
-          <li><svg viewBox="0 0 16 16"><path d="M3 8.5 6.5 12 13 4"/></svg>Full multi-quarter dashboard &amp; trends</li>
-          <li class="dim"><svg viewBox="0 0 16 16"><path d="M3 8.5 6.5 12 13 4"/></svg>Accountant export bundle</li>
-          <li class="dim"><svg viewBox="0 0 16 16"><path d="M3 8.5 6.5 12 13 4"/></svg>Pre-filing completeness check</li>
+          <li><svg viewBox="0 0 16 16"><path d="M3 8.5 6.5 12 13 4"/></svg><span data-i18n="pf.p.1">Everything in Starter</span></li>
+          <li><svg viewBox="0 0 16 16"><path d="M3 8.5 6.5 12 13 4"/></svg><span><b style="color:var(--white);display:block" data-i18n="pf.p.ai">AI learns your business</b><span class="feat-desc" data-i18n="pf.p.ai.sub">Vendor recognition, auto-classification</span></span></li>
+          <li><svg viewBox="0 0 16 16"><path d="M3 8.5 6.5 12 13 4"/></svg><span data-i18n="pf.p.2">Full multi-quarter dashboard &amp; trends</span></li>
+          <li class="dim"><svg viewBox="0 0 16 16"><path d="M3 8.5 6.5 12 13 4"/></svg><span data-i18n="pf.p.dim1">Accountant export bundle</span></li>
+          <li class="dim"><svg viewBox="0 0 16 16"><path d="M3 8.5 6.5 12 13 4"/></svg><span data-i18n="pf.p.dim2">Pre-filing completeness check</span></li>
         </ul>
-        <a href="#" class="plan-cta primary" data-hover>Get Pro</a>
+        <a href="https://app.btw-helper.nl/signup" class="plan-cta primary" data-hover data-i18n="pl.p.cta">Get Pro</a>
       </div>
 
       <!-- STUDIO -->
       <div class="plan reveal">
-        <div class="plan-label">Power user</div>
+        <div class="plan-label" data-i18n="pl.st.label">Power user</div>
         <div class="plan-name">Studio</div>
-        <div class="plan-target">For power users who want everything organized and accountant-ready at year-end.</div>
+        <div class="plan-target" data-i18n="pricing.t3">For power users who want everything organized and accountant-ready at year-end.</div>
         <div class="plan-price-block">
           <div class="plan-price">&euro;27<small>/mo</small></div>
         </div>
         <ul class="plan-feats">
-          <li><svg viewBox="0 0 16 16"><path d="M3 8.5 6.5 12 13 4"/></svg>Everything in Pro</li>
-          <li><svg viewBox="0 0 16 16"><path d="M3 8.5 6.5 12 13 4"/></svg><span><b style="color:var(--white);display:block">Accountant Export Bundle</b><span class="feat-desc">Summary PDF, transaction CSV &amp; invoices, zipped</span></span></li>
-          <li><svg viewBox="0 0 16 16"><path d="M3 8.5 6.5 12 13 4"/></svg><span><b style="color:var(--white);display:block">Annual Report</b><span class="feat-desc">Four quarters aggregated for income-tax prep</span></span></li>
-          <li><svg viewBox="0 0 16 16"><path d="M3 8.5 6.5 12 13 4"/></svg><span><b style="color:var(--white);display:block">Completeness Check</b><span class="feat-desc">Upload bank CSV once, we flag missing invoices</span></span></li>
+          <li><svg viewBox="0 0 16 16"><path d="M3 8.5 6.5 12 13 4"/></svg><span data-i18n="pf.st.1">Everything in Pro</span></li>
+          <li><svg viewBox="0 0 16 16"><path d="M3 8.5 6.5 12 13 4"/></svg><span><b style="color:var(--white);display:block" data-i18n="pf.st.aeb">Accountant Export Bundle</b><span class="feat-desc" data-i18n="pf.st.aeb.sub">Summary PDF, transaction CSV &amp; invoices, zipped</span></span></li>
+          <li><svg viewBox="0 0 16 16"><path d="M3 8.5 6.5 12 13 4"/></svg><span><b style="color:var(--white);display:block" data-i18n="pf.st.ar">Annual Report</b><span class="feat-desc" data-i18n="pf.st.ar.sub">Four quarters aggregated for income-tax prep</span></span></li>
+          <li><svg viewBox="0 0 16 16"><path d="M3 8.5 6.5 12 13 4"/></svg><span><b style="color:var(--white);display:block" data-i18n="pf.st.cc">Completeness Check</b><span class="feat-desc" data-i18n="pf.st.cc.sub">Upload bank CSV once, we flag missing invoices</span></span></li>
         </ul>
-        <a href="#" class="plan-cta ghost" data-hover>Get Studio</a>
+        <a href="https://app.btw-helper.nl/signup" class="plan-cta ghost" data-hover data-i18n="pl.st.cta">Get Studio</a>
       </div>
     </div>
 
-    <p class="vat-note reveal">All prices excl. VAT. VAT may apply depending on your situation.</p>
+    <p class="vat-note reveal" data-i18n="pt.vat">All prices excl. VAT. VAT may apply depending on your situation.</p>
 
     <div class="pricing-trust reveal">
-      <div class="row"><svg viewBox="0 0 16 16"><path d="M3 8.5 6.5 12 13 4"/></svg>No invoice caps on any plan &mdash; upload as many as your quarter has.</div>
-      <div class="row"><svg viewBox="0 0 16 16"><path d="M3 8.5 6.5 12 13 4"/></svg>No bank connection. BTW Helper works from your invoices.</div>
-      <div class="row"><svg viewBox="0 0 16 16"><path d="M3 8.5 6.5 12 13 4"/></svg>No auto-filing. You copy, you submit, you stay in control.</div>
-      <div class="row"><svg viewBox="0 0 16 16"><path d="M3 8.5 6.5 12 13 4"/></svg>Cancel anytime &mdash; account goes read-only, nothing gets deleted.</div>
+      <div class="row"><svg viewBox="0 0 16 16"><path d="M3 8.5 6.5 12 13 4"/></svg><span data-i18n="pt.1">No invoice caps on any plan &mdash; upload as many as your quarter has.</span></div>
+      <div class="row"><svg viewBox="0 0 16 16"><path d="M3 8.5 6.5 12 13 4"/></svg><span data-i18n="pt.2">No bank connection. BTW Helper works from your invoices.</span></div>
+      <div class="row"><svg viewBox="0 0 16 16"><path d="M3 8.5 6.5 12 13 4"/></svg><span data-i18n="pt.3">No auto-filing. You copy, you submit, you stay in control.</span></div>
+      <div class="row"><svg viewBox="0 0 16 16"><path d="M3 8.5 6.5 12 13 4"/></svg><span data-i18n="pt.4">Cancel anytime &mdash; account goes read-only, nothing gets deleted.</span></div>
     </div>
   </div>
 </section>
@@ -949,37 +972,37 @@ footer{border-top:1px solid rgba(255,255,255,.06);background:var(--void);padding
 <section class="faq" id="faq">
   <div class="container">
     <div class="sec-head">
-      <div class="eyebrow reveal">Questions</div>
-      <h2><span class="title-line"><span>Good questions.</span></span></h2>
+      <div class="eyebrow reveal" data-i18n="faq.eyebrow">Questions</div>
+      <h2><span class="title-line"><span data-i18n="faq.h1">Good questions.</span></span></h2>
     </div>
     <div class="faq-list">
       <div class="faq-item reveal">
-        <div class="faq-q" data-hover><span><span class="faq-tag">Clarity</span>I don't have a fiscal background. Will I understand it?</span><span class="x">+</span></div>
-        <div class="faq-a"><div class="faq-a-inner">That's the whole point. Every rubriek and every field comes with a plain-language explanation &mdash; what it means, and why your invoice goes there. Available in Dutch, English and Spanish. You don't need to know the tax code; the AI walks you through it.</div></div>
+        <div class="faq-q" data-hover><span><span class="faq-tag">Clarity</span><span data-i18n="faq.q1">I don't have a fiscal background. Will I understand it?</span></span><span class="x">+</span></div>
+        <div class="faq-a"><div class="faq-a-inner" data-i18n="faq.a1">That's the whole point. Every rubriek and every field comes with a plain-language explanation &mdash; what it means, and why your invoice goes there. Available in Dutch, English and Spanish. You don't need to know the tax code; the AI walks you through it.</div></div>
       </div>
       <div class="faq-item reveal">
-        <div class="faq-q" data-hover><span><span class="faq-tag">Control</span>Does BTW Helper file my return for me?</span><span class="x">+</span></div>
-        <div class="faq-a"><div class="faq-a-inner">No &mdash; by design. BTW Helper calculates every number and lays it out ready to enter into Mijn Belastingdienst Zakelijk. You paste the figures yourself, under your own DigiD. No third-party authorization, no business verification step &mdash; you stay in control of what gets submitted, and it takes about two minutes.</div></div>
+        <div class="faq-q" data-hover><span><span class="faq-tag">Control</span><span data-i18n="faq.q2">Does BTW Helper file my return for me?</span></span><span class="x">+</span></div>
+        <div class="faq-a"><div class="faq-a-inner" data-i18n="faq.a2">No &mdash; by design. BTW Helper calculates every number and lays it out ready to enter into Mijn Belastingdienst Zakelijk. You paste the figures yourself, under your own DigiD. No third-party authorization, no business verification step &mdash; you stay in control of what gets submitted, and it takes about two minutes.</div></div>
       </div>
       <div class="faq-item reveal">
-        <div class="faq-q" data-hover><span><span class="faq-tag">Accuracy</span>How does it handle foreign invoices and reverse charge?</span><span class="x">+</span></div>
-        <div class="faq-a"><div class="faq-a-inner">Automatically. An invoice from a non-EU supplier with no VAT is converted to euro and self-assessed at 21% &mdash; rubriek 4a. EU B2B services map to the right rubriek too. The AI applies the rule and shows you the math for every line, so you can confirm rather than guess.</div></div>
+        <div class="faq-q" data-hover><span><span class="faq-tag">Accuracy</span><span data-i18n="faq.q3">How does it handle foreign invoices and reverse charge?</span></span><span class="x">+</span></div>
+        <div class="faq-a"><div class="faq-a-inner" data-i18n="faq.a3">Automatically. An invoice from a non-EU supplier with no VAT is converted to euro and self-assessed at 21% &mdash; rubriek 4a. EU B2B services map to the right rubriek too. The AI applies the rule and shows you the math for every line, so you can confirm rather than guess.</div></div>
       </div>
       <div class="faq-item reveal">
-        <div class="faq-q" data-hover><span><span class="faq-tag">Privacy</span>What happens to my invoice data?</span><span class="x">+</span></div>
-        <div class="faq-a"><div class="faq-a-inner">Before you mark a quarter as filed, we prompt you to download your full records &mdash; your legal 7-year archive, saved to your own drive. After filing, we delete the invoice files from our storage. Your dashboard figures stay, but we don't hold onto your financial documents indefinitely.</div></div>
+        <div class="faq-q" data-hover><span><span class="faq-tag">Privacy</span><span data-i18n="faq.q4">What happens to my invoice data?</span></span><span class="x">+</span></div>
+        <div class="faq-a"><div class="faq-a-inner" data-i18n="faq.a4">Before you mark a quarter as filed, we prompt you to download your full records &mdash; your legal 7-year archive, saved to your own drive. After filing, we delete the invoice files from our storage. Your dashboard figures stay, but we don't hold onto your financial documents indefinitely.</div></div>
       </div>
       <div class="faq-item reveal">
-        <div class="faq-q" data-hover><span><span class="faq-tag">Scope</span>Can I use this instead of full bookkeeping software?</span><span class="x">+</span></div>
-        <div class="faq-a"><div class="faq-a-inner">If you don't need a full ledger &mdash; client invoicing, payroll, multi-year accounts &mdash; yes. BTW Helper is built for one eenmanszaak that just needs its BTW done right, without the overhead of a full accounting suite. At year-end it also exports everything your accountant needs for your income-tax filing.</div></div>
+        <div class="faq-q" data-hover><span><span class="faq-tag">Scope</span><span data-i18n="faq.q5">Can I use this instead of full bookkeeping software?</span></span><span class="x">+</span></div>
+        <div class="faq-a"><div class="faq-a-inner" data-i18n="faq.a5">If you don't need a full ledger &mdash; client invoicing, payroll, multi-year accounts &mdash; yes. BTW Helper is built for one eenmanszaak that just needs its BTW done right, without the overhead of a full accounting suite. At year-end it also exports everything your accountant needs for your income-tax filing.</div></div>
       </div>
       <div class="faq-item reveal">
-        <div class="faq-q" data-hover><span><span class="faq-tag">Trust</span>How accurate is the AI, really?</span><span class="x">+</span></div>
-        <div class="faq-a"><div class="faq-a-inner">It's built on a frontier AI model and shows its reasoning on every classification &mdash; nothing is a black box. A double-check pass flags anything unusual for your review, and you confirm before anything is filed. The AI does the heavy lifting; the final call is always yours.</div></div>
+        <div class="faq-q" data-hover><span><span class="faq-tag">Trust</span><span data-i18n="faq.q6">How accurate is the AI, really?</span></span><span class="x">+</span></div>
+        <div class="faq-a"><div class="faq-a-inner" data-i18n="faq.a6">It's built on a frontier AI model and shows its reasoning on every classification &mdash; nothing is a black box. A double-check pass flags anything unusual for your review, and you confirm before anything is filed. The AI does the heavy lifting; the final call is always yours.</div></div>
       </div>
       <div class="faq-item reveal">
-        <div class="faq-q" data-hover><span><span class="faq-tag">Commitment</span>Can I cancel? Do I get a refund?</span><span class="x">+</span></div>
-        <div class="faq-a"><div class="faq-a-inner">Cancel anytime &mdash; you keep access through the end of your current billing period, then your account goes read-only. Your dashboard, history and exports stay available; nothing gets deleted. Monthly plans aren't refunded; if we offer an annual plan, it comes with a 14-day money-back window.</div></div>
+        <div class="faq-q" data-hover><span><span class="faq-tag">Commitment</span><span data-i18n="faq.q7">Can I cancel? Do I get a refund?</span></span><span class="x">+</span></div>
+        <div class="faq-a"><div class="faq-a-inner" data-i18n="faq.a7">Cancel anytime &mdash; you keep access through the end of your current billing period, then your account goes read-only. Your dashboard, history and exports stay available; nothing gets deleted. Monthly plans aren't refunded; if we offer an annual plan, it comes with a 14-day money-back window.</div></div>
       </div>
     </div>
   </div>
@@ -988,11 +1011,11 @@ footer{border-top:1px solid rgba(255,255,255,.06);background:var(--void);padding
 <!-- ============ FINAL CTA ============ -->
 <section class="final" id="final">
   <div class="container">
-    <h2 class="reveal">Admin isn't your job.<br><span class="out">Get back to it.</span></h2>
-    <p class="reveal">Drop your invoices. The AI does the rest. You stay in control.</p>
+    <h2 class="reveal"><span data-i18n="final.h1">Admin isn't your job.</span><br><span class="out" data-i18n="final.h2">Get back to it.</span></h2>
+    <p class="reveal" data-i18n="final.tagline">Drop your invoices. The AI does the rest. You stay in control.</p>
     <div class="cta-row reveal">
-      <a href="#pricing" class="btn btn-primary" data-hover>See plans</a>
-      <a href="#how" class="btn btn-ghost" data-hover>See how it works</a>
+      <a href="https://app.btw-helper.nl/signup" class="btn btn-primary" data-hover data-i18n="hero.cta1">Start for free</a>
+      <a href="#how" class="btn btn-ghost" data-hover data-i18n="hero.cta2">See how it works</a>
     </div>
   </div>
 </section>
@@ -1002,10 +1025,10 @@ footer{border-top:1px solid rgba(255,255,255,.06);background:var(--void);padding
     <div class="foot-grid">
       <div class="foot-brand">
         <a href="#" class="wordmark">BTW<span> Helper</span>.</a>
-        <p>Drop your invoices. The AI reads them, classifies every rubriek, and gets your BTW return ready to file.</p>
+        <p data-i18n="footer.tag">Drop your invoices. The AI reads them, classifies every rubriek, and gets your BTW return ready to file.</p>
       </div>
       <div class="foot-col">
-        <h4>Product</h4>
+        <h4 data-i18n="footer.col1">Product</h4>
         <ul>
           <li><a href="#problem" data-hover>The problem</a></li>
           <li><a href="#how" data-hover>How it works</a></li>
@@ -1015,7 +1038,7 @@ footer{border-top:1px solid rgba(255,255,255,.06);background:var(--void);padding
         </ul>
       </div>
       <div class="foot-col">
-        <h4>Legal</h4>
+        <h4 data-i18n="footer.col2">Legal</h4>
         <ul>
           <li><span class="foot-soon" data-hover>Terms of Service<span class="soon-chip">Available at launch</span></span></li>
           <li><span class="foot-soon" data-hover>Privacy Policy<span class="soon-chip">Available at launch</span></span></li>
@@ -1034,7 +1057,384 @@ footer{border-top:1px solid rgba(255,255,255,.06);background:var(--void);padding
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <script>
-/* ---------- mobile nav burger ---------- */
+/* ============================================================
+   i18n — language switcher
+   ============================================================ */
+const CONTENT = {
+  en: {
+    'nav.how':'How it works','nav.features':'Features','nav.pricing':'Pricing',
+    'nav.dashboard':'Log in','nav.cta':'Get started',
+    'hero.eyebrow':'Drop your invoices. Get your BTW return. Done.',
+    'hero.h1a':'File your BTW before','hero.h1b':'your coffee gets cold.',
+    'hero.check1':'AI reads every invoice and assigns the right rubriek',
+    'hero.check2':'Reverse charge & foreign currency — handled, explained',
+    'hero.check3':'Same layout as the Belastingdienst form. You review, you file.',
+    'hero.cta1':'Start for free','hero.cta2':'See how it works',
+    'hero.sub':'Built for eenmanszaak · You stay in control · Cancel anytime',
+    'problem.eyebrow':'The problem','problem.h1':'The aangifte is short.','problem.h2':"Getting it right isn't.",
+    'problem.prose':'Nine boxes. Simple enough — until an afternoon disappears into <span class="ph">sorting invoices</span>, a foreign supplier triggers a <span class="ph">reverse-charge rule you\'ve never heard of</span>, and you press "Akkoord" <span class="ph">hoping you got it right</span>. A wrong box isn\'t a typo. It\'s a correction letter from the Belastingdienst.',
+    'chat.q1':'Why is this invoice rubriek 4a?','chat.q2':'Did I miss something this quarter?','chat.q3':"What's my next step?",
+    'problem.closer':"BTW Helper handles all of it. And when you're not sure — just ask the AI.",
+    'problem.chatanswer':'The built-in AI assistant answers — in Dutch, English, or Spanish. It reads your invoices, explains every classification, and never leaves you guessing.',
+    'ai.eyebrow':'Your AI companion',
+    'ai.attr1h':'Learns your business over time','ai.attr2h':'Groups, classifies, flags — automatically','ai.attr3h':'Answers in your language',
+    'how.eyebrow':'How it works','how.h1':'Four steps.','how.h2':'The AI does the heavy lifting.',
+    'how.sub':'You just review and file.',
+    'how.s1h':'Drop the whole quarter','how.s1p':'Drag in all your invoices at once — bulk upload, PDFs or email forwards. No one-by-one, no manual entry.',
+    'how.s2h':'AI reads & classifies','how.s2p':'14 invoices read, rubriek-tagged and vendor-grouped in ~20 seconds. Smart filters and a double-check pass flag anything unusual.',
+    'how.s3h':'Review & ask','how.s3p':'A frontier AI model explains every call in plain language and learns your business over time — fewer questions, fewer errors, each quarter.',
+    'how.s4h':'Copy into the portal','how.s4p':"The one manual step: 9 boxes in Mijn Belastingdienst Zakelijk. The simulator mirrors it field for field — copy across, you can't get lost.",
+    'engine.eyebrow':'The engine','engine.h1':'Watch the AI','engine.h2':'read an invoice.',
+    'engine.close':'Every invoice, explained like this. You see the reasoning — not just the result.',
+    'feat.eyebrow':'Everything in one place',
+    'stat.eyebrow':'What you get back','stat.h1':'Faster. Cheaper. In control.',
+    'stat.s1check':'Filing time cut from hours to minutes','stat.s1sub':'One quick review. One click to copy. Done.',
+    'stat.s2check':'Guesswork removed from every classification','stat.s2sub':'The AI shows its reasoning. You confirm, then file.',
+    'stat.s3check':'Every rubriek explained in plain language','stat.s3sub':'Reverse charge, ICP, voorbelasting — no jargon.',
+    'cmp.eyebrow':'Where BTW Helper fits','cmp.h1':'One job.','cmp.h2':'Done properly.',
+    'cmp.close':"BTW Helper isn't trying to replace your whole admin. It does one job — your BTW — better than a tool built for everything, and clearer than a spreadsheet built for nothing. And at year-end, it hands you a clean export of everything your accountant needs for your income-tax filing.",
+    'pricing.h1':'One job, done right.',
+    'pricing.launch':"Rates will increase soon — lock in today's price.",
+    'pricing.t1':'Ideal for freelancers and startups handling their own BTW.',
+    'pricing.t2':'For entrepreneurs and startups who file every quarter and want the AI to improve with use.',
+    'pricing.t3':'For power users who want everything organized and accountant-ready at year-end.',
+    'faq.eyebrow':'Questions','faq.h1':'Good questions.',
+    'faq.q1':"I don't have a fiscal background. Will I understand it?",
+    'faq.q2':'Does BTW Helper file my return for me?',
+    'faq.q3':'How does it handle foreign invoices and reverse charge?',
+    'faq.q4':'What happens to my invoice data?',
+    'faq.q5':'Can I use this instead of full bookkeeping software?',
+    'faq.q6':'How accurate is the AI, really?',
+    'faq.q7':'Can I cancel? Do I get a refund?',
+    'final.h1':"Admin isn't your job.",'final.h2':'Get back to it.',
+    'final.tagline':'Drop your invoices. The AI does the rest. You stay in control.',
+    'ai.h1a':"Not just software.",'ai.h1b':"A BTW specialist.",
+    'ai.sub':"Built on a frontier AI model. It reads your invoices, learns your business, explains every decision — and is always one question away.",
+    'ai.attr1p':"It recognizes the vendors you use every quarter and remembers how they're classified. The more you file, the fewer questions it needs to ask.",
+    'ai.attr2p':"Recurring invoices grouped. Reverse charge applied. Anything unusual flagged for your review. You see the reasoning, not just the result.",
+    'ai.attr3p':'\"Why this rubriek?\" \"What\'s next?\" \"Did I miss anything?\" — ask in Dutch, English, or Spanish. It explains, you decide.',
+    'engine.sub':"A real US invoice — reverse-charged and currency-converted. Every field, classified and explained.",
+    'feat.h1':"Built for the whole quarter.",'feat.sub':"Not just a classifier — the full workflow, from invoice to filed.",
+    'stat.sub':"The AI does the sorting and the math. You do the deciding.",
+    'cmp.sub':"A full bookkeeping suite does everything — and asks you to become a bookkeeper to use it. A spreadsheet does nothing until you build it. BTW Helper does exactly one thing: your BTW, done right.",
+    'cmp.col2':"Full bookkeeping suite",'cmp.col3':"Spreadsheet",
+    'cmp.r1':"Built for",'cmp.r1a':"BTW filing, end to end",'cmp.r1b':"Running your whole admin",'cmp.r1c':"Whatever you set up yourself",
+    'cmp.r2':"Learning curve",'cmp.r2a':"Minutes",'cmp.r2b':"Steep — it's a full ledger",'cmp.r2c':"Steep & error-prone",
+    'cmp.r3':"AI that explains every call",'cmp.r4':"Looks like the official form",
+    'cmp.r5':"Plain language · NL/EN/ES",'cmp.r5b':"Partly",
+    'cmp.r6':"No invoice caps",'cmp.r6b':"Priced by volume",
+    'pricing.sub':"No invoice caps, no per-filing fees. Pick the plan that matches how much you want the AI to do for you.",
+    'footer.tag':"Drop your invoices. The AI reads them, classifies every rubriek, and gets your BTW return ready to file.",
+    'footer.col1':"Product",'footer.col2':"Legal",
+    /* features */
+    'feat.1h':'AI invoice parsing',
+    'feat.1p':"Drop a quarter's PDFs at once. The AI reads each one and assigns the correct rubriek — bulk upload, no manual entry.",
+    'feat.2h':'Dashboard with alerts',
+    'feat.2p':'Quarterly KPIs, trends, and what you owe — at a glance. Flags reverse-charge mismatches and unusual invoices before you file.',
+    'feat.3h':'Filters & invoice count',
+    'feat.3p':'Filter by rubriek, quarter, vendor, or type. See exactly how many invoices are in, classified, and ready — no surprises at the deadline.',
+    'feat.4h':'Simulator = the real form',
+    'feat.4p':'Same field order, same rubriek structure as Mijn Belastingdienst Zakelijk — just clearer, with explanations and copy buttons per field.',
+    'feat.5h':'Deadline reminders',
+    'feat.5p':'The quarter sneaks up on everyone. A nudge before the BTW deadline means no more last-evening panic.',
+    'feat.6h':'You file, you control',
+    'feat.6p':'BTW Helper prepares every number. You copy them into the portal under your own DigiD. Nothing gets submitted without you.',
+    /* pricing plan labels/ctas */
+    'pl.s.label':'Start here','pl.p.label':'Every quarter','pl.st.label':'Power user',
+    'pl.p.badge':'Most popular',
+    'pl.s.cta':'Get Starter','pl.p.cta':'Get Pro','pl.st.cta':'Get Studio',
+    /* pricing features */
+    'pf.s.1':'Unlimited invoice uploads & AI classification',
+    'pf.s.2':'Dashboard, simulator, document library',
+    'pf.s.3':'AI assistant — ask anything, in your language',
+    'pf.s.dim1':'AI learns your business','pf.s.dim2':'Multi-quarter history & trends',
+    'pf.p.1':'Everything in Starter',
+    'pf.p.ai':'AI learns your business','pf.p.ai.sub':'Vendor recognition, auto-classification',
+    'pf.p.2':'Full multi-quarter dashboard & trends',
+    'pf.p.dim1':'Accountant export bundle','pf.p.dim2':'Pre-filing completeness check',
+    'pf.st.1':'Everything in Pro',
+    'pf.st.aeb':'Accountant Export Bundle','pf.st.aeb.sub':'Summary PDF, transaction CSV & invoices, zipped',
+    'pf.st.ar':'Annual Report','pf.st.ar.sub':'Four quarters aggregated for income-tax prep',
+    'pf.st.cc':'Completeness Check','pf.st.cc.sub':'Upload bank CSV once, we flag missing invoices',
+    /* pricing trust */
+    'pt.1':'No invoice caps on any plan — upload as many as your quarter has.',
+    'pt.2':'No bank connection. BTW Helper works from your invoices.',
+    'pt.3':'No auto-filing. You copy, you submit, you stay in control.',
+    'pt.4':'Cancel anytime — account goes read-only, nothing gets deleted.',
+    'pt.vat':'All prices excl. VAT. VAT may apply depending on your situation.',
+    /* faq answers */
+    'faq.a1':"That's the whole point. Every rubriek and every field comes with a plain-language explanation — what it means, and why your invoice goes there. Available in Dutch, English and Spanish. You don't need to know the tax code; the AI walks you through it.",
+    'faq.a2':"No — by design. BTW Helper calculates every number and lays it out ready to enter into Mijn Belastingdienst Zakelijk. You paste the figures yourself, under your own DigiD. No third-party authorization, no business verification step — you stay in control of what gets submitted, and it takes about two minutes.",
+    'faq.a3':"Automatically. An invoice from a non-EU supplier with no VAT is converted to euro and self-assessed at 21% — rubriek 4a. EU B2B services map to the right rubriek too. The AI applies the rule and shows you the math for every line, so you can confirm rather than guess.",
+    'faq.a4':"Before you mark a quarter as filed, we prompt you to download your full records — your legal 7-year archive, saved to your own drive. After filing, we delete the invoice files from our storage. Your dashboard figures stay, but we don't hold onto your financial documents indefinitely.",
+    'faq.a5':"If you don't need a full ledger — client invoicing, payroll, multi-year accounts — yes. BTW Helper is built for one eenmanszaak that just needs its BTW done right, without the overhead of a full accounting suite. At year-end it also exports everything your accountant needs for your income-tax filing.",
+    'faq.a6':"It's built on a frontier AI model and shows its reasoning on every classification — nothing is a black box. A double-check pass flags anything unusual for your review, and you confirm before anything is filed. The AI does the heavy lifting; the final call is always yours.",
+    'faq.a7':"Cancel anytime — you keep access through the end of your current billing period, then your account goes read-only. Your dashboard, history and exports stay available; nothing gets deleted. Monthly plans aren't refunded; if we offer an annual plan, it comes with a 14-day money-back window.",
+  },
+  nl: {
+    'nav.how':'Hoe het werkt','nav.features':'Functies','nav.pricing':'Prijzen',
+    'nav.dashboard':'Inloggen','nav.cta':'Begin gratis',
+    'hero.eyebrow':'Upload je facturen. Ontvang je BTW-aangifte. Klaar.',
+    'hero.h1a':'Doe je BTW-aangifte voor','hero.h1b':'je koffie koud wordt.',
+    'hero.check1':'AI leest elke factuur en bepaalt het juiste rubriek',
+    'hero.check2':'Verleggingsregeling & vreemde valuta — automatisch, uitgelegd',
+    'hero.check3':'Zelfde opzet als het Belastingdienst-formulier. Jij controleert, jij dient in.',
+    'hero.cta1':'Begin gratis','hero.cta2':'Bekijk hoe het werkt',
+    'hero.sub':'Gebouwd voor eenmanszaak · Jij behoudt de controle · Altijd opzegbaar',
+    'problem.eyebrow':'Het probleem','problem.h1':'De aangifte is kort.','problem.h2':'Het goed doen niet.',
+    'problem.prose':'Negen vakjes. Simpel genoeg — tot een middag verdwijnt in <span class="ph">facturen sorteren</span>, een buitenlandse leverancier een <span class="ph">verleggingsregel triggert die je nog nooit hebt gezien</span>, en je op \'Akkoord\' drukt in de <span class="ph">hoop dat je het goed hebt gedaan</span>. Een verkeerd vakje is geen typfout. Het is een brief van de Belastingdienst.',
+    'chat.q1':'Waarom staat deze factuur op rubriek 4a?','chat.q2':'Heb ik dit kwartaal iets gemist?','chat.q3':'Wat is mijn volgende stap?',
+    'problem.closer':'BTW Helper regelt het allemaal. En als je twijfelt — vraag het gewoon.',
+    'problem.chatanswer':'De ingebouwde AI-assistent antwoordt — in het Nederlands, Engels of Spaans. Hij leest je facturen, legt elke classificatie uit en laat je nooit raden.',
+    'ai.eyebrow':'Jouw AI-assistent',
+    'ai.attr1h':'Leert je bedrijf steeds beter kennen','ai.attr2h':'Groeperen, classificeren, markeren — automatisch','ai.attr3h':'Antwoordt in jouw taal',
+    'how.eyebrow':'Hoe het werkt','how.h1':'Vier stappen.','how.h2':'De AI doet het zware werk.',
+    'how.sub':'Jij controleert en dient in.',
+    'how.s1h':'Upload het hele kwartaal','how.s1p':'Sleep al je facturen in één keer — bulkupload, PDF\'s of doorgezonden e-mails. Geen één voor één, geen handmatige invoer.',
+    'how.s2h':'AI leest en classificeert','how.s2p':'14 facturen gelezen, rubriek-getagd en per leverancier gegroepeerd in ~20 seconden. Slimme filters en een dubbele check markeren alles wat opvalt.',
+    'how.s3h':'Controleer en vraag','how.s3p':'Een frontier AI-model legt elke beslissing uit in begrijpelijke taal en leert je bedrijf steeds beter kennen — minder vragen, minder fouten, elk kwartaal.',
+    'how.s4h':'Kopieer naar het portaal','how.s4p':'De enige handmatige stap: 9 vakjes in Mijn Belastingdienst Zakelijk. De simulator spiegelt het formulier veld voor veld — kopieer over, je kunt niet verdwalen.',
+    'engine.eyebrow':'De techniek','engine.h1':'Zie hoe de AI','engine.h2':'een factuur leest.',
+    'engine.close':'Elke factuur, zo uitgelegd. Je ziet de redenering — niet alleen het resultaat.',
+    'feat.eyebrow':'Alles op één plek',
+    'stat.eyebrow':'Wat je terugkrijgt','stat.h1':'Sneller. Goedkoper. In controle.',
+    'stat.s1check':'Aangiftetijd teruggebracht van uren naar minuten','stat.s1sub':'Één snelle controle. Eén klik om te kopiëren. Klaar.',
+    'stat.s2check':'Giswerk verwijderd uit elke classificatie','stat.s2sub':'De AI toont haar redenering. Jij bevestigt, dan dien je in.',
+    'stat.s3check':'Elk rubriek uitgelegd in begrijpelijke taal','stat.s3sub':'Verleggingsregeling, ICP, voorbelasting — geen jargon.',
+    'cmp.eyebrow':'Waar BTW Helper past','cmp.h1':'Één taak.','cmp.h2':'Goed gedaan.',
+    'cmp.close':'BTW Helper probeert je hele administratie niet te vervangen. Het doet één ding — jouw BTW — beter dan een tool voor alles, en duidelijker dan een spreadsheet voor niets. En aan het einde van het jaar geeft het je een overzicht van alles wat je accountant nodig heeft voor je inkomstenbelastingaangifte.',
+    'pricing.h1':'Één taak, goed gedaan.',
+    'pricing.launch':'Prijzen stijgen binnenkort — vergrendel de prijs van vandaag.',
+    'pricing.t1':'Ideaal voor freelancers en startups die hun eigen BTW regelen.',
+    'pricing.t2':'Voor ondernemers en startups die elk kwartaal aangifte doen en de AI willen laten leren.',
+    'pricing.t3':'Voor gevorderde gebruikers die alles georganiseerd en klaar voor de accountant willen hebben.',
+    'faq.eyebrow':'Vragen','faq.h1':'Goede vragen.',
+    'faq.q1':'Ik heb geen fiscale achtergrond. Begrijp ik het?',
+    'faq.q2':'Dient BTW Helper mijn aangifte voor mij in?',
+    'faq.q3':'Hoe gaat het om met buitenlandse facturen en verleggingsregeling?',
+    'faq.q4':'Wat gebeurt er met mijn factuurgegevens?',
+    'faq.q5':'Kan ik dit gebruiken in plaats van boekhoudsoftware?',
+    'faq.q6':'Hoe nauwkeurig is de AI, echt?',
+    'faq.q7':'Kan ik opzeggen? Krijg ik een terugbetaling?',
+    'final.h1':'Administratie is niet jouw werk.','final.h2':'Ga terug naar wat je doet.',
+    'final.tagline':'Upload je facturen. De AI doet de rest. Jij behoudt de controle.',
+    'ai.h1a':"Niet zomaar software.",'ai.h1b':"Een BTW-specialist.",
+    'ai.sub':"Gebouwd op een frontier AI-model. Het leest je facturen, leert je bedrijf kennen, legt elke beslissing uit — en is altijd één vraag verwijderd.",
+    'ai.attr1p':"Het herkent de leveranciers die je elk kwartaal gebruikt en onthoudt hoe ze worden geclassificeerd. Hoe meer je indient, hoe minder vragen het hoeft te stellen.",
+    'ai.attr2p':"Terugkerende facturen gegroepeerd. Verleggingsregeling toegepast. Alles wat opvalt gemarkeerd voor jouw controle. Je ziet de redenering, niet alleen het resultaat.",
+    'ai.attr3p':'\"Waarom dit rubriek?\" \"Wat is het volgende?\" \"Heb ik iets gemist?\" — vraag in het Nederlands, Engels of Spaans. Het legt uit, jij beslist.',
+    'engine.sub':"Een echte factuur uit de VS — met verleggingsregeling en valutaomrekening. Elk veld, geclassificeerd en uitgelegd.",
+    'feat.h1':"Gebouwd voor het hele kwartaal.",'feat.sub':"Niet alleen een classifier — de volledige workflow, van factuur tot aangifte.",
+    'stat.sub':"De AI doet het sorteren en rekenen. Jij neemt de beslissingen.",
+    'cmp.sub':"Een volledig boekhoudpakket doet alles — en vraagt je een boekhouder te worden om het te gebruiken. Een spreadsheet doet niets totdat jij het bouwt. BTW Helper doet precies één ding: jouw BTW, goed gedaan.",
+    'cmp.col2':"Boekhoudpakket",'cmp.col3':"Spreadsheet",
+    'cmp.r1':"Gebouwd voor",'cmp.r1a':"BTW-aangifte, van begin tot eind",'cmp.r1b':"Je hele administratie",'cmp.r1c':"Wat je zelf bouwt",
+    'cmp.r2':"Leercurve",'cmp.r2a':"Minuten",'cmp.r2b':"Steil — het is een volledig boekhoudpakket",'cmp.r2c':"Steil & foutgevoelig",
+    'cmp.r3':"AI die elke beslissing uitlegt",'cmp.r4':"Ziet eruit als het officiële formulier",
+    'cmp.r5':"Begrijpelijke taal · NL/EN/ES",'cmp.r5b':"Deels",
+    'cmp.r6':"Geen factuurlimieten",'cmp.r6b':"Prijs per volume",
+    'pricing.sub':"Geen factuurlimieten, geen kosten per aangifte. Kies het plan dat past bij hoeveel je wilt dat de AI voor je doet.",
+    'footer.tag':"Upload je facturen. De AI leest ze, classificeert elk rubriek en bereidt je BTW-aangifte voor.",
+    'footer.col1':"Product",'footer.col2':"Juridisch",
+    /* features */
+    'feat.1h':'AI-factuurverwerking',
+    'feat.1p':"Gooi de PDF's van een kwartaal er in één keer in. De AI leest elke factuur en bepaalt het juiste rubriek — bulkupload, geen handmatige invoer.",
+    'feat.2h':'Dashboard met meldingen',
+    'feat.2p':'Kwartaal-KPI\'s, trends en wat je verschuldigd bent — in één oogopslag. Markeert verleggingsafwijkingen en ongebruikelijke facturen voor je aangifte.',
+    'feat.3h':'Filters & factuurtelling',
+    'feat.3p':'Filter op rubriek, kwartaal, leverancier of type. Zie precies hoeveel facturen er zijn, geclassificeerd en klaar — geen verrassingen vlak voor de deadline.',
+    'feat.4h':'Simulator = het echte formulier',
+    'feat.4p':'Zelfde veldvolgorde, zelfde rubrieksstructuur als Mijn Belastingdienst Zakelijk — maar duidelijker, met uitleg en kopieerknopjes per veld.',
+    'feat.5h':'Herinneringen voor deadlines',
+    'feat.5p':'Het kwartaal sluipt op je af. Een herinnering vóór de BTW-deadline betekent geen last-minute paniek meer.',
+    'feat.6h':'Jij dient in, jij behoudt controle',
+    'feat.6p':'BTW Helper berekent elk getal. Jij kopieert ze naar het portaal via je eigen DigiD. Niets wordt ingediend zonder jou.',
+    /* pricing */
+    'pl.s.label':'Begin hier','pl.p.label':'Elk kwartaal','pl.st.label':'Gevorderde gebruiker',
+    'pl.p.badge':'Meest gekozen',
+    'pl.s.cta':'Kies Starter','pl.p.cta':'Kies Pro','pl.st.cta':'Kies Studio',
+    'pf.s.1':'Onbeperkt facturen uploaden & AI-classificatie',
+    'pf.s.2':'Dashboard, simulator, documentenbibliotheek',
+    'pf.s.3':'AI-assistent — vraag alles, in jouw taal',
+    'pf.s.dim1':'AI leert je bedrijf kennen','pf.s.dim2':'Geschiedenis over meerdere kwartalen',
+    'pf.p.1':'Alles in Starter',
+    'pf.p.ai':'AI leert je bedrijf kennen','pf.p.ai.sub':'Leverancierherkenning, automatische classificatie',
+    'pf.p.2':'Volledig dashboard over meerdere kwartalen',
+    'pf.p.dim1':'Accountantsexportpakket','pf.p.dim2':'Volledigheidscheck voor aangifte',
+    'pf.st.1':'Alles in Pro',
+    'pf.st.aeb':'Accountantsexportpakket','pf.st.aeb.sub':'Samenvatting PDF, transactie-CSV & facturen, gezipped',
+    'pf.st.ar':'Jaarrapport','pf.st.ar.sub':'Vier kwartalen samengevoegd voor de inkomstenbelasting',
+    'pf.st.cc':'Volledigheidscheck','pf.st.cc.sub':'Upload één keer een bank-CSV, wij markeren ontbrekende facturen',
+    'pt.1':'Geen factuurlimieten voor elk plan — upload zoveel als je kwartaal heeft.',
+    'pt.2':'Geen bankverbinding. BTW Helper werkt met je facturen.',
+    'pt.3':'Geen automatische indiening. Jij kopieert, jij dient in, jij behoudt controle.',
+    'pt.4':'Altijd opzegbaar — account wordt alleen-lezen, niets wordt verwijderd.',
+    'pt.vat':'Alle prijzen excl. BTW. BTW kan van toepassing zijn afhankelijk van jouw situatie.',
+    /* faq answers */
+    'faq.a1':'Dat is precies het punt. Elk rubriek en elk veld krijgt een uitleg in begrijpelijke taal — wat het betekent en waarom jouw factuur daar staat. Beschikbaar in het Nederlands, Engels en Spaans. Je hoeft de belastingwetgeving niet te kennen; de AI begeleidt je erdoorheen.',
+    'faq.a2':'Nee — met opzet. BTW Helper berekent elk getal en legt het klaar voor invoer in Mijn Belastingdienst Zakelijk. Jij plakt de cijfers zelf in, onder je eigen DigiD. Geen derde partij, geen bedrijfsverificatie — jij behoudt de controle, en het duurt ongeveer twee minuten.',
+    'faq.a3':'Automatisch. Een factuur van een niet-EU-leverancier zonder BTW wordt omgezet naar euro en zelf berekend op 21% — rubriek 4a. EU B2B-diensten worden ook aan het juiste rubriek gekoppeld. De AI past de regel toe en toont de berekening per regel, zodat jij bevestigt in plaats van raadt.',
+    'faq.a4':'Voordat je een kwartaal als ingediend markeert, vragen we je om je volledige administratie te downloaden — jouw wettelijk 7-jaars archief, op je eigen drive. Na de aangifte verwijderen we de factuurbestanden. Je dashboardgegevens blijven, maar we bewaren je financiële documenten niet voor onbepaalde tijd.',
+    'faq.a5':'Als je geen volledige boekhouding nodig hebt — klantfacturen, salarisadministratie, meerjarige rapporten — dan wel. BTW Helper is gebouwd voor één eenmanszaak die gewoon de BTW goed wil doen. Aan het einde van het jaar exporteert het ook alles wat je accountant nodig heeft voor de inkomstenbelastingaangifte.',
+    'faq.a6':'Het is gebouwd op een frontier AI-model en toont zijn redenering bij elke classificatie — niets is een zwarte doos. Een dubbele check markeert alles wat opvalt, en jij bevestigt voordat er iets wordt ingediend. De AI doet het zware werk; de uiteindelijke beslissing is altijd van jou.',
+    'faq.a7':'Altijd opzegbaar — je behoudt toegang tot het einde van je betaalperiode, dan wordt je account alleen-lezen. Je dashboard, geschiedenis en exports blijven beschikbaar; niets wordt verwijderd. Maandelijkse abonnementen worden niet terugbetaald; bij een jaarplan geldt een 14-daags terugbetalingsrecht.',
+  },
+  es: {
+    'nav.how':'Cómo funciona','nav.features':'Funciones','nav.pricing':'Precios',
+    'nav.dashboard':'Iniciar sesión','nav.cta':'Empieza gratis',
+    'hero.eyebrow':'Sube tus facturas. Obtén tu declaración de BTW. Listo.',
+    'hero.h1a':'Haz tu declaración de BTW antes','hero.h1b':'de que se enfríe tu café.',
+    'hero.check1':'La IA lee cada factura y asigna el rubriek correcto',
+    'hero.check2':'Cargo invertido y divisas extranjeras — gestionado, explicado',
+    'hero.check3':'Mismo diseño que el formulario de Belastingdienst. Tú revisas, tú presentas.',
+    'hero.cta1':'Empieza gratis','hero.cta2':'Ver cómo funciona',
+    'hero.sub':'Para eenmanszaak · Tú mantienes el control · Cancela cuando quieras',
+    'problem.eyebrow':'El problema','problem.h1':'La aangifte es corta.','problem.h2':'Hacerla bien, no tanto.',
+    'problem.prose':'Nueve casillas. Parece simple — hasta que una tarde desaparece <span class="ph">ordenando facturas</span>, un proveedor extranjero activa una <span class="ph">regla de cargo invertido que nunca has visto</span>, y pulsas \'Akkoord\' <span class="ph">esperando haberlo hecho bien</span>. Una casilla incorrecta no es un error de tipografía. Es una carta de la Belastingdienst.',
+    'chat.q1':'¿Por qué esta factura es rubriek 4a?','chat.q2':'¿Me falta algo este trimestre?','chat.q3':'¿Cuál es mi siguiente paso?',
+    'problem.closer':'BTW Helper lo gestiona todo. Y si no estás seguro — pregunta a la IA.',
+    'problem.chatanswer':'El asistente de IA incorporado responde — en neerlandés, inglés o español. Lee tus facturas, explica cada clasificación y nunca te deja adivinar.',
+    'ai.eyebrow':'Tu asistente de IA',
+    'ai.attr1h':'Aprende sobre tu negocio con el tiempo','ai.attr2h':'Agrupa, clasifica, marca — automáticamente','ai.attr3h':'Responde en tu idioma',
+    'how.eyebrow':'Cómo funciona','how.h1':'Cuatro pasos.','how.h2':'La IA hace el trabajo pesado.',
+    'how.sub':'Tú solo revisas y presentas.',
+    'how.s1h':'Sube todo el trimestre','how.s1p':'Arrastra todas tus facturas de una vez — carga masiva, PDFs o reenvíos de email. Sin una a una, sin entrada manual.',
+    'how.s2h':'La IA lee y clasifica','how.s2p':'14 facturas leídas, etiquetadas por rubriek y agrupadas por proveedor en ~20 segundos. Filtros inteligentes y verificación doble marcan cualquier anomalía.',
+    'how.s3h':'Revisa y pregunta','how.s3p':'Un modelo de IA de última generación explica cada decisión en lenguaje sencillo y aprende sobre tu negocio — menos preguntas, menos errores, cada trimestre.',
+    'how.s4h':'Copia al portal','how.s4p':'El único paso manual: 9 casillas en Mijn Belastingdienst Zakelijk. El simulador replica el formulario campo por campo — copia y pega, no puedes perderte.',
+    'engine.eyebrow':'El motor','engine.h1':'Mira cómo la IA','engine.h2':'lee una factura.',
+    'engine.close':'Cada factura, explicada así. Ves el razonamiento — no solo el resultado.',
+    'feat.eyebrow':'Todo en un solo lugar',
+    'stat.eyebrow':'Lo que recuperas','stat.h1':'Más rápido. Más barato. En control.',
+    'stat.s1check':'Tiempo de declaración reducido de horas a minutos','stat.s1sub':'Una revisión rápida. Un clic para copiar. Listo.',
+    'stat.s2check':'Adivinanzas eliminadas de cada clasificación','stat.s2sub':'La IA muestra su razonamiento. Tú confirmas, luego presentas.',
+    'stat.s3check':'Cada rubriek explicado en lenguaje claro','stat.s3sub':'Cargo invertido, ICP, voorbelasting — sin jerga.',
+    'cmp.eyebrow':'Dónde encaja BTW Helper','cmp.h1':'Un trabajo.','cmp.h2':'Bien hecho.',
+    'cmp.close':'BTW Helper no intenta reemplazar toda tu administración. Hace un trabajo — tu BTW — mejor que una herramienta para todo, y más claro que una hoja de cálculo para nada. Y a fin de año, te entrega un resumen con todo lo que tu asesor necesita para la declaración de renta.',
+    'pricing.h1':'Un trabajo, bien hecho.',
+    'pricing.launch':'Los precios subirán pronto — asegura el precio de hoy.',
+    'pricing.t1':'Ideal para freelancers y startups que gestionan su propio BTW.',
+    'pricing.t2':'Para emprendedores y startups que presentan cada trimestre y quieren que la IA mejore con el uso.',
+    'pricing.t3':'Para usuarios avanzados que quieren todo organizado y listo para el asesor a fin de año.',
+    'faq.eyebrow':'Preguntas','faq.h1':'Buenas preguntas.',
+    'faq.q1':'No tengo conocimientos fiscales. ¿Lo entenderé?',
+    'faq.q2':'¿BTW Helper presenta mi declaración por mí?',
+    'faq.q3':'¿Cómo gestiona las facturas extranjeras y el cargo invertido?',
+    'faq.q4':'¿Qué pasa con los datos de mis facturas?',
+    'faq.q5':'¿Puedo usarlo en lugar de software de contabilidad completo?',
+    'faq.q6':'¿Qué tan precisa es la IA, realmente?',
+    'faq.q7':'¿Puedo cancelar? ¿Me devuelven el dinero?',
+    'final.h1':'La administración no es tu trabajo.','final.h2':'Vuelve a lo tuyo.',
+    'final.tagline':'Sube tus facturas. La IA hace el resto. Tú mantienes el control.',
+    'ai.h1a':"No es software cualquiera.",'ai.h1b':"Un especialista en BTW.",
+    'ai.sub':"Construido sobre un modelo de IA de última generación. Lee tus facturas, aprende sobre tu negocio, explica cada decisión — y siempre está a una pregunta de distancia.",
+    'ai.attr1p':"Reconoce los proveedores que usas cada trimestre y recuerda cómo se clasifican. Cuanto más presentes, menos preguntas necesita hacer.",
+    'ai.attr2p':"Facturas recurrentes agrupadas. Cargo invertido aplicado. Cualquier anomalía marcada para tu revisión. Ves el razonamiento, no solo el resultado.",
+    'ai.attr3p':'\"¿Por qué este rubriek?\" \"¿Qué sigue?\" \"¿Me falta algo?\" — pregunta en neerlandés, inglés o español. Explica, tú decides.',
+    'engine.sub':"Una factura real de EE.UU. — con cargo invertido y conversión de divisas. Cada campo, clasificado y explicado.",
+    'feat.h1':"Construido para todo el trimestre.",'feat.sub':"No solo un clasificador — el flujo completo, desde la factura hasta la declaración.",
+    'stat.sub':"La IA hace la clasificación y los cálculos. Tú tomas las decisiones.",
+    'cmp.sub':"Un software de contabilidad completo hace de todo — y te pide que te conviertas en contable para usarlo. Una hoja de cálculo no hace nada hasta que la construyes tú. BTW Helper hace exactamente una cosa: tu BTW, bien hecho.",
+    'cmp.col2':"Software de contabilidad",'cmp.col3':"Hoja de cálculo",
+    'cmp.r1':"Diseñado para",'cmp.r1a':"Declaración de BTW, de principio a fin",'cmp.r1b':"Toda tu administración",'cmp.r1c':"Lo que construyas tú",
+    'cmp.r2':"Curva de aprendizaje",'cmp.r2a':"Minutos",'cmp.r2b':"Pronunciada — es un libro mayor completo",'cmp.r2c':"Pronunciada y propensa a errores",
+    'cmp.r3':"IA que explica cada decisión",'cmp.r4':"Igual al formulario oficial",
+    'cmp.r5':"Lenguaje claro · NL/EN/ES",'cmp.r5b':"En parte",
+    'cmp.r6':"Sin límites de facturas",'cmp.r6b':"Precio por volumen",
+    'pricing.sub':"Sin límites de facturas, sin tarifas por declaración. Elige el plan que se ajuste a cuánto quieres que la IA haga por ti.",
+    'footer.tag':"Sube tus facturas. La IA las lee, clasifica cada rubriek y prepara tu declaración de BTW.",
+    'footer.col1':"Producto",'footer.col2':"Legal",
+    /* features */
+    'feat.1h':'Procesamiento de facturas con IA',
+    'feat.1p':"Sube todos los PDFs de un trimestre de una vez. La IA lee cada uno y asigna el rubriek correcto — carga masiva, sin entrada manual.",
+    'feat.2h':'Dashboard con alertas',
+    'feat.2p':'KPIs trimestrales, tendencias y lo que debes — de un vistazo. Marca discrepancias de cargo invertido y facturas inusuales antes de presentar.',
+    'feat.3h':'Filtros y recuento de facturas',
+    'feat.3p':'Filtra por rubriek, trimestre, proveedor o tipo. Ve exactamente cuántas facturas hay, clasificadas y listas — sin sorpresas antes del plazo.',
+    'feat.4h':'Simulador = el formulario real',
+    'feat.4p':'Mismo orden de campos, misma estructura de rubrieken que Mijn Belastingdienst Zakelijk — pero más claro, con explicaciones y botones de copia por campo.',
+    'feat.5h':'Recordatorios de plazos',
+    'feat.5p':'El trimestre llega sin avisar. Un recordatorio antes del plazo de BTW significa no más pánico de última hora.',
+    'feat.6h':'Tú presentas, tú controlas',
+    'feat.6p':'BTW Helper prepara cada número. Tú los copias al portal bajo tu propio DigiD. Nada se envía sin ti.',
+    /* pricing */
+    'pl.s.label':'Empieza aquí','pl.p.label':'Cada trimestre','pl.st.label':'Usuario avanzado',
+    'pl.p.badge':'Más popular',
+    'pl.s.cta':'Elegir Starter','pl.p.cta':'Elegir Pro','pl.st.cta':'Elegir Studio',
+    'pf.s.1':'Carga ilimitada de facturas y clasificación con IA',
+    'pf.s.2':'Dashboard, simulador, biblioteca de documentos',
+    'pf.s.3':'Asistente de IA — pregunta cualquier cosa, en tu idioma',
+    'pf.s.dim1':'La IA aprende sobre tu negocio','pf.s.dim2':'Historial multi-trimestral',
+    'pf.p.1':'Todo en Starter',
+    'pf.p.ai':'La IA aprende sobre tu negocio','pf.p.ai.sub':'Reconocimiento de proveedores, auto-clasificación',
+    'pf.p.2':'Dashboard completo multi-trimestral',
+    'pf.p.dim1':'Paquete de exportación para contadores','pf.p.dim2':'Verificación de completitud pre-declaración',
+    'pf.st.1':'Todo en Pro',
+    'pf.st.aeb':'Paquete de exportación para contadores','pf.st.aeb.sub':'PDF resumen, CSV de transacciones y facturas, en ZIP',
+    'pf.st.ar':'Informe anual','pf.st.ar.sub':'Cuatro trimestres agregados para la declaración de renta',
+    'pf.st.cc':'Verificación de completitud','pf.st.cc.sub':'Sube un CSV bancario una vez, marcamos las facturas que faltan',
+    'pt.1':'Sin límites de facturas en ningún plan — sube tantas como tenga tu trimestre.',
+    'pt.2':'Sin conexión bancaria. BTW Helper trabaja con tus facturas.',
+    'pt.3':'Sin presentación automática. Tú copias, tú presentas, tú mantienes el control.',
+    'pt.4':'Cancela cuando quieras — la cuenta pasa a solo lectura, nada se borra.',
+    'pt.vat':'Todos los precios excl. IVA. El IVA puede aplicarse según tu situación.',
+    /* faq answers */
+    'faq.a1':'Ese es exactamente el punto. Cada rubriek y cada campo incluye una explicación en lenguaje claro — qué significa y por qué tu factura va ahí. Disponible en neerlandés, inglés y español. No necesitas conocer la normativa fiscal; la IA te guía paso a paso.',
+    'faq.a2':'No — y eso es intencional. BTW Helper calcula cada número y lo deja listo para introducirlo en Mijn Belastingdienst Zakelijk. Tú pegas las cifras tú mismo, bajo tu propio DigiD. Sin autorización de terceros, sin verificación empresarial — tú controlas lo que se presenta, y tarda unos dos minutos.',
+    'faq.a3':'Automáticamente. Una factura de un proveedor no perteneciente a la UE sin IVA se convierte a euros y se autoliquida al 21% — rubriek 4a. Los servicios B2B de la UE también se asignan al rubriek correcto. La IA aplica la regla y muestra el cálculo por línea, para que confirmes en lugar de adivinar.',
+    'faq.a4':'Antes de marcar un trimestre como presentado, te pedimos que descargues tus registros completos — tu archivo legal de 7 años, en tu propio drive. Después eliminamos los archivos de facturas. Las cifras del dashboard permanecen, pero no conservamos tus documentos financieros indefinidamente.',
+    'faq.a5':'Si no necesitas un libro mayor completo — facturación a clientes, nóminas, informes plurianuales — sí. BTW Helper está construido para una eenmanszaak que solo necesita hacer bien su BTW. A fin de año también exporta todo lo que tu asesor necesita para la declaración de renta.',
+    'faq.a6':'Está construido sobre un modelo de IA de última generación y muestra su razonamiento en cada clasificación — nada es una caja negra. Una verificación doble marca cualquier anomalía, y tú confirmas antes de que se presente nada. La IA hace el trabajo pesado; la decisión final siempre es tuya.',
+    'faq.a7':'Cancela cuando quieras — mantienes el acceso hasta el final de tu período actual, luego la cuenta pasa a solo lectura. Tu dashboard, historial y exportaciones siguen disponibles; nada se borra. Los planes mensuales no son reembolsables; si ofrecemos plan anual, incluye 14 días de garantía.',
+  }
+};
+
+let currentLang = 'en';
+
+function setLang(lang) {
+  if (!CONTENT[lang]) return;
+  currentLang = lang;
+  document.documentElement.lang = lang === 'nl' ? 'nl' : lang === 'es' ? 'es' : 'en';
+
+  /* textContent elements */
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (CONTENT[lang][key] !== undefined) el.textContent = CONTENT[lang][key];
+  });
+
+  /* innerHTML elements (prose with inner spans) */
+  document.querySelectorAll('[data-i18n-html]').forEach(el => {
+    const key = el.getAttribute('data-i18n-html');
+    if (CONTENT[lang][key] !== undefined) el.innerHTML = CONTENT[lang][key];
+  });
+
+  /* typewriter chat bubbles — update data-text so the TW effect uses new text */
+  document.querySelectorAll('[data-i18n-tw]').forEach(el => {
+    const key = el.getAttribute('data-i18n-tw');
+    if (CONTENT[lang][key] !== undefined) {
+      el.setAttribute('data-text', CONTENT[lang][key]);
+      el.textContent = '';      /* clear so TW re-runs if triggered */
+      el.style.opacity = '0';  /* reset visibility */
+    }
+  });
+
+  /* active lang button */
+  document.querySelectorAll('.lang-btn').forEach(btn =>
+    btn.classList.toggle('active', btn.getAttribute('data-lang') === lang));
+
+  try { history.replaceState(null, '', '#' + lang); } catch(e) {}
+}
+
+/* auto-detect */
+(function(){
+  const hash = location.hash.replace('#','');
+  if (['nl','en','es'].includes(hash)) { setLang(hash); return; }
+  const nav = (navigator.language || navigator.userLanguage || 'en').toLowerCase();
+  if (nav.startsWith('nl')) setLang('nl');
+  else if (nav.startsWith('es')) setLang('es');
+})();
+
+
 (function(){
   const burger=document.getElementById('navBurger');
   const panel=document.getElementById('navMobilePanel');
@@ -1184,6 +1584,7 @@ if(!reduced && window.gsap){
       const speed = 38; // ms per char
       function tick(){
         if(i < text.length){
+          if(cursor.parentNode !== el) return; /* aborted — lang changed mid-animation */
           el.insertBefore(document.createTextNode(text[i]), cursor);
           i++;
           setTimeout(tick, speed);
