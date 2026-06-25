@@ -923,7 +923,10 @@ footer{border-top:1px solid rgba(255,255,255,.06);background:var(--void);padding
           <li class="dim"><svg viewBox="0 0 16 16"><path d="M4 4 12 12 M12 4 4 12"/></svg><span data-i18n="pf.s.dim1">AI learns your business</span></li>
           <li class="dim"><svg viewBox="0 0 16 16"><path d="M4 4 12 12 M12 4 4 12"/></svg><span data-i18n="pf.s.dim2">Multi-quarter history &amp; trends</span></li>
         </ul>
-        <a href="https://app.btw-helper.nl/signup" class="plan-cta ghost" data-hover data-i18n="pl.s.cta">Get Starter</a>
+        <a class="plan-cta ghost" data-hover data-i18n="pl.s.cta"
+           data-mo="https://buy.stripe.com/test_9B628r8Gp3P23Qnerr8IU00"
+           data-yr="https://buy.stripe.com/test_7sY9AT1dXetG2Mj2IJ8IU01"
+           href="https://buy.stripe.com/test_7sY9AT1dXetG2Mj2IJ8IU01">Get Starter</a>
         <button class="view-monthly" data-i18n="toggle.view_monthly">View monthly billing ↗</button>
       </div>
 
@@ -945,7 +948,10 @@ footer{border-top:1px solid rgba(255,255,255,.06);background:var(--void);padding
           <li class="dim"><svg viewBox="0 0 16 16"><path d="M4 4 12 12 M12 4 4 12"/></svg><span data-i18n="pf.p.dim1">Accountant export bundle</span></li>
           <li class="dim"><svg viewBox="0 0 16 16"><path d="M4 4 12 12 M12 4 4 12"/></svg><span data-i18n="pf.p.dim2">Pre-filing completeness check</span></li>
         </ul>
-        <a href="https://app.btw-helper.nl/signup" class="plan-cta primary" data-hover data-i18n="pl.p.cta">Get Pro</a>
+        <a class="plan-cta primary" data-hover data-i18n="pl.p.cta"
+           data-mo="https://buy.stripe.com/test_cNi5kD9Kt2KYgD95UV8IU02"
+           data-yr="https://buy.stripe.com/test_4gMfZhe0J3P20Eb5UV8IU03"
+           href="https://buy.stripe.com/test_4gMfZhe0J3P20Eb5UV8IU03">Get Pro</a>
         <button class="view-monthly" data-i18n="toggle.view_monthly">View monthly billing ↗</button>
       </div>
 
@@ -965,7 +971,10 @@ footer{border-top:1px solid rgba(255,255,255,.06);background:var(--void);padding
           <li><svg viewBox="0 0 16 16"><path d="M3 8.5 6.5 12 13 4"/></svg><span><b style="color:var(--white);display:block" data-i18n="pf.st.ar">Annual Report</b><span class="feat-desc" data-i18n="pf.st.ar.sub">Four quarters aggregated for income-tax prep</span></span></li>
           <li><svg viewBox="0 0 16 16"><path d="M3 8.5 6.5 12 13 4"/></svg><span><b style="color:var(--white);display:block" data-i18n="pf.st.cc">Completeness Check</b><span class="feat-desc" data-i18n="pf.st.cc.sub">Upload bank CSV once, we flag missing invoices</span></span></li>
         </ul>
-        <a href="https://app.btw-helper.nl/signup" class="plan-cta ghost" data-hover data-i18n="pl.st.cta">Get Studio</a>
+        <a class="plan-cta ghost" data-hover data-i18n="pl.st.cta"
+           data-mo="https://buy.stripe.com/test_9B66oHbSBadqaeL9778IU05"
+           data-yr="https://buy.stripe.com/test_9B6cN54q9etG3Qnbff8IU04"
+           href="https://buy.stripe.com/test_9B6cN54q9etG3Qnbff8IU04">Get Studio</a>
         <button class="view-monthly" data-i18n="toggle.view_monthly">View monthly billing ↗</button>
       </div>
     </div>
@@ -1700,6 +1709,9 @@ function setBilling(annual) {
   document.querySelectorAll('.yr-price').forEach(el => el.style.display = annual ? '' : 'none');
   document.querySelectorAll('.yr-note').forEach(el => el.style.display = annual ? '' : 'none');
   document.querySelectorAll('.view-monthly').forEach(el => el.style.display = annual ? '' : 'none');
+  document.querySelectorAll('.plan-cta[data-mo]').forEach(el => {
+    el.href = annual ? el.dataset.yr : el.dataset.mo;
+  });
 }
 
 optMo.addEventListener('click', () => setBilling(false));
