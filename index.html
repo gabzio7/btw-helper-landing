@@ -398,6 +398,13 @@ section{position:relative;padding:110px 0;border-top:1px solid rgba(255,255,255,
 .tgl.yr .tgl-knob{transform:translateX(24px)}
 .yr-pill{font-family:var(--fm);font-size:10px;color:var(--green-glow);background:rgba(52,211,153,.1);border:1px solid rgba(52,211,153,.3);border-radius:100px;padding:3px 10px;opacity:0;transition:opacity .25s}
 .yr-pill.show{opacity:1}
+.toggle-label{font-size:14px;color:var(--white-soft);font-family:var(--fb)}
+.toggle-label.active{color:var(--white);font-weight:500}
+.billing-switch{width:44px;height:24px;border-radius:100px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);cursor:pointer;position:relative;transition:background .25s}
+.billing-switch[aria-pressed="true"]{background:var(--indigo);border-color:var(--indigo)}
+.billing-switch-knob{position:absolute;top:3px;left:3px;width:16px;height:16px;border-radius:50%;background:#fff;transition:transform .25s}
+.billing-switch[aria-pressed="true"] .billing-switch-knob{transform:translateX(20px)}
+.save-badge{background:rgba(52,211,153,.15);color:var(--green-glow);font-size:11px;font-weight:600;padding:2px 7px;border-radius:100px;margin-left:6px;font-family:var(--fm);letter-spacing:.04em}
 .plans{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;align-items:stretch}
 @media(max-width:900px){.plans{grid-template-columns:1fr;max-width:420px;margin:0 auto}}
 @media(max-width:480px){.plan{padding:26px 22px}.plan-price{font-size:36px}}
@@ -901,6 +908,14 @@ footer{border-top:1px solid rgba(255,255,255,.06);background:var(--void);padding
 
     <div class="launch-note reveal" data-i18n="pricing.launch">Rates will increase soon — lock in today's price.</div>
 
+    <div class="toggle-row reveal">
+      <span class="toggle-label" id="lbl-mo" data-i18n="toggle.monthly">Monthly</span>
+      <button class="billing-switch" id="billing-switch" aria-label="Switch billing period" aria-pressed="false">
+        <span class="billing-switch-knob"></span>
+      </button>
+      <span class="toggle-label" id="lbl-yr" data-i18n="toggle.annual">Annual <span class="save-badge" data-i18n="toggle.save">Save 20%</span></span>
+    </div>
+
     <div class="plans">
       <!-- STARTER -->
       <div class="plan reveal">
@@ -908,7 +923,9 @@ footer{border-top:1px solid rgba(255,255,255,.06);background:var(--void);padding
         <div class="plan-name">Starter</div>
         <div class="plan-target" data-i18n="pricing.t1">Ideal for freelancers and startups handling their own BTW.</div>
         <div class="plan-price-block">
-          <div class="plan-price">&euro;8<small>/mo</small></div>
+          <div class="plan-price mo-price">&euro;8<small>/mo</small></div>
+          <div class="plan-price yr-price" style="display:none">&euro;6.40<small>/mo</small></div>
+          <div class="plan-price-yr yr-note" style="display:none">€77 billed annually</div>
         </div>
         <ul class="plan-feats">
           <li><svg viewBox="0 0 16 16"><path d="M3 8.5 6.5 12 13 4"/></svg><span data-i18n="pf.s.1">Unlimited invoice uploads &amp; AI classification</span></li>
@@ -927,7 +944,9 @@ footer{border-top:1px solid rgba(255,255,255,.06);background:var(--void);padding
         <div class="plan-name">Pro</div>
         <div class="plan-target" data-i18n="pricing.t2">For entrepreneurs and startups who file every quarter and want the AI to improve with use.</div>
         <div class="plan-price-block">
-          <div class="plan-price">&euro;18<small>/mo</small></div>
+          <div class="plan-price mo-price">&euro;18<small>/mo</small></div>
+          <div class="plan-price yr-price" style="display:none">&euro;14.40<small>/mo</small></div>
+          <div class="plan-price-yr yr-note" style="display:none">€173 billed annually</div>
         </div>
         <ul class="plan-feats">
           <li><svg viewBox="0 0 16 16"><path d="M3 8.5 6.5 12 13 4"/></svg><span data-i18n="pf.p.1">Everything in Starter</span></li>
@@ -945,7 +964,9 @@ footer{border-top:1px solid rgba(255,255,255,.06);background:var(--void);padding
         <div class="plan-name">Studio</div>
         <div class="plan-target" data-i18n="pricing.t3">For power users who want everything organized and accountant-ready at year-end.</div>
         <div class="plan-price-block">
-          <div class="plan-price">&euro;27<small>/mo</small></div>
+          <div class="plan-price mo-price">&euro;27<small>/mo</small></div>
+          <div class="plan-price yr-price" style="display:none">&euro;21.60<small>/mo</small></div>
+          <div class="plan-price-yr yr-note" style="display:none">€259 billed annually</div>
         </div>
         <ul class="plan-feats">
           <li><svg viewBox="0 0 16 16"><path d="M3 8.5 6.5 12 13 4"/></svg><span data-i18n="pf.st.1">Everything in Pro</span></li>
@@ -1002,7 +1023,7 @@ footer{border-top:1px solid rgba(255,255,255,.06);background:var(--void);padding
       </div>
       <div class="faq-item reveal">
         <div class="faq-q" data-hover><span><span class="faq-tag">Commitment</span><span data-i18n="faq.q7">Can I cancel? Do I get a refund?</span></span><span class="x">+</span></div>
-        <div class="faq-a"><div class="faq-a-inner" data-i18n="faq.a7">Cancel anytime &mdash; you keep access through the end of your current billing period, then your account goes read-only. Your dashboard, history and exports stay available; nothing gets deleted. Monthly plans aren't refunded; if we offer an annual plan, it comes with a 14-day money-back window.</div></div>
+        <div class="faq-a"><div class="faq-a-inner" data-i18n="faq.a7">Cancel anytime &mdash; you keep access through the end of your current billing period, then your account goes read-only. Your dashboard, history and exports stay available; nothing gets deleted. Monthly plans aren't refunded. Annual plans come with a 14-day money-back window.</div></div>
       </div>
     </div>
   </div>
@@ -1095,6 +1116,7 @@ const CONTENT = {
     'cmp.close':"BTW Helper isn't trying to replace your whole admin. It does one job — your BTW — better than a tool built for everything, and clearer than a spreadsheet built for nothing. And at year-end, it hands you a clean export of everything your accountant needs for your income-tax filing.",
     'pricing.h1':'One job, done right.',
     'pricing.launch':"Rates will increase soon — lock in today's price.",
+    'toggle.monthly':'Monthly','toggle.annual':'Annual','toggle.save':'Save 20%',
     'pricing.t1':'Ideal for freelancers and startups handling their own BTW.',
     'pricing.t2':'For entrepreneurs and startups who file every quarter and want the AI to improve with use.',
     'pricing.t3':'For power users who want everything organized and accountant-ready at year-end.',
@@ -1169,7 +1191,7 @@ const CONTENT = {
     'faq.a4':"Before you mark a quarter as filed, we prompt you to download your full records — your legal 7-year archive, saved to your own drive. After filing, we delete the invoice files from our storage. Your dashboard figures stay, but we don't hold onto your financial documents indefinitely.",
     'faq.a5':"If you don't need a full ledger — client invoicing, payroll, multi-year accounts — yes. BTW Helper is built for one eenmanszaak that just needs its BTW done right, without the overhead of a full accounting suite. At year-end it also exports everything your accountant needs for your income-tax filing.",
     'faq.a6':"It's built on a frontier AI model and shows its reasoning on every classification — nothing is a black box. A double-check pass flags anything unusual for your review, and you confirm before anything is filed. The AI does the heavy lifting; the final call is always yours.",
-    'faq.a7':"Cancel anytime — you keep access through the end of your current billing period, then your account goes read-only. Your dashboard, history and exports stay available; nothing gets deleted. Monthly plans aren't refunded; if we offer an annual plan, it comes with a 14-day money-back window.",
+    'faq.a7':"Cancel anytime — you keep access through the end of your current billing period, then your account goes read-only. Your dashboard, history and exports stay available; nothing gets deleted. Monthly plans aren't refunded. Annual plans come with a 14-day money-back window.",
   },
   nl: {
     'nav.how':'Hoe het werkt','nav.features':'Functies','nav.pricing':'Prijzen',
@@ -1205,6 +1227,7 @@ const CONTENT = {
     'cmp.close':'BTW Helper probeert je hele administratie niet te vervangen. Het doet één ding — jouw BTW — beter dan een tool voor alles, en duidelijker dan een spreadsheet voor niets. En aan het einde van het jaar geeft het je een overzicht van alles wat je accountant nodig heeft voor je inkomstenbelastingaangifte.',
     'pricing.h1':'Één taak, goed gedaan.',
     'pricing.launch':'Prijzen stijgen binnenkort — vergrendel de prijs van vandaag.',
+    'toggle.monthly':'Maandelijks','toggle.annual':'Jaarlijks','toggle.save':'20% korting',
     'pricing.t1':'Ideaal voor freelancers en startups die hun eigen BTW regelen.',
     'pricing.t2':'Voor ondernemers en startups die elk kwartaal aangifte doen en de AI willen laten leren.',
     'pricing.t3':'Voor gevorderde gebruikers die alles georganiseerd en klaar voor de accountant willen hebben.',
@@ -1277,7 +1300,7 @@ const CONTENT = {
     'faq.a4':'Voordat je een kwartaal als ingediend markeert, vragen we je om je volledige administratie te downloaden — jouw wettelijk 7-jaars archief, op je eigen drive. Na de aangifte verwijderen we de factuurbestanden. Je dashboardgegevens blijven, maar we bewaren je financiële documenten niet voor onbepaalde tijd.',
     'faq.a5':'Als je geen volledige boekhouding nodig hebt — klantfacturen, salarisadministratie, meerjarige rapporten — dan wel. BTW Helper is gebouwd voor één eenmanszaak die gewoon de BTW goed wil doen. Aan het einde van het jaar exporteert het ook alles wat je accountant nodig heeft voor de inkomstenbelastingaangifte.',
     'faq.a6':'Het is gebouwd op een frontier AI-model en toont zijn redenering bij elke classificatie — niets is een zwarte doos. Een dubbele check markeert alles wat opvalt, en jij bevestigt voordat er iets wordt ingediend. De AI doet het zware werk; de uiteindelijke beslissing is altijd van jou.',
-    'faq.a7':'Altijd opzegbaar — je behoudt toegang tot het einde van je betaalperiode, dan wordt je account alleen-lezen. Je dashboard, geschiedenis en exports blijven beschikbaar; niets wordt verwijderd. Maandelijkse abonnementen worden niet terugbetaald; bij een jaarplan geldt een 14-daags terugbetalingsrecht.',
+    'faq.a7':'Altijd opzegbaar — je behoudt toegang tot het einde van je betaalperiode, dan wordt je account alleen-lezen. Je dashboard, geschiedenis en exports blijven beschikbaar; niets wordt verwijderd. Maandelijkse abonnementen worden niet terugbetaald. Jaarplannen hebben 14 dagen terugbetalingsrecht.',
   },
   es: {
     'nav.how':'Cómo funciona','nav.features':'Funciones','nav.pricing':'Precios',
@@ -1313,6 +1336,7 @@ const CONTENT = {
     'cmp.close':'BTW Helper no intenta reemplazar toda tu administración. Hace un trabajo — tu BTW — mejor que una herramienta para todo, y más claro que una hoja de cálculo para nada. Y a fin de año, te entrega un resumen con todo lo que tu asesor necesita para la declaración de renta.',
     'pricing.h1':'Un trabajo, bien hecho.',
     'pricing.launch':'Los precios subirán pronto — asegura el precio de hoy.',
+    'toggle.monthly':'Mensual','toggle.annual':'Anual','toggle.save':'Ahorra 20%',
     'pricing.t1':'Ideal para freelancers y startups que gestionan su propio BTW.',
     'pricing.t2':'Para emprendedores y startups que presentan cada trimestre y quieren que la IA mejore con el uso.',
     'pricing.t3':'Para usuarios avanzados que quieren todo organizado y listo para el asesor a fin de año.',
@@ -1385,7 +1409,7 @@ const CONTENT = {
     'faq.a4':'Antes de marcar un trimestre como presentado, te pedimos que descargues tus registros completos — tu archivo legal de 7 años, en tu propio drive. Después eliminamos los archivos de facturas. Las cifras del dashboard permanecen, pero no conservamos tus documentos financieros indefinidamente.',
     'faq.a5':'Si no necesitas un libro mayor completo — facturación a clientes, nóminas, informes plurianuales — sí. BTW Helper está construido para una eenmanszaak que solo necesita hacer bien su BTW. A fin de año también exporta todo lo que tu asesor necesita para la declaración de renta.',
     'faq.a6':'Está construido sobre un modelo de IA de última generación y muestra su razonamiento en cada clasificación — nada es una caja negra. Una verificación doble marca cualquier anomalía, y tú confirmas antes de que se presente nada. La IA hace el trabajo pesado; la decisión final siempre es tuya.',
-    'faq.a7':'Cancela cuando quieras — mantienes el acceso hasta el final de tu período actual, luego la cuenta pasa a solo lectura. Tu dashboard, historial y exportaciones siguen disponibles; nada se borra. Los planes mensuales no son reembolsables; si ofrecemos plan anual, incluye 14 días de garantía.',
+    'faq.a7':'Cancela cuando quieras — mantienes el acceso hasta el final de tu período actual, luego la cuenta pasa a solo lectura. Tu dashboard, historial y exportaciones siguen disponibles; nada se borra. Los planes mensuales no son reembolsables. Los planes anuales incluyen 14 días de garantía.',
   }
 };
 
@@ -1673,6 +1697,25 @@ if(!reduced && window.gsap){
   document.getElementById('steps').classList.add('drawn');
   document.getElementById('replayBtn').style.display='none';
 }
+
+const billingSwitch = document.getElementById('billing-switch');
+const lblMo = document.getElementById('lbl-mo');
+const lblYr = document.getElementById('lbl-yr');
+
+billingSwitch.addEventListener('click', () => {
+  const isAnnual = billingSwitch.getAttribute('aria-pressed') === 'true';
+  const next = !isAnnual;
+  billingSwitch.setAttribute('aria-pressed', String(next));
+
+  document.querySelectorAll('.mo-price').forEach(el => el.style.display = next ? 'none' : '');
+  document.querySelectorAll('.yr-price').forEach(el => el.style.display = next ? '' : 'none');
+  document.querySelectorAll('.yr-note').forEach(el => el.style.display = next ? '' : 'none');
+
+  lblMo.classList.toggle('active', !next);
+  lblYr.classList.toggle('active', next);
+});
+
+lblMo.classList.add('active');
 </script>
 </body>
 </html>
