@@ -1,284 +1,1276 @@
 <!DOCTYPE html>
-<html lang="nl">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BTWklaar — BTW aangifte voor zzp'ers</title>
-  <meta name="description" content="Je facturen erin. Klaar eruit. BTWklaar rubriceert je facturen, regelt reverse charge en valuta, en vult je BTW-aangifte voor. Jij controleert en dient zelf in — in 10 minuten.">
-  <link rel="canonical" href="https://btwklaar.nl/">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BTW Helper — design v3 · fintech</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --void:#05050a; --void-2:#0c0c18;
+  --indigo:#5B5BF0; --indigo-deep:#3E2BC9; --violet:#a78bfa;
+  --green:#16a34a; --green-glow:#34d399; --red:#fb7185;
+  --white:#f4f4f8; --white-soft:rgba(244,244,248,.72); --white-faint:rgba(244,244,248,.42);
+  --glass:rgba(255,255,255,.045); --glass-2:rgba(255,255,255,.07); --glass-line:rgba(255,255,255,.09);
+  --fd:'Space Grotesk',sans-serif; --fb:'Inter',system-ui,sans-serif; --fm:'JetBrains Mono',monospace;
+  --maxw:1320px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;max-width:100%;overflow-x:hidden}
+body{background:var(--void);color:var(--white);font-family:var(--fb);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden;width:100%;max-width:100vw}
+img,canvas,svg{max-width:100%;display:block}
+.container{max-width:var(--maxw);margin:0 auto;padding:0 24px}
+@media(max-width:380px){.container{padding:0 18px}}
+.mono{font-family:var(--fm)}
+:focus-visible{outline:2px solid var(--violet);outline-offset:3px;border-radius:4px}
 
-  <!-- OpenGraph -->
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://btwklaar.nl/">
-  <meta property="og:title" content="BTWklaar — BTW aangifte voor zzp'ers">
-  <meta property="og:description" content="Je facturen erin. Klaar eruit. BTWklaar rubriceert je facturen, regelt reverse charge en valuta, en vult je BTW-aangifte voor. Jij controleert en dient zelf in — in 10 minuten.">
-  <meta property="og:locale" content="nl_NL">
-  <meta property="og:site_name" content="BTWklaar">
+/* ===== cursor ===== */
+@media(pointer:fine) and (prefers-reduced-motion:no-preference){
+  body{cursor:none}
+  body a,body button{cursor:none}
+}
+#cdot,#cring{position:fixed;top:0;left:0;z-index:300;pointer-events:none;border-radius:100px}
+#cdot{width:7px;height:7px;background:var(--violet)}
+#cring{width:30px;height:30px;border:1px solid rgba(167,139,250,.7);transition:width .25s,height .25s,background .25s}
+#cring.grow{width:54px;height:54px;background:rgba(91,91,240,.1)}
+@media(pointer:coarse){#cdot,#cring{display:none}}
 
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%235B5BF0'/%3E%3Ctext x='32' y='44' font-family='sans-serif' font-size='36' font-weight='700' fill='%23fff' text-anchor='middle'%3EK%3C/text%3E%3C/svg%3E">
+/* ===== nav ===== */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;backdrop-filter:blur(22px);background:rgba(5,5,10,.7);border-bottom:1px solid rgba(255,255,255,.05)}
+.nav-inner{max-width:var(--maxw);margin:0 auto;padding:15px 24px;display:flex;align-items:center;justify-content:space-between;gap:24px}
+.wordmark{font-family:var(--fd);font-weight:700;font-size:19px;color:var(--white);text-decoration:none}
+.wordmark span{color:var(--indigo)}
+.nav-links{display:flex;gap:26px;align-items:center}
+.nav-links a{color:var(--white-soft);text-decoration:none;font-size:14px;font-weight:500;position:relative}
+.nav-links a:not(.nav-cta)::after{content:"";position:absolute;left:0;bottom:-4px;width:100%;height:1.5px;background:var(--violet);transform:scaleX(0);transform-origin:left;transition:transform .3s}
+.nav-links a:not(.nav-cta):hover::after{transform:scaleX(1)}
+.nav-cta{background:var(--indigo);color:#fff;padding:9px 18px;border-radius:100px;font-size:14px;font-weight:600;text-decoration:none;transition:transform .2s,box-shadow .2s}
+.nav-cta:hover{transform:translateY(-1px);box-shadow:0 8px 24px -8px rgba(91,91,240,.7)}
+.nav-burger{display:none;width:36px;height:36px;border-radius:8px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.04);align-items:center;justify-content:center;flex-direction:column;gap:4px;cursor:pointer}
+.nav-burger span{width:16px;height:1.5px;background:var(--white);transition:transform .3s,opacity .3s}
+.nav-burger.open span:nth-child(1){transform:translateY(5.5px) rotate(45deg)}
+.nav-burger.open span:nth-child(2){opacity:0}
+.nav-burger.open span:nth-child(3){transform:translateY(-5.5px) rotate(-45deg)}
+.nav-mobile-panel{display:none;flex-direction:column;gap:4px;padding:14px 24px 18px;border-top:1px solid rgba(255,255,255,.06);background:rgba(5,5,10,.97)}
+.nav-mobile-panel.open{display:flex}
+.nav-mobile-panel a{color:var(--white-soft);text-decoration:none;font-size:15px;padding:11px 4px;border-bottom:1px solid rgba(255,255,255,.05)}
+.nav-mobile-panel a:last-child{border-bottom:none}
+.nav-mobile-panel a.nav-cta{margin-top:8px;text-align:center;border-radius:100px;background:var(--indigo);color:#fff;font-weight:600;border-bottom:none;padding:12px}
+@media(max-width:780px){
+  .nav-links a:not(.nav-cta){display:none}
+  .nav-links .nav-cta{display:none}
+  .nav-burger{display:flex}
+}
 
-  <!-- Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
-  <noscript><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet"></noscript>
+#field{position:absolute;inset:0;z-index:0;opacity:.75}
 
-  <link rel="stylesheet" href="styles.css">
-  <!-- hero screenshot is the LCP element -->
-  <link rel="preload" as="image" href="assets/app-dashboard.webp" fetchpriority="high">
+/* ===== hero ===== */
+.hero{position:relative;min-height:96vh;display:flex;align-items:center;padding:130px 0 80px;background:var(--void)}
+.hero-grid{position:relative;z-index:2;display:grid;grid-template-columns:minmax(0,520px) minmax(0,1fr);gap:56px;align-items:center}
+@media(max-width:1000px){.hero-grid{grid-template-columns:1fr;gap:44px}}
+@media(max-width:480px){.hero{padding:110px 0 60px}.hero h1{font-size:clamp(36px,11vw,48px)}.hero-checks li{font-size:15px}.eyebrow{font-size:10px;letter-spacing:.04em;white-space:normal;overflow:visible}.cta-sub{white-space:normal;line-height:1.6}}
+.eyebrow{font-family:var(--fm);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--violet);margin-bottom:22px;display:flex;align-items:center;gap:10px;white-space:nowrap;flex-wrap:nowrap;overflow:hidden}
+.eyebrow::before{content:"";width:24px;height:1px;background:var(--violet)}
+.hero h1{font-family:var(--fd);font-weight:700;font-size:clamp(48px,7.5vw,96px);line-height:1.04;letter-spacing:-.025em;margin-bottom:26px}
+.hero h1 .out{color:var(--violet)}
+.hero-checks{list-style:none;margin:0 0 38px;display:flex;flex-direction:column;gap:13px}
+.hero-checks li{display:flex;align-items:flex-start;gap:12px;font-size:17px;color:var(--white-soft);max-width:100%}
+.hero-checks .tick{width:20px;height:20px;border-radius:6px;background:rgba(91,91,240,.18);border:1px solid rgba(109,109,255,.4);display:inline-flex;align-items:center;justify-content:center;flex-shrink:0}
+.hero-checks .tick svg{width:11px;height:11px;stroke:var(--violet);stroke-width:2.6;fill:none}
+.cta-row{display:flex;flex-wrap:wrap;align-items:stretch;gap:14px}
+@media(max-width:480px){.cta-row{flex-direction:column}.cta-row .btn{width:100%;box-sizing:border-box}}
+.btn{display:inline-flex;align-items:center;justify-content:center;height:52px;padding:0 26px;border-radius:100px;font-size:15px;font-weight:600;text-decoration:none;transition:transform .25s,box-shadow .25s,border-color .25s;border:none}
+.btn-primary{background:linear-gradient(135deg,var(--indigo),var(--indigo-deep));color:#fff;box-shadow:0 8px 32px -8px rgba(91,91,240,.55)}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 16px 48px -8px rgba(91,91,240,.75)}
+.btn-ghost{background:rgba(255,255,255,.04);backdrop-filter:blur(8px);color:var(--white);border:1px solid rgba(255,255,255,.16)}
+.btn-ghost:hover{border-color:var(--violet);transform:translateY(-2px)}
+.cta-sub{margin-top:24px;font-family:var(--fm);font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--white-faint);white-space:nowrap}
 
-  <!-- Three.js via import map (hero.js is a module) -->
-  <script type="importmap">
-    { "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.module.js" } }
-  </script>
+/* ===== app shot ===== */
+.appshot{background:rgba(10,10,18,.75);backdrop-filter:blur(16px);border:1px solid rgba(109,109,255,.2);border-radius:18px;padding:18px;box-shadow:0 0 70px -20px rgba(91,91,240,.4),0 50px 100px -40px rgba(0,0,0,.8);font-size:11px;max-width:480px;justify-self:end;will-change:transform;transform-style:preserve-3d}
+@media(max-width:1000px){.appshot{justify-self:start;max-width:100%}}
+.as-head{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:13px}
+.as-head .hi{font-size:9px;color:var(--white-faint)}
+.as-head .name{font-family:var(--fd);font-weight:600;font-size:14px}
+.as-pills{display:flex;gap:5px}
+.as-pill{font-size:9px;padding:3px 8px;border-radius:100px;border:1px solid rgba(255,255,255,.1);color:var(--white-faint)}
+.as-pill.on{background:var(--indigo);color:#fff;border-color:var(--indigo)}
+.as-filing{font-size:9px;padding:5px 10px;border-radius:8px;background:var(--indigo);color:#fff;font-weight:600}
+.as-grid{display:grid;grid-template-columns:1.5fr 1fr 1fr;gap:7px;margin:11px 0}
+@media(max-width:520px){.as-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:380px){.as-grid{grid-template-columns:1fr}.as-card.owe{grid-row:auto}}
+.as-card{background:rgba(255,255,255,.03);backdrop-filter:blur(8px);border:1px solid rgba(109,109,255,.13);border-radius:10px;padding:11px;transition:border-color .3s,transform .3s}
+.as-card:hover{border-color:rgba(109,109,255,.4);transform:translateY(-2px)}
+.as-card.owe{grid-row:span 2;border-color:rgba(244,63,94,.35);box-shadow:0 0 30px -10px rgba(244,63,94,.25);display:flex;flex-direction:column}
+.as-tag{font-size:8px;color:var(--white-faint);padding:2px 6px;border:1px solid rgba(255,255,255,.1);border-radius:100px;display:inline-block}
+.as-tag.due{color:var(--red);border-color:rgba(244,63,94,.4)}
+.as-k{font-size:8.5px;color:var(--white-faint);margin-bottom:3px}
+.as-v{font-family:var(--fm);font-weight:500;font-size:14px}
+.as-v.red{color:var(--red);font-size:23px;text-shadow:0 0 24px rgba(244,63,94,.5)}
+.as-sub{font-size:8px;color:var(--white-faint);margin-top:3px}
+.as-chip{font-size:8px;color:var(--white-soft);border:1px solid rgba(255,255,255,.12);border-radius:100px;padding:2px 7px;display:inline-block;margin-top:6px}
+.as-spark{margin-top:auto;padding-top:9px}
+.as-spark svg{width:100%;height:32px}
+/* (uploads list removed from hero crop — full dashboard appears in product section) */
+
+/* ===== ticker ===== */
+.ticker{position:relative;z-index:2;border-top:1px solid rgba(255,255,255,.05);border-bottom:1px solid rgba(255,255,255,.05);background:rgba(255,255,255,.015);overflow:hidden;padding:14px 0;-webkit-mask-image:linear-gradient(to right,transparent 0%,black 12%,black 88%,transparent 100%);mask-image:linear-gradient(to right,transparent 0%,black 12%,black 88%,transparent 100%)}
+.ticker-track{display:flex;gap:48px;width:max-content;animation:tick 36s linear infinite;font-family:var(--fm);font-size:12px;color:var(--white-faint);white-space:nowrap}
+.ticker:hover .ticker-track{animation-play-state:paused}
+.ticker-track b{color:var(--violet);font-weight:500}
+.ticker-track .g{color:var(--green-glow)}
+@keyframes tick{to{transform:translateX(-50%)}}
+
+/* ===== sections ===== */
+section{position:relative;padding:110px 0;border-top:1px solid rgba(255,255,255,.04)}
+@media(max-width:560px){section{padding:72px 0}.eyebrow{white-space:normal !important;overflow:visible !important}.cta-sub{white-space:normal !important}}
+.sec-head{max-width:640px;margin-bottom:56px}
+.sec-head h2{font-family:var(--fd);font-weight:700;font-size:clamp(30px,4.2vw,48px);line-height:1.08;letter-spacing:-.02em;margin:16px 0 18px}
+.sec-big-sub{font-family:var(--fd);font-weight:600;font-size:clamp(18px,2vw,22px);color:var(--white-soft);line-height:1.4}
+
+/* ===== problem ===== */
+.problem{background:linear-gradient(180deg,var(--void) 0%,#0a0a16 40%,#080812 100%)}
+.pain-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;margin-bottom:64px}
+@media(max-width:760px){.pain-grid{grid-template-columns:1fr}}
+.pain-card{background:var(--glass);backdrop-filter:blur(14px);border:1px solid var(--glass-line);border-radius:18px;padding:28px;transition:transform .35s,border-color .35s,box-shadow .35s;position:relative;overflow:hidden}
+.pain-card::before{content:"";position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--indigo),var(--violet));transform:scaleX(0);transform-origin:left;transition:transform .45s ease}
+.pain-card:hover{transform:translateY(-5px);border-color:rgba(109,109,255,.3);box-shadow:0 24px 48px -24px rgba(0,0,0,.6)}
+.pain-card:hover::before{transform:scaleX(1)}
+.pain-tag{font-family:var(--fm);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--violet);display:block;margin-bottom:12px}
+.pain-card h3{font-family:var(--fd);font-weight:600;font-size:18px;margin-bottom:8px}
+.pain-card p{font-size:15px;color:var(--white-soft);line-height:1.6}
+.problem-closer{background:linear-gradient(135deg,rgba(91,91,240,.14),rgba(167,139,250,.06));backdrop-filter:blur(14px);border:1px solid rgba(109,109,255,.28);border-radius:20px;padding:40px;max-width:760px}
+.problem-closer h3{font-family:var(--fd);font-weight:700;font-size:clamp(21px,2.5vw,26px);line-height:1.25;margin-bottom:20px}
+.chat-bubble{font-family:var(--fm);font-size:13px;color:var(--violet);background:rgba(91,91,240,.12);border:1px solid rgba(109,109,255,.25);border-radius:14px 14px 14px 4px;padding:9px 16px;display:inline-block;margin:4px 8px 4px 0;opacity:0;min-height:36px}
+.problem-prose{font-size:clamp(18px,2vw,22px);line-height:1.7;color:var(--white-soft);max-width:760px;font-family:var(--fb)}
+.problem-prose .ph{color:var(--white);font-weight:500;position:relative;white-space:nowrap}
+.problem-prose .ph::after{content:"";position:absolute;left:0;right:0;bottom:1px;height:6px;background:rgba(109,109,255,.22);z-index:-1;border-radius:2px}
+.chat-answer{margin-top:16px;color:var(--white-soft);font-size:15px;display:flex;align-items:flex-start;gap:12px;line-height:1.6}
+.chat-answer .k-dot{width:28px;height:28px;border-radius:100px;background:linear-gradient(135deg,var(--indigo),var(--violet));flex-shrink:0;display:inline-flex;align-items:center;justify-content:center;font-family:var(--fm);font-weight:500;font-size:10px;color:#fff;margin-top:2px}
+
+/* ===== savings ===== */
+.savings{background:linear-gradient(180deg,#080812 0%,#07070e 100%)}
+.stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+@media(max-width:900px){.stat-grid{grid-template-columns:1fr}}
+@media(max-width:480px){.stat-card{padding:26px 22px}.stat-big{font-size:38px}}
+.stat-card{background:var(--glass);backdrop-filter:blur(14px);border:1px solid var(--glass-line);border-radius:20px;padding:32px 28px;display:flex;flex-direction:column;transition:transform .35s,border-color .35s;position:relative;overflow:hidden}
+.stat-card:hover{transform:translateY(-5px);border-color:rgba(109,109,255,.32)}
+.stat-big{font-family:var(--fm);font-weight:500;font-size:clamp(38px,3.8vw,48px);letter-spacing:-.02em;line-height:1.1;margin-bottom:6px}
+.stat-big .unit{font-size:.42em;color:var(--white-faint);margin-left:5px}
+.stat-big .strike{color:var(--white-faint);text-decoration:line-through;text-decoration-color:rgba(167,139,250,.6);font-size:.5em;margin-right:10px;vertical-align:middle}
+.stat-big.is-green{color:var(--green-glow);text-shadow:0 0 40px rgba(52,211,153,.4)}
+.stat-label{font-family:var(--fd);font-weight:600;font-size:15px;margin:12px 0 12px}
+.stat-bullets{list-style:none;display:flex;flex-direction:column;gap:8px;flex:1}
+.stat-bullets li{font-size:15px;color:var(--white-soft);display:flex;gap:9px;align-items:flex-start;line-height:1.5}
+.stat-bullets li::before{content:"—";color:var(--violet);flex-shrink:0}
+.stat-foot{font-family:var(--fm);font-size:10.5px;color:var(--white-faint);margin-top:18px;padding-top:14px;border-top:1px solid rgba(255,255,255,.06);line-height:1.55}
+.mini-bars{display:flex;align-items:flex-end;gap:4px;height:36px;margin-top:14px;position:relative}
+.mini-bars i{flex:1;background:linear-gradient(180deg,var(--indigo),var(--indigo-deep));border-radius:3px 3px 0 0;transform:scaleY(0);transform-origin:bottom;display:block;transition:filter .25s}
+.mini-bars i.gr{background:linear-gradient(180deg,var(--green-glow),var(--green))}
+.stat-card:hover .mini-bars i{animation:barWave .55s ease}
+.stat-card:hover .mini-bars i:nth-child(2){animation-delay:.05s}
+.stat-card:hover .mini-bars i:nth-child(3){animation-delay:.1s}
+.stat-card:hover .mini-bars i:nth-child(4){animation-delay:.15s}
+.stat-card:hover .mini-bars i:nth-child(5){animation-delay:.2s}
+.stat-card:hover .mini-bars i:nth-child(6){animation-delay:.25s}
+@keyframes barWave{0%,100%{transform:scaleY(1)}40%{transform:scaleY(1.18)}}
+.stat-card::after{content:"";position:absolute;top:0;left:-80%;width:60%;height:100%;background:linear-gradient(105deg,transparent,rgba(167,139,250,.07),transparent);transform:skewX(-15deg);transition:left .7s ease;pointer-events:none}
+.stat-card:hover::after{left:130%}
+.lang-line-nl{font-family:var(--fm);font-size:13px;color:var(--white-faint);margin-bottom:8px}
+.lang-line-you{font-family:var(--fd);font-weight:700;font-size:clamp(22px,2.2vw,27px);line-height:1.2}
+.lang-line-you em{font-style:normal;color:var(--violet)}
+.lang-flags{display:flex;gap:8px;margin-top:14px}
+.lang-flag{font-family:var(--fm);font-size:11px;color:var(--white-soft);border:1px solid rgba(255,255,255,.12);border-radius:100px;padding:4px 12px;transition:border-color .25s,color .25s}
+.lang-flag:hover{border-color:var(--violet);color:var(--violet)}
+
+/* ===== how it works ===== */
+.how{background:linear-gradient(180deg,#080812 0%,#0c0c1a 50%,#0a0a16 100%)}
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;position:relative}
+@media(max-width:980px){.steps{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:600px){.steps{grid-template-columns:1fr}}
+.steps::before{content:"";position:absolute;top:38px;left:6%;right:6%;height:1px;background:linear-gradient(90deg,var(--indigo),var(--violet));transform:scaleX(0);transform-origin:left;z-index:0}
+.steps.drawn::before{animation:lineDraw 1.4s ease forwards}
+@keyframes lineDraw{to{transform:scaleX(1)}}
+@media(max-width:980px){.steps::before{display:none}}
+.step-card{position:relative;z-index:1;background:var(--glass);backdrop-filter:blur(14px);border:1px solid var(--glass-line);border-radius:18px;padding:26px 22px;transition:transform .35s,border-color .35s}
+.step-card:hover{transform:translateY(-5px);border-color:rgba(109,109,255,.32)}
+.step-num{font-family:var(--fm);font-size:11px;color:var(--violet);width:32px;height:32px;border-radius:100px;border:1px solid rgba(109,109,255,.4);background:var(--void);display:inline-flex;align-items:center;justify-content:center;margin-bottom:16px}
+.step-card h3{font-family:var(--fd);font-weight:600;font-size:17px;margin-bottom:8px}
+.step-card p{font-size:15px;color:var(--white-soft);line-height:1.55;min-height:64px}
+.step-visual{margin-top:16px;height:74px;border-radius:12px;background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.06);display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative}
+.v-drop{width:70%;height:48px;border:1.5px dashed rgba(109,109,255,.5);border-radius:10px;display:flex;align-items:center;justify-content:center;animation:zonePulse 3s ease-in-out infinite}
+@keyframes zonePulse{0%,100%{border-color:rgba(109,109,255,.35)}50%{border-color:rgba(167,139,250,.8)}}
+.v-pdf{font-family:var(--fm);font-size:9px;color:var(--white-soft);background:rgba(91,91,240,.18);border:1px solid rgba(109,109,255,.4);border-radius:6px;padding:4px 9px;animation:pdfDrop 3s ease-in-out infinite}
+@keyframes pdfDrop{0%{transform:translateY(-34px);opacity:0}25%{transform:translateY(0);opacity:1}80%{opacity:1}100%{transform:translateY(0);opacity:0}}
+.v-chips{display:flex;gap:7px}
+.v-chip{font-family:var(--fm);font-size:10px;color:var(--white-soft);border:1px solid rgba(109,109,255,.4);border-radius:100px;padding:4px 10px;opacity:0;animation:chipIn 4s ease infinite}
+.v-chip .ok{color:var(--green-glow);margin-left:4px}
+.v-chip:nth-child(2){animation-delay:.5s}
+.v-chip:nth-child(3){animation-delay:1s}
+@keyframes chipIn{0%{opacity:0;transform:translateY(8px)}15%,80%{opacity:1;transform:translateY(0)}95%,100%{opacity:0}}
+.v-chat{display:flex;flex-direction:column;gap:5px;width:80%}
+.v-q,.v-a{font-family:var(--fm);font-size:9px;padding:4px 10px;border-radius:10px;max-width:max-content;opacity:0}
+.v-q{color:var(--violet);background:rgba(91,91,240,.15);border:1px solid rgba(109,109,255,.3);animation:msgIn 4.5s ease infinite}
+.v-a{color:var(--white-soft);background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);align-self:flex-end;animation:msgIn 4.5s ease infinite;animation-delay:.9s}
+@keyframes msgIn{0%{opacity:0;transform:translateY(6px)}18%,80%{opacity:1;transform:translateY(0)}95%,100%{opacity:0}}
+.v-win{display:flex;gap:10px;align-items:center;position:relative;width:100%;height:100%;justify-content:center}
+.v-w{width:52px;height:40px;border-radius:7px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.03);position:relative}
+.v-w::before{content:"";position:absolute;top:6px;left:6px;right:6px;height:3px;border-radius:2px;background:rgba(167,139,250,.5)}
+.v-w::after{content:"";position:absolute;top:14px;left:6px;width:24px;height:3px;border-radius:2px;background:rgba(255,255,255,.15)}
+.v-val{font-family:var(--fm);font-size:9px;color:var(--green-glow);position:absolute;left:50%;top:50%;animation:valCopy 3.4s ease-in-out infinite}
+@keyframes valCopy{0%,15%{transform:translate(-90px,-50%);opacity:0}25%{opacity:1;transform:translate(-60px,-50%)}55%{transform:translate(28px,-50%);opacity:1}70%,100%{transform:translate(46px,-50%);opacity:0}}
+
+/* ===== engine ===== */
+.engine{background:linear-gradient(180deg,#0a0a16 0%,#080812 100%)}
+.engine-stage{display:grid;grid-template-columns:minmax(0,420px) minmax(0,1fr);gap:40px;align-items:start}
+@media(max-width:900px){.engine-stage{grid-template-columns:1fr;gap:28px}}
+@media(max-width:480px){.invoice{font-size:11.5px}.tip{padding:12px 14px;font-size:13.5px}}
+.invoice{background:transparent;border:none;border-radius:16px;padding:4px;font-family:var(--fm);font-size:12.5px;position:relative;overflow:visible}
+.inv-row{display:flex;justify-content:space-between;padding:9px 10px;margin:0 -10px;border-radius:8px;color:var(--white-soft);transition:background .5s,box-shadow .5s}
+.inv-row .l{color:var(--white-faint)}
+.inv-row.hl{background:rgba(91,91,240,.16);box-shadow:inset 0 0 0 1px rgba(109,109,255,.45)}
+.inv-head{font-size:14px;color:var(--white);font-weight:500;padding-bottom:14px;margin-bottom:10px;border-bottom:1px solid rgba(255,255,255,.08)}
+.inv-foot{margin-top:12px;padding-top:12px;border-top:1px solid rgba(255,255,255,.08);font-size:10.5px;color:var(--white-faint)}
+/* scanline removed */
+.tips{display:flex;flex-direction:column;gap:12px}
+.tip{background:var(--glass);backdrop-filter:blur(12px);border:1px solid rgba(109,109,255,.25);border-left:3px solid var(--violet);border-radius:12px;padding:14px 18px;font-size:15px;color:var(--white-soft);opacity:0;transform:translateX(16px)}
+.tip b{color:var(--white);font-weight:600}
+.tip .mono{font-size:12.5px;color:var(--violet)}
+.result-card{background:linear-gradient(135deg,rgba(22,163,74,.12),rgba(52,211,153,.05));border:1px solid rgba(52,211,153,.4);border-radius:14px;padding:18px 20px;margin-top:6px;opacity:0;transform:translateY(14px)}
+.result-card .rt{display:flex;align-items:center;gap:10px;font-family:var(--fd);font-weight:600;font-size:15px;margin-bottom:8px}
+.result-tick{width:22px;height:22px;border-radius:100px;background:var(--green-glow);display:inline-flex;align-items:center;justify-content:center;flex-shrink:0}
+.result-tick svg{width:12px;height:12px;stroke:#052e16;stroke-width:3;fill:none}
+.result-card .rd{font-family:var(--fm);font-size:14px;color:var(--white-soft);line-height:1.7}
+.result-card .rd .g{color:var(--green-glow)}
+.engine-close{font-family:var(--fd);font-weight:600;font-size:clamp(17px,1.9vw,20px);color:var(--white-soft);margin-top:48px;max-width:560px}
+.replay{margin-top:18px;font-family:var(--fm);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--violet);background:none;border:1px solid rgba(109,109,255,.35);border-radius:100px;padding:8px 18px;transition:border-color .25s,background .25s;cursor:pointer}
+.replay:hover{border-color:var(--violet);background:rgba(91,91,240,.1)}
+
+/* ===== audience ===== */
+.audience{background:linear-gradient(180deg,#07070e 0%,#0a0a16 100%)}
+.aud-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+@media(max-width:760px){.aud-grid{grid-template-columns:1fr}}
+.aud-card{background:var(--glass);backdrop-filter:blur(14px);border:1px solid var(--glass-line);border-radius:18px;padding:30px 28px;transition:transform .35s,border-color .35s;position:relative;overflow:hidden}
+.aud-card::before{content:"";position:absolute;top:0;left:0;width:3px;height:100%;background:linear-gradient(180deg,var(--indigo),var(--violet));transform:scaleY(0);transform-origin:top;transition:transform .4s}
+.aud-card:hover{transform:translateY(-4px);border-color:rgba(109,109,255,.3)}
+.aud-card:hover::before{transform:scaleY(1)}
+.aud-tag{font-family:var(--fm);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--violet);display:block;margin-bottom:14px}
+.aud-card .hook{font-family:var(--fd);font-weight:600;font-size:18px;line-height:1.3;margin-bottom:8px}
+.aud-card .punch{font-size:15px;color:var(--white-soft);font-style:italic}
+
+/* ===== founder ===== */
+.founder{background:linear-gradient(180deg,#0a0a16 0%,#080812 100%)}
+.founder-grid{display:grid;grid-template-columns:200px 1fr;gap:48px;align-items:center;max-width:880px;margin:0 auto}
+@media(max-width:680px){.founder-grid{grid-template-columns:1fr;gap:28px;text-align:center}}
+@media(max-width:480px){.founder-photo{width:140px;height:140px}.founder-text .hi{font-size:24px}}
+.founder-photo{width:180px;height:180px;border-radius:100px;object-fit:cover;border:2px solid rgba(109,109,255,.4);box-shadow:0 0 50px -10px rgba(91,91,240,.5);justify-self:center}
+.founder-text .hi{font-family:var(--fd);font-weight:700;font-size:clamp(24px,3vw,32px);margin-bottom:18px}
+.founder-text p{font-size:16px;color:var(--white-soft);line-height:1.7;margin-bottom:16px;max-width:52ch}
+@media(max-width:680px){.founder-text p{margin-left:auto;margin-right:auto}}
+.founder-text .sign{font-family:var(--fd);font-weight:600;color:var(--white);font-size:16px}
+.founder-text .meta{font-family:var(--fm);font-size:11px;color:var(--white-faint);margin-top:14px;letter-spacing:.06em}
+
+/* ===== comparison ===== */
+.compare{background:linear-gradient(180deg,#080812 0%,#0a0a14 100%)}
+.cmp-wrap{overflow-x:auto;border-radius:18px;border:1px solid var(--glass-line);background:var(--glass);backdrop-filter:blur(14px);-webkit-overflow-scrolling:touch}
+.cmp-scroll-hint{display:none;font-family:var(--fm);font-size:11px;color:var(--white-faint);text-align:center;margin-top:10px}
+@media(max-width:680px){.cmp-scroll-hint{display:block}}
+.cmp{width:100%;border-collapse:collapse;min-width:680px;font-size:14px}
+.cmp th,.cmp td{padding:16px 18px;text-align:left;border-bottom:1px solid rgba(255,255,255,.05)}
+.cmp thead th{font-family:var(--fd);font-weight:600;font-size:14px;color:var(--white);background:rgba(255,255,255,.02)}
+.cmp thead th.us{color:var(--violet);background:rgba(91,91,240,.1)}
+.cmp tbody th{font-family:var(--fm);font-size:12px;color:var(--white-faint);font-weight:400;letter-spacing:.04em}
+.cmp td{color:var(--white-soft)}
+.cmp td.us{color:var(--white);background:rgba(91,91,240,.06);font-weight:500;box-shadow:inset 3px 0 0 var(--indigo),inset -1px 0 0 rgba(109,109,255,.2)}
+.cmp .yes{color:var(--green-glow)}
+.cmp .no{color:var(--white-faint)}
+.cmp-close{font-family:var(--fd);font-weight:600;font-size:clamp(16px,1.8vw,19px);color:var(--white-soft);margin-top:36px;max-width:620px}
+.cmp-sources{font-family:var(--fm);font-size:10.5px;color:var(--white-faint);margin-top:18px;line-height:1.6;max-width:680px}
+
+/* ===== pricing ===== */
+.pricing{background:linear-gradient(180deg,#0a0a14 0%,#080812 100%)}
+.plans{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;align-items:stretch}
+@media(max-width:880px){.plans{grid-template-columns:1fr;max-width:420px;margin:0 auto}}
+.plan{background:var(--glass);backdrop-filter:blur(14px);border:1px solid var(--glass-line);border-radius:20px;padding:32px 28px;display:flex;flex-direction:column;transition:transform .35s,border-color .35s,box-shadow .35s;position:relative}
+.plan:hover{transform:translateY(-6px);border-color:rgba(109,109,255,.35);box-shadow:0 30px 60px -30px rgba(0,0,0,.7)}
+.plan.feat{border-color:rgba(109,109,255,.5);box-shadow:0 0 50px -20px rgba(91,91,240,.5)}
+.plan-badge{position:absolute;top:-11px;left:50%;transform:translateX(-50%);font-family:var(--fm);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#fff;background:linear-gradient(135deg,var(--indigo),var(--violet));border-radius:100px;padding:5px 14px;white-space:nowrap}
+.plan-label{font-family:var(--fm);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--violet);margin-bottom:8px}
+.plan-name{font-family:var(--fd);font-weight:700;font-size:22px;margin-bottom:16px}
+.plan-price{font-family:var(--fm);font-weight:500;font-size:42px;letter-spacing:-.02em;line-height:1;margin-bottom:6px}
+.plan-price small{font-size:15px;color:var(--white-faint);font-weight:400}
+.plan-per{font-size:13px;color:var(--white-faint);min-height:20px;margin-bottom:24px}
+.plan-feats{list-style:none;display:flex;flex-direction:column;gap:11px;flex:1;margin-bottom:28px}
+.plan-feats li{font-size:15px;color:var(--white-soft);display:flex;gap:10px;align-items:flex-start;line-height:1.5}
+.plan-feats li svg{width:16px;height:16px;stroke:var(--violet);stroke-width:2.4;fill:none;flex-shrink:0;margin-top:3px}
+.plan-cta{display:flex;align-items:center;justify-content:center;height:48px;border-radius:100px;font-size:15px;font-weight:600;text-decoration:none;transition:transform .25s,box-shadow .25s,border-color .25s}
+.plan-cta.primary{background:linear-gradient(135deg,var(--indigo),var(--indigo-deep));color:#fff;box-shadow:0 8px 28px -8px rgba(91,91,240,.5)}
+.plan-cta.primary:hover{transform:translateY(-2px);box-shadow:0 14px 40px -8px rgba(91,91,240,.7)}
+.plan-cta.ghost{background:rgba(255,255,255,.04);color:var(--white);border:1px solid rgba(255,255,255,.16)}
+.plan-cta.ghost:hover{border-color:var(--violet)}
+.plan-foot{font-family:var(--fm);font-size:11px;color:var(--white-faint);margin-top:14px;line-height:1.6}
+.pricing-trust{max-width:680px;margin:44px auto 0;display:flex;flex-direction:column;gap:10px}
+.pricing-trust .row{display:flex;gap:12px;align-items:flex-start;font-size:15px;color:var(--white-soft);line-height:1.6}
+.pricing-trust .row svg{width:16px;height:16px;stroke:var(--green-glow);stroke-width:2.4;fill:none;flex-shrink:0;margin-top:3px}
+.pricing-trust .row b{color:var(--white)}
+
+/* ===== feature strip ===== */
+.features{background:linear-gradient(180deg,#080812 0%,#07070e 100%)}
+.feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+@media(max-width:880px){.feat-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:560px){.feat-grid{grid-template-columns:1fr}.feat-item{padding:20px}}
+.feat-item{background:var(--glass);backdrop-filter:blur(14px);border:1px solid var(--glass-line);border-radius:16px;padding:24px;transition:transform .35s,border-color .35s}
+.feat-item:hover{transform:translateY(-4px);border-color:rgba(109,109,255,.3)}
+.feat-ic{width:38px;height:38px;border-radius:10px;background:rgba(91,91,240,.16);border:1px solid rgba(109,109,255,.3);display:flex;align-items:center;justify-content:center;margin-bottom:16px}
+.feat-ic svg{width:18px;height:18px;stroke:var(--violet);stroke-width:2;fill:none}
+.feat-item h4{font-family:var(--fd);font-weight:600;font-size:16px;margin-bottom:7px}
+.feat-item p{font-size:15px;color:var(--white-soft);line-height:1.55}
+.feat-item:hover .feat-ic{transform:translateY(-3px) rotate(-6deg);border-color:rgba(167,139,250,.6)}
+.feat-ic{transition:transform .4s cubic-bezier(.4,1.4,.5,1),border-color .3s}
+.launch-note{text-align:center;font-family:var(--fm);font-size:12px;color:var(--violet);background:rgba(91,91,240,.08);border:1px solid rgba(109,109,255,.25);border-radius:100px;padding:8px 18px;width:max-content;max-width:90%;margin:0 auto 36px;white-space:normal;line-height:1.5}
+@media(max-width:480px){.launch-note{font-size:10.5px;padding:8px 14px;border-radius:14px}}
+.plan-sub{font-size:13px;color:var(--white-faint);margin-top:6px}
+
+/* ===== meet klaar ===== */
+.klaar-sec{background:linear-gradient(180deg,#07070e 0%,#0c0c1a 100%)}
+.klaar-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,480px);gap:56px;align-items:center}
+@media(max-width:920px){.klaar-grid{grid-template-columns:1fr}}
+@media(max-width:480px){.k-chat{padding:16px}.k-msgs{min-height:200px}.k-msg{font-size:13.5px;max-width:90%}}
+.klaar-left h2{font-family:var(--fd);font-weight:700;font-size:clamp(30px,4vw,46px);line-height:1.08;letter-spacing:-.02em;margin:16px 0 22px}
+.klaar-attrs{display:flex;flex-direction:column;gap:16px;margin-top:28px}
+.kattr{display:flex;gap:14px;align-items:flex-start}
+.kattr-dot{width:36px;height:36px;border-radius:10px;background:rgba(91,91,240,.18);border:1px solid rgba(109,109,255,.35);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.kattr-dot svg{width:16px;height:16px;stroke:var(--violet);stroke-width:2.2;fill:none}
+.kattr-text h4{font-family:var(--fd);font-weight:600;font-size:15px;margin-bottom:3px}
+.kattr-text p{font-size:15px;color:var(--white-soft);line-height:1.55}
+/* chat widget */
+.k-chat{background:rgba(10,10,18,.8);backdrop-filter:blur(18px);border:1px solid rgba(109,109,255,.22);border-radius:20px;padding:22px;box-shadow:0 0 60px -20px rgba(91,91,240,.4)}
+.k-chat-head{display:flex;align-items:center;gap:10px;padding-bottom:16px;border-bottom:1px solid rgba(255,255,255,.07);margin-bottom:16px}
+.k-avatar{width:32px;height:32px;border-radius:100px;background:linear-gradient(135deg,var(--indigo),var(--violet));display:flex;align-items:center;justify-content:center;font-family:var(--fd);font-weight:700;font-size:14px;color:#fff;flex-shrink:0}
+.k-chat-head .k-name{font-family:var(--fd);font-weight:600;font-size:14px}
+.k-chat-head .k-status{font-family:var(--fm);font-size:11px;color:var(--green-glow);display:flex;align-items:center;gap:5px}
+.k-chat-head .k-status::before{content:"";width:6px;height:6px;border-radius:100px;background:var(--green-glow);box-shadow:0 0 6px var(--green-glow);display:inline-block}
+.k-msgs{display:flex;flex-direction:column;gap:10px;min-height:260px}
+.k-msg{max-width:82%;padding:10px 14px;border-radius:16px;font-size:14.5px;line-height:1.55;opacity:0;transform:translateY(8px)}
+.k-msg.u{background:rgba(91,91,240,.18);border:1px solid rgba(109,109,255,.3);color:var(--white-soft);align-self:flex-end;border-bottom-right-radius:4px}
+.k-msg.k{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.09);color:var(--white-soft);align-self:flex-start;border-bottom-left-radius:4px}
+.k-msg.k .k-tag{font-family:var(--fm);font-size:10px;color:var(--violet);display:block;margin-bottom:4px}
+.k-msg b{color:var(--white)}
+.k-input{margin-top:14px;padding-top:14px;border-top:1px solid rgba(255,255,255,.07);display:flex;gap:10px;align-items:center}
+.k-input-field{flex:1;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:100px;padding:9px 16px;font-size:13px;color:var(--white-soft);font-family:var(--fb)}
+.k-send{width:34px;height:34px;border-radius:100px;background:var(--indigo);border:none;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.k-send svg{width:14px;height:14px;stroke:#fff;stroke-width:2.4;fill:none}
+
+/* ===== digipoort callout ===== */
+.digicall{background:linear-gradient(135deg,rgba(91,91,240,.1),rgba(167,139,250,.05));border-top:1px solid rgba(109,109,255,.2);border-bottom:1px solid rgba(109,109,255,.2);padding:60px 0}
+.digicall-inner{display:grid;grid-template-columns:1fr auto;gap:40px;align-items:center;max-width:900px;margin:0 auto}
+.digicall h3{font-family:var(--fd);font-weight:700;font-size:clamp(21px,2.4vw,27px);line-height:1.25;margin-bottom:14px}
+.digicall p{font-size:15px;color:var(--white-soft);line-height:1.65;max-width:58ch}
+.digicall p em{font-style:normal;color:var(--white)}
+.digicall-badge{background:rgba(52,211,153,.08);border:1px solid rgba(52,211,153,.3);border-radius:14px;padding:18px 22px;text-align:center;flex-shrink:0;min-width:160px}
+.digicall-badge .db-n{font-family:var(--fm);font-weight:500;font-size:28px;color:var(--green-glow);text-shadow:0 0 30px rgba(52,211,153,.4);display:block;margin-bottom:4px}
+.digicall-badge .db-l{font-size:12px;color:var(--white-soft)}
+
+/* ===== pricing v2 ===== */
+.pricing{background:linear-gradient(180deg,#0a0a14 0%,#080812 100%)}
+.founding-banner{background:linear-gradient(135deg,rgba(91,91,240,.15),rgba(167,139,250,.08));border:1px solid rgba(109,109,255,.3);border-radius:14px;padding:16px 22px;margin-bottom:36px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.fb-left{font-size:15px;color:var(--white)}
+.fb-left b{color:var(--violet)}
+.fb-spots{font-family:var(--fm);font-size:12px;color:var(--white-faint);display:flex;align-items:center;gap:8px}
+.fb-dots{display:flex;gap:4px}
+.fb-dot{width:8px;height:8px;border-radius:100px;background:var(--indigo)}
+.fb-dot.taken{background:rgba(255,255,255,.12)}
+.toggle-row{display:flex;align-items:center;justify-content:center;gap:14px;margin-bottom:40px}
+.tgl-lbl{font-size:14px;color:var(--white-faint);font-weight:500;transition:color .25s}
+.tgl-lbl.on{color:var(--white)}
+.tgl{width:50px;height:26px;border-radius:100px;background:rgba(255,255,255,.08);border:1px solid var(--glass-line);position:relative;cursor:pointer;transition:background .25s}
+.tgl.yr{background:rgba(91,91,240,.35);border-color:rgba(109,109,255,.5)}
+.tgl-knob{position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:100px;background:var(--white);transition:transform .28s cubic-bezier(.4,1.4,.5,1)}
+.tgl.yr .tgl-knob{transform:translateX(24px)}
+.yr-pill{font-family:var(--fm);font-size:10px;color:var(--green-glow);background:rgba(52,211,153,.1);border:1px solid rgba(52,211,153,.3);border-radius:100px;padding:3px 10px;opacity:0;transition:opacity .25s}
+.yr-pill.show{opacity:1}
+.plans{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;align-items:stretch}
+@media(max-width:900px){.plans{grid-template-columns:1fr;max-width:420px;margin:0 auto}}
+@media(max-width:480px){.plan{padding:26px 22px}.plan-price{font-size:36px}}
+.plan{background:var(--glass);backdrop-filter:blur(14px);border:1px solid var(--glass-line);border-radius:20px;padding:32px 28px;display:flex;flex-direction:column;transition:transform .35s,border-color .35s,box-shadow .35s;position:relative}
+.plan:hover{transform:translateY(-6px);border-color:rgba(109,109,255,.35);box-shadow:0 30px 60px -30px rgba(0,0,0,.7)}
+.plan.feat{border-color:rgba(109,109,255,.45);box-shadow:0 0 50px -20px rgba(91,91,240,.5)}
+.plan-badge{position:absolute;top:-12px;left:50%;transform:translateX(-50%);font-family:var(--fm);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#fff;background:linear-gradient(135deg,var(--indigo),var(--violet));border-radius:100px;padding:5px 14px;white-space:nowrap}
+.plan-label{font-family:var(--fm);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--violet);margin-bottom:8px}
+.plan-name{font-family:var(--fd);font-weight:700;font-size:22px;margin-bottom:14px}
+.plan-price-block{margin-bottom:20px}
+.plan-founding{font-family:var(--fm);font-size:13px;color:var(--white-faint);text-decoration:line-through;text-decoration-color:rgba(167,139,250,.5);margin-bottom:4px}
+.plan-price{font-family:var(--fm);font-weight:500;font-size:40px;letter-spacing:-.02em;line-height:1}
+.plan-price small{font-size:14px;color:var(--white-faint);font-weight:400}
+.plan-price-yr{display:none;font-family:var(--fm);font-size:13px;color:var(--white-faint);margin-top:4px}
+.plan-price-yr s{text-decoration-color:rgba(167,139,250,.5)}
+.plan-feats{list-style:none;display:flex;flex-direction:column;gap:11px;flex:1;margin-bottom:26px}
+.plan-feats li{font-size:15px;color:var(--white-soft);display:flex;gap:10px;align-items:flex-start;line-height:1.5}
+.plan-feats li svg{width:15px;height:15px;stroke:var(--violet);stroke-width:2.4;fill:none;flex-shrink:0;margin-top:3px}
+.plan-feats .dim svg{stroke:rgba(255,255,255,.2)}
+.plan-feats .dim{color:var(--white-faint)}
+.plan-cta{display:flex;align-items:center;justify-content:center;height:48px;border-radius:100px;font-size:15px;font-weight:600;text-decoration:none;transition:transform .25s,box-shadow .25s,border-color .25s;margin-bottom:10px}
+.plan-cta.primary{background:linear-gradient(135deg,var(--indigo),var(--indigo-deep));color:#fff;box-shadow:0 8px 28px -8px rgba(91,91,240,.5)}
+.plan-cta.primary:hover{transform:translateY(-2px);box-shadow:0 14px 40px -8px rgba(91,91,240,.7)}
+.plan-cta.ghost{background:rgba(255,255,255,.04);color:var(--white);border:1px solid rgba(255,255,255,.16)}
+.plan-cta.ghost:hover{border-color:var(--violet)}
+.plan-fine{font-family:var(--fm);font-size:11px;color:var(--white-faint);text-align:center;line-height:1.5}
+.feat-desc{display:block;font-size:13px;color:var(--white-faint);font-style:italic;margin-top:2px;font-weight:400}
+.pricing-trust{max-width:680px;margin:22px auto 0;display:flex;flex-direction:column;gap:10px}
+.pricing-trust .row{display:flex;gap:12px;align-items:flex-start;font-size:15px;color:var(--white-soft);line-height:1.6}
+.pricing-trust .row svg{width:15px;height:15px;stroke:var(--green-glow);stroke-width:2.4;fill:none;flex-shrink:0;margin-top:3px}
+
+.reveal{opacity:0;transform:translateY(22px)}
+.faq{background:linear-gradient(180deg,#080812 0%,#060610 100%)}
+.faq-list{max-width:760px}
+.faq-item{border-bottom:1px solid rgba(255,255,255,.07)}
+.faq-q{display:flex;justify-content:space-between;align-items:center;gap:20px;padding:22px 4px;cursor:pointer;font-family:var(--fd);font-weight:600;font-size:17px;color:var(--white)}
+.faq-q .x{font-family:var(--fm);font-size:13px;color:var(--violet);width:24px;height:24px;border-radius:100px;border:1px solid rgba(109,109,255,.35);display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;transition:transform .35s}
+.faq-item.open .faq-q .x{transform:rotate(45deg)}
+.faq-a{overflow:hidden;height:0}
+.faq-a-inner{padding:0 4px 22px;font-size:16px;color:var(--white-soft);line-height:1.7;max-width:62ch}
+.faq-tag{font-family:var(--fm);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--violet);display:block;margin-bottom:6px}
+
+/* ===== FINAL CTA ===== */
+.final{background:radial-gradient(ellipse 70% 60% at 50% 30%, rgba(91,91,240,.18), transparent 65%), var(--void);text-align:center;padding-bottom:60px}
+.final h2{font-family:var(--fd);font-weight:700;font-size:clamp(34px,5vw,58px);line-height:1.1;letter-spacing:-.02em;margin-bottom:18px}
+.final h2 .out{color:var(--violet);text-shadow:0 0 50px rgba(167,139,250,.4)}
+.final p{font-size:17px;color:var(--white-soft);max-width:46ch;margin:0 auto 36px}
+.final .cta-row{justify-content:center}
+
+/* ===== FOOTER ===== */
+footer{border-top:1px solid rgba(255,255,255,.06);background:var(--void);padding:64px 0 32px}
+.foot-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:48px;margin-bottom:48px}
+@media(max-width:720px){.foot-grid{grid-template-columns:1fr;gap:36px}}
+.foot-brand .wordmark{display:inline-block;margin-bottom:14px}
+.foot-brand p{font-size:14px;color:var(--white-soft);max-width:34ch;line-height:1.6;margin-bottom:14px}
+.foot-meta{font-family:var(--fm);font-size:11px;color:var(--white-faint)}
+.foot-col h4{font-family:var(--fm);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--white-faint);margin-bottom:16px}
+.foot-col ul{list-style:none;display:flex;flex-direction:column;gap:11px}
+.foot-col a{color:var(--white-soft);text-decoration:none;font-size:14px;transition:color .2s;position:relative}
+.foot-col a:hover{color:var(--violet)}
+.foot-soon{position:relative;display:inline-flex;align-items:center;gap:8px;font-size:14px;font-weight:400;color:var(--white-soft);font-family:var(--fb);cursor:default}
+.soon-chip{font-family:var(--fm);font-size:9px;color:var(--white-faint);border:1px solid var(--glass-line);border-radius:100px;padding:2px 8px;opacity:0;transform:translateY(4px);transition:opacity .25s,transform .25s;pointer-events:none}
+.foot-soon:hover .soon-chip{opacity:1;transform:translateY(0)}
+.foot-bottom{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;padding-top:28px;border-top:1px solid rgba(255,255,255,.05);font-family:var(--fm);font-size:11px;color:var(--white-faint)}
+@media(max-width:560px){.foot-bottom{flex-direction:column;align-items:flex-start;text-align:left}}
+
+.reveal{opacity:0;transform:translateY(22px)}
+.title-line{display:block;overflow:hidden}
+.title-line span{display:block;transform:translateY(110%)}
+@media(prefers-reduced-motion:reduce){
+  .reveal,.chat-bubble{opacity:1;transform:none}
+  .title-line span{transform:none}
+  .mini-bars i{transform:scaleY(1)}
+  #field,#cdot,#cring{display:none}
+  body,body a,body button{cursor:auto}
+  .ticker-track{animation:none}
+}
+.stat-check{display:flex;align-items:center;gap:8px;font-family:var(--fd);font-weight:600;font-size:15px;color:var(--white);margin-top:18px}
+.stat-check svg{width:18px;height:18px;stroke:var(--green-glow);stroke-width:2.6;fill:none;flex-shrink:0}
+.stat-sub2{font-size:15px;color:var(--white-soft);margin-top:8px;line-height:1.55}
+.plan-target{font-size:12.5px;color:var(--white-faint);line-height:1.55;margin-bottom:14px;font-style:italic}
+.vat-note{text-align:center;font-family:var(--fm);font-size:11px;color:var(--white-faint);margin:14px 0 0}
+.tw-cursor{display:inline-block;width:2px;height:.9em;background:var(--violet);vertical-align:middle;margin-left:2px;animation:twBlink .7s step-end infinite}
+@keyframes twBlink{0%,100%{opacity:1}50%{opacity:0}}
+</style>
 </head>
 <body>
 
-  <!-- Persistent preview marker (visible at all times) -->
-  <div class="preview-badge mono" role="note" aria-label="Preview prototype" data-i18n="badge">Preview · nog niet live</div>
+<div id="cring"></div><div id="cdot"></div>
 
-  <header class="site-header">
-    <div class="container header-inner">
-      <a href="#hero" class="wordmark disp" aria-label="BTWklaar, naar boven">
-        <span id="brand-word">BTWklaar</span><span class="wordmark-dot">.</span>
-        <span class="wordmark-sub mono" id="brand-descriptor">BTW filing assistant for zzp'ers</span>
-      </a>
-      <nav class="site-nav" aria-label="Hoofdnavigatie">
-        <a href="#how" data-i18n="nav.how">Hoe het werkt</a>
-        <a href="#proof" data-i18n="nav.proof">De motor</a>
-        <a href="#pricing" data-i18n="nav.pricing">Prijzen</a>
-        <a href="#faq" data-i18n="nav.faq">FAQ</a>
-      </nav>
-      <div class="header-actions">
-        <div class="lang-switch mono" role="group" aria-label="Taal / Language / Idioma">
-          <button type="button" data-lang="nl" aria-pressed="true" lang="nl" aria-label="Nederlands">NL</button>
-          <button type="button" data-lang="en" aria-pressed="false" lang="en" aria-label="English">EN</button>
-          <button type="button" data-lang="es" aria-pressed="false" lang="es" aria-label="Español">ES</button>
+<nav>
+  <div class="nav-inner">
+    <a href="#" class="wordmark" data-hover>BTW<span> Helper</span>.</a>
+    <div class="nav-links">
+      <a href="#how" data-hover>How it works</a>
+      <a href="#features" data-hover>Features</a>
+      <a href="#pricing" data-hover>Pricing</a>
+      <a href="#pricing" class="nav-cta" data-hover>Get started</a>
+    </div>
+    <button class="nav-burger" id="navBurger" aria-label="Open menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+  <div class="nav-mobile-panel" id="navMobilePanel">
+    <a href="#how">How it works</a>
+    <a href="#features">Features</a>
+    <a href="#pricing">Pricing</a>
+    <a href="#faq">FAQ</a>
+    <a href="#pricing" class="nav-cta">Get started</a>
+  </div>
+</nav>
+
+<!-- ============ HERO ============ -->
+<header class="hero">
+  <canvas id="field"></canvas>
+  <div class="container hero-grid">
+    <div>
+      <div class="eyebrow reveal">Drop your invoices. Get your BTW return. Done.</div>
+      <h1>
+        <span class="title-line"><span>File your BTW before</span></span>
+        <span class="title-line"><span class="out">your coffee gets cold.</span></span>
+      </h1>
+      <ul class="hero-checks">
+        <li class="reveal"><span class="tick"><svg viewBox="0 0 12 12"><path d="M2 6.5 4.8 9 10 3.2"/></svg></span>AI reads every invoice and assigns the right rubriek</li>
+        <li class="reveal"><span class="tick"><svg viewBox="0 0 12 12"><path d="M2 6.5 4.8 9 10 3.2"/></svg></span>Reverse charge &amp; foreign currency — handled, explained</li>
+        <li class="reveal"><span class="tick"><svg viewBox="0 0 12 12"><path d="M2 6.5 4.8 9 10 3.2"/></svg></span>Same layout as the Belastingdienst form. You review, you file.</li>
+      </ul>
+      <div class="cta-row reveal">
+        <a href="#pricing" class="btn btn-primary" data-hover>See plans</a>
+        <a href="#how" class="btn btn-ghost" data-hover>See how it works</a>
+      </div>
+      <p class="cta-sub reveal">Built for eenmanszaak · You stay in control · Cancel anytime</p>
+    </div>
+
+    <div class="appshot reveal" aria-label="BTW Helper dashboard preview">
+      <div class="as-head">
+        <div><div class="hi">Welcome back</div><div class="name">Jens's overview</div></div>
+        <div style="display:flex;gap:9px;align-items:center">
+          <div class="as-pills"><span class="as-pill on">Q1</span><span class="as-pill">Q2</span><span class="as-pill">Q3</span><span class="as-pill">Q4</span></div>
+          <span class="as-filing">Start filing</span>
         </div>
-        <a href="#pricing" class="btn btn-primary btn-sm" data-i18n="nav.cta">Probeer gratis</a>
+      </div>
+      <div class="as-grid">
+        <div class="as-card owe">
+          <div style="display:flex;justify-content:space-between"><span class="as-tag">Q1 2026</span><span class="as-tag due">Due</span></div>
+          <div class="as-k" style="margin-top:9px">You owe the Belastingdienst</div>
+          <div class="as-v red" id="appNum">€ 2.604,57</div>
+          <div class="as-spark">
+            <div class="as-k">Quarterly trend</div>
+            <svg viewBox="0 0 200 32" preserveAspectRatio="none">
+              <defs><linearGradient id="sg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fb7185" stop-opacity=".35"/><stop offset="1" stop-color="#fb7185" stop-opacity="0"/></linearGradient></defs>
+              <path d="M0,8 C30,6 50,13 80,17 C120,22 160,24 200,25 L200,32 L0,32 Z" fill="url(#sg)"/>
+              <path d="M0,8 C30,6 50,13 80,17 C120,22 160,24 200,25" fill="none" stroke="#fb7185" stroke-width="1.6"/>
+            </svg>
+          </div>
+        </div>
+        <div class="as-card"><div class="as-k">Revenue excl. VAT</div><div class="as-v">€ 14.250,00</div><div class="as-sub">VAT on revenue · € 2.992,50</div><span class="as-chip">Income</span></div>
+        <div class="as-card"><div class="as-k">VAT on revenue</div><div class="as-v">€ 2.992,50</div><div class="as-sub">Rubriek 1a · 21%</div><span class="as-chip">To pay</span></div>
+        <div class="as-card"><div class="as-k">Expenses excl. VAT</div><div class="as-v">€ 1.847,30</div><div class="as-sub">Voorbelasting · € 387,93</div><span class="as-chip">Expenses</span></div>
+        <div class="as-card"><div class="as-k">Input tax</div><div class="as-v">€ 387,93</div><div class="as-sub">Rubriek 5b · deductible</div><span class="as-chip">To reclaim</span></div>
       </div>
     </div>
-  </header>
+  </div>
+</header>
 
-  <main id="main">
+<!-- ============ TICKER ============ -->
+<div class="ticker" aria-hidden="true">
+  <div class="ticker-track" id="tickerTrack">
+    <span><b>1a</b> omzet 21% · €2.992,50</span>
+    <span>Vercel Inc. → <b>4a</b> reverse charge</span>
+    <span>$20.00 → €18,40 <span class="g">converted</span></span>
+    <span>Anthropic → <b>4a</b> self-assessed 21%</span>
+    <span>Framer B.V. → <b>5b</b> voorbelasting</span>
+    <span>ICP check <span class="g">✓</span></span>
+    <span><b>5g</b> balance · <span class="g">klaar</span></span>
+    <span>12 invoices · 0 manual entries</span>
+  </div>
+</div>
 
-    <!-- 1 · HERO -->
-    <section id="hero" class="hero dark" aria-labelledby="hero-h">
-      <div class="hero-glow" aria-hidden="true"></div>
-      <canvas id="hero-canvas" aria-hidden="true"></canvas>
-      <div class="container hero-inner">
-        <div class="hero-copy">
-          <p class="eyebrow mono" data-i18n="hero.eyebrow">Je facturen erin. Klaar eruit.</p>
-          <h1 id="hero-h">
-            <span class="mask"><span class="line" data-i18n="hero.h1a">Je BTW-aangifte?</span></span>
-            <span class="mask"><span class="line accent" data-i18n="hero.h1b">Klaar.</span></span>
-          </h1>
-          <p class="hero-sub" data-i18n="hero.sub">Sleep je facturen erin. Klaar rubriceert ze, regelt reverse charge en buitenlandse valuta. Jij controleert. Jij dient in. 10 minuten — geen 3 uur.</p>
-          <div class="cta-group">
-            <div class="cta-row hero-ctas">
-              <a href="#pricing" class="btn btn-primary"><span data-i18n="hero.ctaPrimary">Probeer je eerste kwartaal — gratis</span> <span aria-hidden="true">→</span></a>
-              <a href="#how" class="btn btn-ghost" data-i18n="hero.ctaGhost">Bekijk hoe het werkt</a>
-            </div>
-            <p class="cta-note mono" data-i18n="hero.ctaNote">Geen creditcard. Geen Nederlands nodig. Geen accountant nodig.</p>
+<!-- ============ PROBLEM ============ -->
+<section class="problem" id="problem">
+  <div class="container">
+    <div class="sec-head">
+      <div class="eyebrow reveal">The problem</div>
+      <h2>
+        <span class="title-line"><span>The aangifte is short.</span></span>
+        <span class="title-line"><span>Getting it right isn't.</span></span>
+      </h2>
+      <p class="problem-prose reveal">Nine boxes. Simple enough — until an afternoon disappears into <span class="ph">sorting invoices</span>, a foreign supplier triggers a <span class="ph">reverse-charge rule you've never heard of</span>, and you press "Akkoord" <span class="ph">hoping you got it right</span>. A wrong box isn't a typo. It's a correction letter from the Belastingdienst.</p>
+    </div>
+
+    <div class="problem-closer reveal">
+      <h3>BTW Helper handles all of it. And when you're not sure — just ask the AI.</h3>
+      <div>
+        <span class="chat-bubble tw" data-text="Why is this invoice rubriek 4a?"></span>
+        <span class="chat-bubble tw" data-text="Did I miss something this quarter?"></span>
+        <span class="chat-bubble tw" data-text="What's my next step?"></span>
+      </div>
+      <p class="chat-answer"><span class="k-dot ai-dot">AI</span><span>The built-in AI assistant answers — in Dutch, English, or Spanish. It reads your invoices, explains every classification, and never leaves you guessing.</span></p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ MEET KLAAR ============ -->
+<section class="klaar-sec" id="klaar">
+  <div class="container">
+    <div class="klaar-grid">
+      <div class="klaar-left">
+        <div class="eyebrow reveal">Your AI companion</div>
+        <h2 class="reveal">Not just software.<br><span style="color:var(--violet)">A BTW specialist.</span></h2>
+        <p class="sec-big-sub reveal" style="margin-bottom:32px">Built on a frontier AI model. It reads your invoices, learns your business, explains every decision — and is always one question away.</p>
+        <div class="klaar-attrs">
+          <div class="kattr reveal">
+            <div class="kattr-dot"><svg viewBox="0 0 16 16"><path d="M8 2C5 2 3 4.5 3 7.5S5.5 13 8 13s5-2.5 5-5.5S11 2 8 2z"/><path d="M8 6v2.5l1.5 1.5"/></svg></div>
+            <div class="kattr-text"><h4>Learns your business over time</h4><p>It recognizes the vendors you use every quarter and remembers how they're classified. The more you file, the fewer questions it needs to ask.</p></div>
           </div>
-        </div>
-
-        <!-- Signature element: real app screenshot + the live result card on top -->
-        <div class="hero-visual" id="hero-visual">
-          <span class="shot-frame">
-            <img src="assets/app-dashboard.webp" alt="BTWklaar dashboard — kwartaaloverzicht" class="app-shot" width="1200" height="539" fetchpriority="high">
-            <span class="shot-label mono" aria-hidden="true">↗ Open app</span>
-          </span>
-          <div class="mock glass" id="hero-mock" aria-label="Voorbeeld van een aangifte-resultaat">
-            <p class="mock-label mono" data-i18n="hero.mockLabel">Q1 2026 · resultaat</p>
-            <p class="mock-big mono" id="mock-result" data-target="24.15">+€24,15</p>
-            <div id="mock-rows">
-              <div class="mock-row mono"><span>1a · omzet</span><span>€46,20</span></div>
-              <div class="mock-row mono"><span>4a · verleggingsregeling</span><span>€25,66</span></div>
-              <div class="mock-row mono"><span>5g · te betalen</span><span>+€24,15</span></div>
-            </div>
+          <div class="kattr reveal">
+            <div class="kattr-dot"><svg viewBox="0 0 16 16"><path d="M2 4h12M2 8h8M2 12h5"/></svg></div>
+            <div class="kattr-text"><h4>Groups, classifies, flags — automatically</h4><p>Recurring invoices grouped. Reverse charge applied. Anything unusual flagged for your review. You see the reasoning, not just the result.</p></div>
           </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- 2 · BUILDER NOTE -->
-    <section id="builder" class="light builder">
-      <div class="container narrow center">
-        <div class="builder-note" data-reveal>
-          <img src="assets/gabz.jpg" alt="Gabz" class="avatar-photo">
-          <p class="builder-text" data-i18n="builder.text">Ik bouwde BTWklaar omdat ik zelf elk kwartaal uren kwijt was. Het formulier, de rubrieken, de buitenlandse facturen — niemand legt het je uit als je begint. Als het mij heeft geholpen, helpt het jou ook.</p>
-          <p class="builder-sig disp" data-i18n="builder.sig">— Gabz, zzp'er &amp; maker</p>
-          <p class="builder-label mono" data-i18n="builder.label">Gemaakt door één persoon in Nederland</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- 3 · PAIN — four layers -->
-    <section id="pain" class="dark" aria-labelledby="pain-h">
-      <div class="container">
-        <p class="eyebrow mono" data-i18n="pain.eyebrow" data-reveal>Het probleem</p>
-        <h2 id="pain-h" data-i18n="pain.h" data-reveal>De vijand is niet de accountant. Het is die middag per kwartaal.</h2>
-        <p class="section-intro" data-i18n="pain.intro" data-reveal>Vier dingen maken die middag langer dan nodig.</p>
-        <div class="cards-4" id="pain-cards"><!-- rendered from content.js --></div>
-        <p class="gap-line disp" data-i18n="pain.gap" data-reveal>BTWklaar haalt alle vier weg. Je facturen erin. Klaar eruit.</p>
-      </div>
-    </section>
-
-    <!-- 4 · STATS -->
-    <section id="stats" class="dark2" aria-labelledby="stats-h">
-      <div class="container">
-        <p class="eyebrow mono" data-i18n="stats.eyebrow" data-reveal>De besparing</p>
-        <h2 id="stats-h" data-i18n="stats.h" data-reveal>Wat BTWklaar je bespaart</h2>
-        <div class="stats-grid" id="stats-cards"><!-- rendered from content.js --></div>
-      </div>
-    </section>
-
-    <!-- 5 · HOW IT WORKS -->
-    <section id="how" class="light alt" aria-labelledby="how-h">
-      <div class="container">
-        <p class="eyebrow mono" data-i18n="how.eyebrow" data-reveal>Hoe het werkt</p>
-        <h2 id="how-h" data-i18n="how.h" data-reveal>Van schoenendoos naar aangifte in vier stappen.</h2>
-        <div class="steps-wrap">
-          <div class="steps-line" aria-hidden="true"><i></i></div>
-          <ol class="steps" id="how-steps"><!-- rendered from content.js --></ol>
-        </div>
-      </div>
-    </section>
-
-    <!-- 5b · TWO-WINDOW SIMULATOR DEMO -->
-    <section id="demo" class="light alt demo" aria-label="Simulator demo">
-      <div class="container">
-        <p class="demo-caption" data-i18n="how.simCaption" data-reveal>Zelfde velden, naast elkaar. Kopieer de getallen — je dient in, je gokt niet.</p>
-        <div class="sim-demo" data-reveal>
-          <figure class="sim-win sim-win-shot">
-            <span class="shot-frame">
-              <img src="assets/app-simulator.webp" alt="BTWklaar simulator — stap 2 van 7" class="app-shot" width="1100" height="503" loading="lazy">
-              <span class="shot-label mono" aria-hidden="true">↗ Open app</span>
-            </span>
-            <figcaption class="sim-title mono" data-i18n="how.simLeft">BTWklaar · simulator</figcaption>
-          </figure>
-          <div class="sim-gap" aria-hidden="true"><span class="sim-chip mono">+€24,15</span><span class="sim-arrow-head">→</span></div>
-          <div class="sim-win">
-            <p class="sim-title mono" data-i18n="how.simRight">Mijn Belastingdienst Zakelijk</p>
-            <div class="sim-row mono"><span>1a</span><span class="sim-dim">€46,20</span></div>
-            <div class="sim-row mono"><span>4a</span><span class="sim-dim">€25,66</span></div>
-            <div class="sim-row mono"><span>5g</span><span class="sim-target">+€24,15</span></div>
+          <div class="kattr reveal">
+            <div class="kattr-dot"><svg viewBox="0 0 16 16"><path d="M3 13l2-5 3 2 3-7 2 4"/></svg></div>
+            <div class="kattr-text"><h4>Answers in your language</h4><p>"Why this rubriek?" "What's next?" "Did I miss anything?" — ask in Dutch, English, or Spanish. It explains, you decide.</p></div>
           </div>
         </div>
       </div>
-    </section>
 
-    <!-- 6 · THE ENGINE / PROOF -->
-    <section id="proof" class="dark" aria-labelledby="proof-h">
-      <div class="container">
-        <p class="eyebrow mono" data-i18n="proof.eyebrow" data-reveal>De motor</p>
-        <h2 id="proof-h" data-i18n="proof.h" data-reveal>Geen demo-data. Dit is een echte factuur.</h2>
-        <p class="section-intro" data-i18n="proof.sub" data-reveal>Uit de Q1 2026 proefrit: een Amerikaanse factuur, automatisch verlegd en omgerekend.</p>
-        <div class="proof-grid" data-reveal>
-          <div class="invoice-card glass" id="invoice-card"><!-- rendered from content.js --></div>
-          <p class="invoice-explain" id="invoice-explain"></p>
+      <div class="k-chat reveal">
+        <div class="k-chat-head">
+          <div class="k-avatar">AI</div>
+          <div><div class="k-name">BTW Helper · AI assistant</div><div class="k-status">online</div></div>
         </div>
-      </div>
-    </section>
-
-    <!-- 7 · AUDIENCE — mirrors, not testimonials -->
-    <section id="audience" class="dark2" aria-labelledby="aud-h">
-      <div class="container">
-        <p class="eyebrow mono" data-i18n="audience.eyebrow" data-reveal>Voor wie</p>
-        <h2 id="aud-h" data-i18n="audience.h" data-reveal>Herken je dit?</h2>
-        <div class="aud-grid" id="aud-cards"><!-- rendered from content.js --></div>
-      </div>
-    </section>
-
-    <!-- 8 · COMPARISON -->
-    <section id="compare" class="light" aria-labelledby="compare-h">
-      <div class="container">
-        <p class="eyebrow mono" data-i18n="compare.eyebrow" data-reveal>Eerlijke vergelijking</p>
-        <h2 id="compare-h" data-i18n="compare.h" data-reveal>Waar we winnen — en waar niet.</h2>
-        <div class="table-wrap" data-reveal>
-          <table class="compare-table" id="compare-table"><!-- rendered from content.js --></table>
+        <div class="k-msgs" id="kmsgs">
+          <div class="k-msg u" data-ki="0">Why is this invoice rubriek 4a?</div>
+          <div class="k-msg k" data-ki="1"><span class="k-tag">AI assistant</span>The supplier is based outside the EU and charged no VAT — so you self-assess 21% under the reverse-charge rule. That's rubriek 4a. Same as this supplier last quarter.</div>
+          <div class="k-msg u" data-ki="2">I have 14 invoices from the same vendor this year. Check each one?</div>
+          <div class="k-msg k" data-ki="3"><span class="k-tag">AI assistant</span>No need — I've grouped them. <b>Same vendor &#8594; same rubriek, every time.</b> I'll only flag one if something looks different. All 14 are classified and ready.</div>
+          <div class="k-msg u" data-ki="4">Does BTW Helper file my return automatically?</div>
+          <div class="k-msg k" data-ki="5"><span class="k-tag">AI assistant</span>No — and that's the point. I calculate every number. You paste them into Mijn Belastingdienst Zakelijk under your own DigiD. You stay in control of what gets submitted. Two minutes, with the simulator open next to the form.</div>
         </div>
-        <p class="compare-note" data-i18n="compare.note" data-reveal></p>
-      </div>
-    </section>
-
-    <!-- 9 · PRICING -->
-    <section id="pricing" class="light alt" aria-labelledby="pricing-h">
-      <div class="container">
-        <p class="eyebrow mono" data-i18n="pricing.eyebrow" data-reveal>Prijzen</p>
-        <h2 id="pricing-h" data-i18n="pricing.h" data-reveal>Je eerste kwartaal is gratis.</h2>
-        <p class="section-intro" data-i18n="pricing.sub" data-reveal>De volledige ervaring — geen demo, je echte aangifte.</p>
-        <div class="cards-3 pricing-cards" id="pricing-cards"><!-- rendered from content.js --></div>
-        <div class="pricing-nudge" id="pricing-nudge" data-reveal><!-- rendered from content.js --></div>
-      </div>
-    </section>
-
-    <!-- 10 · FAQ -->
-    <section id="faq" class="light" aria-labelledby="faq-h">
-      <div class="container narrow">
-        <p class="eyebrow mono" data-i18n="faq.eyebrow" data-reveal>FAQ</p>
-        <h2 id="faq-h" data-i18n="faq.h" data-reveal>Vijf vragen vóór je ja zegt.</h2>
-        <div class="faq-list" id="faq-list"><!-- rendered from content.js --></div>
-      </div>
-    </section>
-
-    <!-- 11 · FINAL CTA -->
-    <section id="final" class="dark final" aria-labelledby="final-h">
-      <div class="container narrow center">
-        <h2 id="final-h" data-i18n="final.h" data-reveal>Volgend kwartaal: tien minuten.</h2>
-        <p class="section-intro" data-i18n="final.sub" data-reveal>Probeer je eerste kwartaal gratis. Geen creditcard, geen abonnement — gewoon je aangifte, klaar.</p>
-        <a href="#pricing" class="btn btn-primary btn-lg" data-reveal><span data-i18n="final.cta">Probeer je eerste kwartaal — gratis</span> <span aria-hidden="true">→</span></a>
-      </div>
-    </section>
-
-  </main>
-
-  <!-- FOOTER -->
-  <footer class="site-footer">
-    <div class="container">
-      <div class="footer-grid">
-        <div class="footer-brand">
-          <a href="#hero" class="wordmark disp" aria-label="BTWklaar, naar boven">
-            <span id="footer-brand-word">BTWklaar</span><span class="wordmark-dot">.</span>
-          </a>
-          <p class="footer-tagline" id="footer-tagline">Je facturen erin. Klaar.</p>
-          <p class="footer-madeby mono" id="footer-madeby">Gemaakt door Gabz in Groningen, NL</p>
-          <a class="footer-gh" href="#" data-soon aria-label="GitHub">
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
-            <span>GitHub</span>
-            <span class="soon-chip mono" id="soon-chip-gh" aria-hidden="true">Beschikbaar bij lancering</span>
-          </a>
+        <div class="k-input">
+          <div class="k-input-field" style="color:rgba(244,244,248,.3)">Ask anything about your BTW...</div>
+          <button class="k-send" aria-label="Send"><svg viewBox="0 0 16 16"><path d="M14 8L2 2l2 6-2 6 12-6z"/></svg></button>
         </div>
-        <nav aria-label="Footer links">
-          <h3 class="footer-h mono" id="footer-links-h">Links</h3>
-          <ul class="footer-list" id="footer-links"><!-- rendered from content.js --></ul>
-        </nav>
-        <div>
-          <h3 class="footer-h mono" id="footer-legal-h">Legal</h3>
-          <ul class="footer-list" id="footer-legal"><!-- rendered from content.js --></ul>
-        </div>
-      </div>
-      <div class="footer-fine">
-        <p><strong id="footer-tax-title">Belasting-disclaimer.</strong> <span id="footer-tax"></span></p>
-        <p><strong id="footer-data-title">Data.</strong> <span id="footer-data"></span></p>
-      </div>
-      <div class="footer-bar mono">
-        <span id="footer-bar-left">© 2026 BTWklaar. Alle rechten voorbehouden.</span>
-        <span id="footer-bar-right">BTWklaar · Niet verbonden aan de Belastingdienst · Preview-prototype</span>
       </div>
     </div>
-  </footer>
+  </div>
+</section>
 
-  <!-- Copy & data -->
-  <script src="content.js"></script>
-  <!-- GSAP + ScrollTrigger + ScrollTo -->
-  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollToPlugin.min.js"></script>
-  <!-- Page behaviour -->
-  <script src="main.js"></script>
-  <!-- Hero: Three.js ambient field + GSAP load timeline -->
-  <script type="module" src="hero.js"></script>
+<!-- ============ HOW IT WORKS ============ -->
+<section class="how" id="how">
+  <div class="container">
+    <div class="sec-head">
+      <div class="eyebrow reveal">How it works</div>
+      <h2>
+        <span class="title-line"><span>Four steps.</span></span>
+        <span class="title-line"><span>Most of them aren't yours.</span></span>
+      </h2>
+      <p class="sec-big-sub reveal">The AI does the heavy lifting. You just review and file.</p>
+    </div>
+
+    <div class="steps" id="steps">
+      <div class="step-card reveal">
+        <span class="step-num">01</span>
+        <h3>Drop the whole quarter</h3>
+        <p>Drag in all your invoices at once — bulk upload, PDFs or email forwards. No one-by-one, no manual entry.</p>
+        <div class="step-visual"><div class="v-drop"><span class="v-pdf">14 invoices.pdf</span></div></div>
+      </div>
+      <div class="step-card reveal">
+        <span class="step-num">02</span>
+        <h3>AI reads &amp; classifies</h3>
+        <p>14 invoices read, rubriek-tagged and vendor-grouped in ~20 seconds. Smart filters and a double-check pass flag anything unusual.</p>
+        <div class="step-visual"><div class="v-chips">
+          <span class="v-chip">1a<span class="ok">✓</span></span>
+          <span class="v-chip">4a<span class="ok">✓</span></span>
+          <span class="v-chip">5b<span class="ok">✓</span></span>
+        </div></div>
+      </div>
+      <div class="step-card reveal">
+        <span class="step-num">03</span>
+        <h3>Review &amp; ask</h3>
+        <p>A frontier AI model explains every call in plain language and learns your business over time — fewer questions, fewer errors, each quarter.</p>
+        <div class="step-visual"><div class="v-chat">
+          <span class="v-q">Why 4a?</span>
+          <span class="v-a">US vendor, no VAT → reverse charge</span>
+        </div></div>
+      </div>
+      <div class="step-card reveal">
+        <span class="step-num">04</span>
+        <h3>Copy into the portal</h3>
+        <p>The one manual step: 9 boxes in Mijn Belastingdienst Zakelijk. The simulator mirrors it field for field — copy across, you can't get lost.</p>
+        <div class="step-visual"><div class="v-win">
+          <span class="v-w"></span><span class="v-val">€46,20</span><span class="v-w"></span>
+        </div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ THE ENGINE ============ -->
+<section class="engine" id="engine">
+  <div class="container">
+    <div class="sec-head">
+      <div class="eyebrow reveal">The engine</div>
+      <h2>
+        <span class="title-line"><span>Watch the AI</span></span>
+        <span class="title-line"><span>read an invoice.</span></span>
+      </h2>
+      <p class="sec-big-sub reveal">A real US invoice — reverse-charged and currency-converted. Every field, classified and explained.</p>
+    </div>
+
+    <div class="engine-stage">
+      <div class="invoice reveal" id="invoice">
+        <div class="inv-head">INVOICE · #VRC-2026-0318</div>
+        <div class="inv-row" data-row="vendor"><span class="l">From</span><span>Vercel Inc. · San Francisco, CA</span></div>
+        <div class="inv-row"><span class="l">To</span><span>Jens de Vries · Amsterdam, NL</span></div>
+        <div class="inv-row"><span class="l">Date</span><span>2026-03-18</span></div>
+        <div class="inv-row" data-row="amount"><span class="l">Subtotal</span><span>$20.00 USD</span></div>
+        <div class="inv-row" data-row="vat"><span class="l">VAT</span><span>$0.00 — not charged</span></div>
+        <div class="inv-row"><span class="l">Total</span><span>$20.00 USD</span></div>
+        <div class="inv-foot">Payment processed via card ending 4242</div>
+      </div>
+
+      <div class="tips">
+        <div class="tip" data-tip="1"><b>Vendor outside EU</b><br><span class="mono">→ reverse charge applies</span></div>
+        <div class="tip" data-tip="2"><b>$20.00 USD converted</b><br><span class="mono">→ €18,40 (×0.92)</span></div>
+        <div class="tip" data-tip="3"><b>No VAT charged</b><br><span class="mono">→ you self-assess 21% = €3,86</span></div>
+        <div class="result-card" id="resultCard">
+          <div class="rt"><span class="result-tick"><svg viewBox="0 0 12 12"><path d="M2 6.5 4.8 9 10 3.2"/></svg></span>Classified · Rubriek 4a</div>
+          <div class="rd">reverse charge · €18,40 + €3,86 BTW<br><span class="g">appears in 4a and 5b — nets to zero. Done.</span></div>
+        </div>
+        <button class="replay" id="replayBtn" data-hover>↻ Replay</button>
+      </div>
+    </div>
+
+    <p class="engine-close reveal">Every invoice, explained like this. You see the reasoning — not just the result.</p>
+  </div>
+</section>
+
+<!-- ============ FEATURE STRIP ============ -->
+<section class="features" id="features">
+  <div class="container">
+    <div class="sec-head">
+      <div class="eyebrow reveal">Everything in one place</div>
+      <h2><span class="title-line"><span>Built for the whole quarter.</span></span></h2>
+      <p class="sec-big-sub reveal">Not just a classifier — the full workflow, from invoice to filed.</p>
+    </div>
+    <div class="feat-grid">
+      <div class="feat-item reveal">
+        <div class="feat-ic"><svg viewBox="0 0 18 18"><path d="M9 2v14M2 9h14"/><circle cx="9" cy="9" r="3"/></svg></div>
+        <h4>AI invoice parsing</h4>
+        <p>Drop a quarter's PDFs at once. The AI reads each one and assigns the correct rubriek — bulk upload, no manual entry.</p>
+      </div>
+      <div class="feat-item reveal">
+        <div class="feat-ic"><svg viewBox="0 0 18 18"><path d="M2 14l4-5 3 3 5-7"/><path d="M2 16h14"/></svg></div>
+        <h4>Dashboard with alerts</h4>
+        <p>Quarterly KPIs, trends, and what you owe — at a glance. Flags reverse-charge mismatches and unusual invoices before you file.</p>
+      </div>
+      <div class="feat-item reveal">
+        <div class="feat-ic"><svg viewBox="0 0 18 18"><path d="M3 4h12M5 9h8M7 14h4"/></svg></div>
+        <h4>Filters &amp; invoice count</h4>
+        <p>Filter by rubriek, quarter, vendor, or type. See exactly how many invoices are in, classified, and ready — no surprises at the deadline.</p>
+      </div>
+      <div class="feat-item reveal">
+        <div class="feat-ic"><svg viewBox="0 0 18 18"><rect x="2" y="3" width="14" height="12" rx="1.5"/><path d="M2 7h14M6 11h6"/></svg></div>
+        <h4>Simulator = the real form</h4>
+        <p>Same field order, same rubriek structure as Mijn Belastingdienst Zakelijk — just clearer, with explanations and copy buttons per field.</p>
+      </div>
+      <div class="feat-item reveal">
+        <div class="feat-ic"><svg viewBox="0 0 18 18"><path d="M9 2a4 4 0 0 0-4 4v3l-1.5 2.5h11L13 9V6a4 4 0 0 0-4-4z"/><path d="M7.5 14a1.5 1.5 0 0 0 3 0"/></svg></div>
+        <h4>Deadline reminders</h4>
+        <p>The quarter sneaks up on everyone. A nudge before the BTW deadline means no more last-evening panic.</p>
+      </div>
+      <div class="feat-item reveal">
+        <div class="feat-ic"><svg viewBox="0 0 18 18"><path d="M3 9l4 4 8-9"/></svg></div>
+        <h4>You file, you control</h4>
+        <p>BTW Helper prepares every number. You copy them into the portal under your own DigiD. Nothing gets submitted without you.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SAVINGS ============ -->
+<section class="savings" id="savings">
+  <div class="container">
+    <div class="sec-head">
+      <div class="eyebrow reveal">What you get back</div>
+      <h2><span class="title-line"><span>Faster. Cheaper. In control.</span></span></h2>
+      <p class="sec-big-sub reveal">The AI does the sorting and the math. You do the deciding.</p>
+    </div>
+
+    <div class="stat-grid">
+      <div class="stat-card reveal">
+        <div class="stat-big"><span id="statTime">180</span><span class="unit">min</span></div>
+        <div class="mini-bars" id="barsTime">
+          <i style="height:100%"></i><i style="height:78%"></i><i style="height:52%"></i><i style="height:30%"></i><i style="height:14%" class="gr"></i><i style="height:7%" class="gr"></i>
+        </div>
+        <div class="stat-check"><svg viewBox="0 0 16 16"><path d="M3 8.5 6.5 12 13 4"/></svg>Filing time cut from hours to minutes</div>
+        <div class="stat-sub2">One quick review. One click to copy. Done.</div>
+      </div>
+
+      <div class="stat-card reveal">
+        <div class="stat-big is-green"><span id="statAcc">0</span><span class="unit">%</span></div>
+        <div class="mini-bars" id="barsAcc">
+          <i style="height:90%"></i><i style="height:96%"></i><i style="height:88%"></i><i style="height:100%"></i><i style="height:94%" class="gr"></i><i style="height:98%" class="gr"></i>
+        </div>
+        <div class="stat-check"><svg viewBox="0 0 16 16"><path d="M3 8.5 6.5 12 13 4"/></svg>Guesswork removed from every classification</div>
+        <div class="stat-sub2">The AI shows its reasoning. You confirm, then file.</div>
+      </div>
+
+      <div class="stat-card reveal">
+        <div class="stat-big"><span id="statLang">3</span><span class="unit">languages</span></div>
+        <div class="lang-flags" style="margin-top:14px">
+          <span class="lang-flag" data-hover>NL</span>
+          <span class="lang-flag" data-hover>EN</span>
+          <span class="lang-flag" data-hover>ES</span>
+        </div>
+        <div class="stat-check"><svg viewBox="0 0 16 16"><path d="M3 8.5 6.5 12 13 4"/></svg>Every rubriek explained in plain language</div>
+        <div class="stat-sub2">Reverse charge, ICP, voorbelasting — no jargon.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ COMPARISON ============ -->
+<section class="compare" id="compare">
+  <div class="container">
+    <div class="sec-head">
+      <div class="eyebrow reveal">Where BTW Helper fits</div>
+      <h2>
+        <span class="title-line"><span>One job.</span></span>
+        <span class="title-line"><span>Done properly.</span></span>
+      </h2>
+      <p class="sec-big-sub reveal">A full bookkeeping suite does everything — and asks you to become a bookkeeper to use it. A spreadsheet does nothing until you build it. BTW Helper does exactly one thing: your BTW, done right.</p>
+    </div>
+    <div class="cmp-wrap reveal">
+      <table class="cmp">
+        <thead>
+          <tr>
+            <th></th>
+            <th class="us">BTW Helper</th>
+            <th>Full bookkeeping suite</th>
+            <th>Spreadsheet</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><th>Built for</th><td class="us">BTW filing, end to end</td><td>Running your whole admin</td><td>Whatever you set up yourself</td></tr>
+          <tr><th>Learning curve</th><td class="us">Minutes</td><td>Steep — it's a full ledger</td><td>Steep &amp; error-prone</td></tr>
+          <tr><th>AI that explains every call</th><td class="us yes">Yes</td><td class="no">No</td><td class="no">No</td></tr>
+          <tr><th>Looks like the official form</th><td class="us yes">Yes</td><td class="no">No</td><td class="no">No</td></tr>
+          <tr><th>Plain language · NL/EN/ES</th><td class="us yes">Yes</td><td>Partly</td><td class="no">No</td></tr>
+          <tr><th>No invoice caps</th><td class="us yes">Yes</td><td class="no">Priced by volume</td><td>Yes</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="cmp-scroll-hint">&larr; Swipe to see all columns &rarr;</p>
+    <p class="cmp-close reveal">BTW Helper isn't trying to replace your whole admin. It does one job — your BTW — better than a tool built for everything, and clearer than a spreadsheet built for nothing. And at year-end, it hands you a clean export of everything your accountant needs for your income-tax filing.</p>
+  </div>
+</section>
+
+<!-- ============ FOUNDER ============ -->
+<section class="founder" id="founder">
+  <div class="container">
+    <div class="founder-grid reveal">
+      <img class="founder-photo" src="data:image/jpeg;base64,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" alt="Gabz, founder of BTW Helper">
+      <div class="founder-text">
+        <div class="hi">Hi, I'm Gabz.</div>
+        <p>I run my own business in the Netherlands, and for years the BTW aangifte was the part of every quarter I dreaded most — an afternoon lost to sorting invoices, second-guessing rubrieken, and hoping I'd read the rules right.</p>
+        <p>So I built the tool I wished existed. It reads the invoices, explains every classification, and lays the numbers out exactly the way the Belastingdienst form expects them. The dread is gone — now it's a few minutes, and I actually trust the result.</p>
+        <p>It works for me, every quarter. I built it so it works for you too.</p>
+        <div class="sign">— Gabz</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PRICING ============ -->
+<section class="pricing" id="pricing">
+  <div class="container">
+    <div class="sec-head" style="margin-left:auto;margin-right:auto;text-align:center;max-width:640px">
+      <div class="eyebrow reveal" style="justify-content:center">Pricing</div>
+      <h2><span class="title-line"><span>One job, done right.</span></span></h2>
+      <p class="sec-big-sub reveal">No invoice caps, no per-filing fees. Pick the plan that matches how much you want the AI to do for you.</p>
+    </div>
+
+    <div class="launch-note reveal">Rates will increase soon &mdash; lock in today's price.</div>
+
+    <div class="plans">
+      <!-- STARTER -->
+      <div class="plan reveal">
+        <div class="plan-label">Start here</div>
+        <div class="plan-name">Starter</div>
+        <div class="plan-target">Ideal for freelancers and startups handling their own BTW.</div>
+        <div class="plan-price-block">
+          <div class="plan-price">&euro;8<small>/mo</small></div>
+        </div>
+        <ul class="plan-feats">
+          <li><svg viewBox="0 0 16 16"><path d="M3 8.5 6.5 12 13 4"/></svg>Unlimited invoice uploads &amp; AI classification</li>
+          <li><svg viewBox="0 0 16 16"><path d="M3 8.5 6.5 12 13 4"/></svg>Dashboard, simulator, document library</li>
+          <li><svg viewBox="0 0 16 16"><path d="M3 8.5 6.5 12 13 4"/></svg>AI assistant &mdash; ask anything, in your language</li>
+          <li class="dim"><svg viewBox="0 0 16 16"><path d="M3 8.5 6.5 12 13 4"/></svg>AI learns your business</li>
+          <li class="dim"><svg viewBox="0 0 16 16"><path d="M3 8.5 6.5 12 13 4"/></svg>Multi-quarter history &amp; trends</li>
+        </ul>
+        <a href="#" class="plan-cta ghost" data-hover>Get Starter</a>
+      </div>
+
+      <!-- PRO -->
+      <div class="plan feat reveal">
+        <div class="plan-badge">Most popular</div>
+        <div class="plan-label">Every quarter</div>
+        <div class="plan-name">Pro</div>
+        <div class="plan-target">For entrepreneurs and startups who file every quarter and want the AI to improve with use.</div>
+        <div class="plan-price-block">
+          <div class="plan-price">&euro;18<small>/mo</small></div>
+        </div>
+        <ul class="plan-feats">
+          <li><svg viewBox="0 0 16 16"><path d="M3 8.5 6.5 12 13 4"/></svg>Everything in Starter</li>
+          <li><svg viewBox="0 0 16 16"><path d="M3 8.5 6.5 12 13 4"/></svg><span><b style="color:var(--white);display:block">AI learns your business</b><span class="feat-desc">Vendor recognition, auto-classification</span></span></li>
+          <li><svg viewBox="0 0 16 16"><path d="M3 8.5 6.5 12 13 4"/></svg>Full multi-quarter dashboard &amp; trends</li>
+          <li class="dim"><svg viewBox="0 0 16 16"><path d="M3 8.5 6.5 12 13 4"/></svg>Accountant export bundle</li>
+          <li class="dim"><svg viewBox="0 0 16 16"><path d="M3 8.5 6.5 12 13 4"/></svg>Pre-filing completeness check</li>
+        </ul>
+        <a href="#" class="plan-cta primary" data-hover>Get Pro</a>
+      </div>
+
+      <!-- STUDIO -->
+      <div class="plan reveal">
+        <div class="plan-label">Power user</div>
+        <div class="plan-name">Studio</div>
+        <div class="plan-target">For power users who want everything organized and accountant-ready at year-end.</div>
+        <div class="plan-price-block">
+          <div class="plan-price">&euro;27<small>/mo</small></div>
+        </div>
+        <ul class="plan-feats">
+          <li><svg viewBox="0 0 16 16"><path d="M3 8.5 6.5 12 13 4"/></svg>Everything in Pro</li>
+          <li><svg viewBox="0 0 16 16"><path d="M3 8.5 6.5 12 13 4"/></svg><span><b style="color:var(--white);display:block">Accountant Export Bundle</b><span class="feat-desc">Summary PDF, transaction CSV &amp; invoices, zipped</span></span></li>
+          <li><svg viewBox="0 0 16 16"><path d="M3 8.5 6.5 12 13 4"/></svg><span><b style="color:var(--white);display:block">Annual Report</b><span class="feat-desc">Four quarters aggregated for income-tax prep</span></span></li>
+          <li><svg viewBox="0 0 16 16"><path d="M3 8.5 6.5 12 13 4"/></svg><span><b style="color:var(--white);display:block">Completeness Check</b><span class="feat-desc">Upload bank CSV once, we flag missing invoices</span></span></li>
+        </ul>
+        <a href="#" class="plan-cta ghost" data-hover>Get Studio</a>
+      </div>
+    </div>
+
+    <p class="vat-note reveal">All prices excl. VAT. VAT may apply depending on your situation.</p>
+
+    <div class="pricing-trust reveal">
+      <div class="row"><svg viewBox="0 0 16 16"><path d="M3 8.5 6.5 12 13 4"/></svg>No invoice caps on any plan &mdash; upload as many as your quarter has.</div>
+      <div class="row"><svg viewBox="0 0 16 16"><path d="M3 8.5 6.5 12 13 4"/></svg>No bank connection. BTW Helper works from your invoices.</div>
+      <div class="row"><svg viewBox="0 0 16 16"><path d="M3 8.5 6.5 12 13 4"/></svg>No auto-filing. You copy, you submit, you stay in control.</div>
+      <div class="row"><svg viewBox="0 0 16 16"><path d="M3 8.5 6.5 12 13 4"/></svg>Cancel anytime &mdash; account goes read-only, nothing gets deleted.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FAQ ============ -->
+<section class="faq" id="faq">
+  <div class="container">
+    <div class="sec-head">
+      <div class="eyebrow reveal">Questions</div>
+      <h2><span class="title-line"><span>Good questions.</span></span></h2>
+    </div>
+    <div class="faq-list">
+      <div class="faq-item reveal">
+        <div class="faq-q" data-hover><span><span class="faq-tag">Clarity</span>I don't have a fiscal background. Will I understand it?</span><span class="x">+</span></div>
+        <div class="faq-a"><div class="faq-a-inner">That's the whole point. Every rubriek and every field comes with a plain-language explanation &mdash; what it means, and why your invoice goes there. Available in Dutch, English and Spanish. You don't need to know the tax code; the AI walks you through it.</div></div>
+      </div>
+      <div class="faq-item reveal">
+        <div class="faq-q" data-hover><span><span class="faq-tag">Control</span>Does BTW Helper file my return for me?</span><span class="x">+</span></div>
+        <div class="faq-a"><div class="faq-a-inner">No &mdash; by design. BTW Helper calculates every number and lays it out ready to enter into Mijn Belastingdienst Zakelijk. You paste the figures yourself, under your own DigiD. No third-party authorization, no business verification step &mdash; you stay in control of what gets submitted, and it takes about two minutes.</div></div>
+      </div>
+      <div class="faq-item reveal">
+        <div class="faq-q" data-hover><span><span class="faq-tag">Accuracy</span>How does it handle foreign invoices and reverse charge?</span><span class="x">+</span></div>
+        <div class="faq-a"><div class="faq-a-inner">Automatically. An invoice from a non-EU supplier with no VAT is converted to euro and self-assessed at 21% &mdash; rubriek 4a. EU B2B services map to the right rubriek too. The AI applies the rule and shows you the math for every line, so you can confirm rather than guess.</div></div>
+      </div>
+      <div class="faq-item reveal">
+        <div class="faq-q" data-hover><span><span class="faq-tag">Privacy</span>What happens to my invoice data?</span><span class="x">+</span></div>
+        <div class="faq-a"><div class="faq-a-inner">Before you mark a quarter as filed, we prompt you to download your full records &mdash; your legal 7-year archive, saved to your own drive. After filing, we delete the invoice files from our storage. Your dashboard figures stay, but we don't hold onto your financial documents indefinitely.</div></div>
+      </div>
+      <div class="faq-item reveal">
+        <div class="faq-q" data-hover><span><span class="faq-tag">Scope</span>Can I use this instead of full bookkeeping software?</span><span class="x">+</span></div>
+        <div class="faq-a"><div class="faq-a-inner">If you don't need a full ledger &mdash; client invoicing, payroll, multi-year accounts &mdash; yes. BTW Helper is built for one eenmanszaak that just needs its BTW done right, without the overhead of a full accounting suite. At year-end it also exports everything your accountant needs for your income-tax filing.</div></div>
+      </div>
+      <div class="faq-item reveal">
+        <div class="faq-q" data-hover><span><span class="faq-tag">Trust</span>How accurate is the AI, really?</span><span class="x">+</span></div>
+        <div class="faq-a"><div class="faq-a-inner">It's built on a frontier AI model and shows its reasoning on every classification &mdash; nothing is a black box. A double-check pass flags anything unusual for your review, and you confirm before anything is filed. The AI does the heavy lifting; the final call is always yours.</div></div>
+      </div>
+      <div class="faq-item reveal">
+        <div class="faq-q" data-hover><span><span class="faq-tag">Commitment</span>Can I cancel? Do I get a refund?</span><span class="x">+</span></div>
+        <div class="faq-a"><div class="faq-a-inner">Cancel anytime &mdash; you keep access through the end of your current billing period, then your account goes read-only. Your dashboard, history and exports stay available; nothing gets deleted. Monthly plans aren't refunded; if we offer an annual plan, it comes with a 14-day money-back window.</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FINAL CTA ============ -->
+<section class="final" id="final">
+  <div class="container">
+    <h2 class="reveal">Admin isn't your job.<br><span class="out">Get back to it.</span></h2>
+    <p class="reveal">Drop your invoices. The AI does the rest. You stay in control.</p>
+    <div class="cta-row reveal">
+      <a href="#pricing" class="btn btn-primary" data-hover>See plans</a>
+      <a href="#how" class="btn btn-ghost" data-hover>See how it works</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <a href="#" class="wordmark">BTW<span> Helper</span>.</a>
+        <p>Drop your invoices. The AI reads them, classifies every rubriek, and gets your BTW return ready to file.</p>
+      </div>
+      <div class="foot-col">
+        <h4>Product</h4>
+        <ul>
+          <li><a href="#problem" data-hover>The problem</a></li>
+          <li><a href="#how" data-hover>How it works</a></li>
+          <li><a href="#pricing" data-hover>Pricing</a></li>
+          <li><a href="#faq" data-hover>FAQ</a></li>
+          <li><a href="mailto:hello@btwklaar.nl" data-hover>Contact</a></li>
+        </ul>
+      </div>
+      <div class="foot-col">
+        <h4>Legal</h4>
+        <ul>
+          <li><span class="foot-soon" data-hover>Terms of Service<span class="soon-chip">Available at launch</span></span></li>
+          <li><span class="foot-soon" data-hover>Privacy Policy<span class="soon-chip">Available at launch</span></span></li>
+          <li><span class="foot-soon" data-hover>Cookie Policy<span class="soon-chip">Available at launch</span></span></li>
+          <li><span class="foot-soon" data-hover>Disclaimer<span class="soon-chip">Available at launch</span></span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 BTW Helper. All rights reserved.</span>
+      <span>BTW Helper · Not affiliated with the Belastingdienst · Preview prototype</span>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+/* ---------- mobile nav burger ---------- */
+(function(){
+  const burger=document.getElementById('navBurger');
+  const panel=document.getElementById('navMobilePanel');
+  if(!burger||!panel)return;
+  function close(){
+    burger.classList.remove('open');
+    panel.classList.remove('open');
+    burger.setAttribute('aria-expanded','false');
+  }
+  burger.addEventListener('click',()=>{
+    const open=burger.classList.toggle('open');
+    panel.classList.toggle('open',open);
+    burger.setAttribute('aria-expanded',open);
+  });
+  panel.querySelectorAll('a').forEach(a=>a.addEventListener('click',close));
+  document.addEventListener('keydown',e=>{if(e.key==='Escape')close();});
+})();
+
+/* ---------- AI chat auto-animate ---------- */
+(function(){
+  const msgs=document.querySelectorAll('#kmsgs .k-msg');
+  if(!msgs.length)return;
+  let i=0;
+  function next(){
+    if(i>=msgs.length)return;
+    const m=msgs[i];
+    if(window.gsap){
+      gsap.to(m,{opacity:1,y:0,duration:.45,ease:'power2.out'});
+    }else{
+      m.style.opacity=1;m.style.transform='none';
+    }
+    i++;
+    if(i<msgs.length) setTimeout(next, i%2===0?1600:900);
+  }
+  if(window.ScrollTrigger){
+    ScrollTrigger.create({trigger:'#kmsgs',start:'top 75%',once:true,onEnter:()=>setTimeout(next,400)});
+  }else{
+    setTimeout(next,800);
+  }
+})();
+
+document.querySelectorAll('.faq-q').forEach(q=>{
+  q.addEventListener('click',()=>{
+    const item=q.closest('.faq-item');
+    const ans=item.querySelector('.faq-a');
+    const inner=item.querySelector('.faq-a-inner');
+    const opening=!item.classList.contains('open');
+    document.querySelectorAll('.faq-item.open').forEach(o=>{
+      if(o!==item){
+        o.classList.remove('open');
+        const a=o.querySelector('.faq-a');
+        if(window.gsap)gsap.to(a,{height:0,duration:.35,ease:'power2.inOut'});
+        else a.style.height='0px';
+      }
+    });
+    item.classList.toggle('open',opening);
+    if(window.gsap){
+      gsap.to(ans,{height:opening?inner.offsetHeight:0,duration:.4,ease:'power2.inOut'});
+    }else{
+      ans.style.height=opening?inner.offsetHeight+'px':'0px';
+    }
+  });
+});
+
+const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* duplicate ticker content for seamless loop */
+const tt=document.getElementById('tickerTrack');
+tt.innerHTML += tt.innerHTML;
+
+/* ---------- particles ---------- */
+if(!reduced){
+  const cv=document.getElementById('field'),ctx=cv.getContext('2d');
+  let W,H,pts=[];
+  function size(){const p=cv.parentElement;W=cv.width=(p.offsetWidth||innerWidth)*devicePixelRatio;H=cv.height=(p.offsetHeight||innerHeight)*devicePixelRatio}
+  size();addEventListener('resize',size);
+  for(let i=0;i<140;i++)pts.push({x:Math.random(),y:Math.random(),s:Math.random()*1.8+.6,v:Math.random()*.0005+.00015,o:Math.random()*.6+.25});
+  let mx=.5,my=.5,run=true;
+  addEventListener('mousemove',e=>{mx=e.clientX/innerWidth;my=e.clientY/innerHeight});
+  document.addEventListener('visibilitychange',()=>run=!document.hidden);
+  (function draw(){requestAnimationFrame(draw);if(!run)return;
+    ctx.clearRect(0,0,W,H);
+    for(const p of pts){
+      p.y-=p.v;if(p.y<0)p.y=1;
+      const dx=(mx-p.x)*16,dy=(my-p.y)*16;
+      ctx.beginPath();ctx.arc(p.x*W+dx*p.s,p.y*H+dy*p.s,p.s*devicePixelRatio,0,7);
+      ctx.fillStyle=`rgba(${p.s>1.2?'167,139,250':'109,109,255'},${p.o})`;ctx.fill();
+    }})();
+}
+
+/* ---------- appshot mouse tilt ---------- */
+if(!reduced && matchMedia('(pointer:fine)').matches && window.gsap){
+  const shot=document.querySelector('.appshot');
+  const qx=gsap.quickTo(shot,'rotationY',{duration:.6,ease:'power3'});
+  const qy=gsap.quickTo(shot,'rotationX',{duration:.6,ease:'power3'});
+  gsap.set(shot,{transformPerspective:1100,rotationY:-5,rotationX:2});
+  const hero=document.querySelector('.hero');
+  hero.addEventListener('mousemove',e=>{
+    const r=hero.getBoundingClientRect();
+    const nx=(e.clientX-r.left)/r.width-.5, ny=(e.clientY-r.top)/r.height-.5;
+    qx(nx*-10); qy(ny*8);
+  });
+  hero.addEventListener('mouseleave',()=>{qx(-5);qy(2)});
+}
+
+/* ---------- cursor ---------- */
+if(!reduced && matchMedia('(pointer:fine)').matches){
+  const dot=document.getElementById('cdot'),ring=document.getElementById('cring');
+  const dx=gsap.quickTo(dot,'x',{duration:.08}),dy=gsap.quickTo(dot,'y',{duration:.08});
+  const rx=gsap.quickTo(ring,'x',{duration:.32,ease:'power3'}),ry=gsap.quickTo(ring,'y',{duration:.32,ease:'power3'});
+  gsap.set([dot,ring],{xPercent:-50,yPercent:-50});
+  addEventListener('mousemove',e=>{dx(e.clientX);dy(e.clientY);rx(e.clientX);ry(e.clientY)});
+  document.querySelectorAll('a,button,[data-hover]').forEach(el=>{
+    el.addEventListener('mouseenter',()=>ring.classList.add('grow'));
+    el.addEventListener('mouseleave',()=>ring.classList.remove('grow'));
+  });
+}
+
+/* ---------- GSAP ---------- */
+if(!reduced && window.gsap){
+  gsap.registerPlugin(ScrollTrigger);
+
+  /* masked title lines */
+  gsap.utils.toArray('.title-line span').forEach((el,i)=>{
+    gsap.to(el,{y:0,duration:1,ease:'power3.out',
+      scrollTrigger:{trigger:el,start:'top 90%',once:true},delay:i%2*.12});
+  });
+
+  gsap.utils.toArray('.reveal').forEach((el,i)=>{
+    gsap.to(el,{opacity:1,y:0,duration:.85,ease:'power3.out',
+      scrollTrigger:{trigger:el,start:'top 88%',once:true},
+      delay:(el.closest('.hero')? i*.07 : 0)});
+  });
+
+  /* problem chat typewriter */
+  (function(){
+    const bubbles = document.querySelectorAll('.chat-bubble.tw');
+    if(!bubbles.length) return;
+    function typewrite(el, text, done){
+      el.textContent = '';
+      el.style.opacity = 1;
+      el.style.transform = 'none';
+      const cursor = document.createElement('span');
+      cursor.className = 'tw-cursor';
+      el.appendChild(cursor);
+      let i = 0;
+      const speed = 38; // ms per char
+      function tick(){
+        if(i < text.length){
+          el.insertBefore(document.createTextNode(text[i]), cursor);
+          i++;
+          setTimeout(tick, speed);
+        } else {
+          setTimeout(()=>{ cursor.remove(); if(done) done(); }, 500);
+        }
+      }
+      tick();
+    }
+    function runAll(idx){
+      if(idx >= bubbles.length) return;
+      const b = bubbles[idx];
+      const text = b.dataset.text || '';
+      typewrite(b, text, ()=> setTimeout(()=>runAll(idx+1), 300));
+    }
+    if(window.ScrollTrigger){
+      ScrollTrigger.create({trigger:'.problem-closer',start:'top 75%',once:true,
+        onEnter:()=>setTimeout(()=>runAll(0),400)});
+    } else {
+      setTimeout(()=>runAll(0), 800);
+    }
+  })();
+
+  /* chat bubbles pop in sequence (old gsap fallback removed) */
+
+  /* dashboard number */
+  const num={v:0};
+  gsap.to(num,{v:2604.57,duration:1.8,ease:'power2.inOut',delay:1,
+    onUpdate:()=>{document.getElementById('appNum').textContent='€ '+num.v.toLocaleString('nl-NL',{minimumFractionDigits:2,maximumFractionDigits:2})}});
+
+  /* steps connecting line */
+  ScrollTrigger.create({trigger:'#steps',start:'top 75%',once:true,
+    onEnter:()=>document.getElementById('steps').classList.add('drawn')});
+
+  /* ===== engine autoplay ===== */
+  function engineTL(){
+    const rows={vendor:document.querySelector('[data-row="vendor"]'),
+                amount:document.querySelector('[data-row="amount"]'),
+                vat:document.querySelector('[data-row="vat"]')};
+    const tips=[1,2,3].map(n=>document.querySelector(`[data-tip="${n}"]`));
+    const result=document.getElementById('resultCard');
+    /* reset */
+    Object.values(rows).forEach(r=>r.classList.remove('hl'));
+    gsap.set(tips,{opacity:0,x:16});
+    gsap.set(result,{opacity:0,y:14});
+
+    const tl=gsap.timeline();
+    tl.add(()=>rows.vendor.classList.add('hl'))
+      .to(tips[0],{opacity:1,x:0,duration:.5,ease:'power3.out'},'.2')
+      .add(()=>rows.amount.classList.add('hl'),'+=.8')
+      .to(tips[1],{opacity:1,x:0,duration:.5,ease:'power3.out'},'-=.1')
+      .add(()=>rows.vat.classList.add('hl'),'+=.8')
+      .to(tips[2],{opacity:1,x:0,duration:.5,ease:'power3.out'},'-=.1')
+      .to(result,{opacity:1,y:0,duration:.6,ease:'back.out(1.4)'},'+=.7');
+    return tl;
+  }
+  ScrollTrigger.create({trigger:'#engine',start:'top 60%',once:true,onEnter:engineTL});
+  document.getElementById('replayBtn').addEventListener('click',engineTL);
+
+  /* stat counters */
+  const t={v:180};
+  gsap.to(t,{v:10,duration:2,ease:'power2.inOut',
+    scrollTrigger:{trigger:'#statTime',start:'top 80%',once:true},
+    onUpdate:()=>{document.getElementById('statTime').textContent=Math.round(t.v)}});
+  const a={v:0};
+  gsap.to(a,{v:100,duration:2,ease:'power2.inOut',
+    scrollTrigger:{trigger:'#statAcc',start:'top 80%',once:true},
+    onUpdate:()=>{document.getElementById('statAcc').textContent=Math.round(a.v)}});
+
+  /* mini bar charts grow */
+  ['#barsTime','#barsAcc'].forEach(sel=>{
+    gsap.to(sel+' i',{scaleY:1,duration:.7,ease:'power3.out',stagger:.08,
+      scrollTrigger:{trigger:sel,start:'top 85%',once:true}});
+  });
+}else{
+  document.getElementById('appNum').textContent='€ 2.604,57';
+  document.getElementById('statTime').textContent='10';
+  document.getElementById('statAcc').textContent='100';
+  document.querySelectorAll('.reveal,.chat-bubble,.tip,.result-card').forEach(el=>{
+    el.style.opacity=1;el.style.transform='none';
+    if(el.classList.contains('tw') && el.dataset.text) el.textContent=el.dataset.text;
+  });
+  document.querySelectorAll('.title-line span').forEach(el=>el.style.transform='none');
+  document.querySelectorAll('.mini-bars i').forEach(el=>el.style.transform='scaleY(1)');
+  document.querySelectorAll('.inv-row[data-row]').forEach(el=>el.classList.add('hl'));
+  document.getElementById('steps').classList.add('drawn');
+  document.getElementById('replayBtn').style.display='none';
+}
+</script>
 </body>
 </html>
