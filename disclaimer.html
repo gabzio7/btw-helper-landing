@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Disclaimer — BTW Helper</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --void:#05050a;--void-2:#0c0c18;
+  --indigo:#5B5BF0;--indigo-deep:#3E2BC9;--violet:#a78bfa;
+  --green:#16a34a;--green-glow:#34d399;--red:#fb7185;
+  --white:#f4f4f8;--white-soft:rgba(244,244,248,.72);--white-faint:rgba(244,244,248,.42);
+  --glass:rgba(255,255,255,.045);--glass-line:rgba(255,255,255,.09);
+  --fd:'Space Grotesk',sans-serif;--fb:'Inter',system-ui,sans-serif;--fm:'JetBrains Mono',monospace;
+  --maxw:1320px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;overflow-x:hidden}
+body{background:var(--void);color:var(--white);font-family:var(--fb);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+:focus-visible{outline:2px solid var(--violet);outline-offset:3px;border-radius:4px}
+
+/* nav */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;backdrop-filter:blur(22px);background:rgba(5,5,10,.7);border-bottom:1px solid rgba(255,255,255,.05)}
+.nav-inner{max-width:var(--maxw);margin:0 auto;padding:15px 24px;display:flex;align-items:center;justify-content:space-between;gap:24px}
+.wordmark{font-family:var(--fd);font-weight:700;font-size:19px;color:var(--white);text-decoration:none}
+.wordmark span{color:var(--indigo)}
+.nav-links{display:flex;gap:26px;align-items:center}
+.nav-links a{color:var(--white-soft);text-decoration:none;font-size:14px;font-weight:500;position:relative}
+.nav-links a:not(.nav-cta):not(.nav-dash)::after{content:"";position:absolute;left:0;bottom:-4px;width:100%;height:1.5px;background:var(--violet);transform:scaleX(0);transform-origin:left;transition:transform .3s}
+.nav-links a:not(.nav-cta):not(.nav-dash):hover::after{transform:scaleX(1)}
+.nav-cta{background:var(--indigo);color:#fff;padding:9px 18px;border-radius:100px;font-size:14px;font-weight:600;text-decoration:none;transition:transform .2s,box-shadow .2s}
+.nav-cta:hover{transform:translateY(-1px);box-shadow:0 8px 24px -8px rgba(91,91,240,.7)}
+.nav-lang{display:flex;gap:2px;align-items:center;margin-right:4px}
+.lang-btn{font-family:var(--fm);font-size:11px;letter-spacing:.08em;color:var(--white-faint);background:none;border:none;padding:5px 8px;border-radius:6px;cursor:pointer;transition:color .2s,background .2s}
+.lang-btn:hover{color:var(--white)}
+.lang-btn.active{color:var(--violet);background:rgba(91,91,240,.12);font-weight:500}
+.lang-sep{color:rgba(255,255,255,.15);font-size:10px;user-select:none}
+.nav-dash{color:var(--white-soft);border:1px solid rgba(255,255,255,.18);padding:9px 18px;border-radius:100px;font-size:14px;font-weight:500;text-decoration:none;transition:border-color .2s,color .2s;background:transparent}
+.nav-dash:hover{border-color:rgba(255,255,255,.4);color:var(--white)}
+.nav-burger{display:none;width:36px;height:36px;border-radius:8px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.04);align-items:center;justify-content:center;flex-direction:column;gap:4px;cursor:pointer}
+.nav-burger span{width:16px;height:1.5px;background:var(--white);transition:transform .3s,opacity .3s}
+.nav-burger.open span:nth-child(1){transform:translateY(5.5px) rotate(45deg)}
+.nav-burger.open span:nth-child(2){opacity:0}
+.nav-burger.open span:nth-child(3){transform:translateY(-5.5px) rotate(-45deg)}
+.nav-mobile-panel{display:none;flex-direction:column;gap:4px;padding:14px 24px 18px;border-top:1px solid rgba(255,255,255,.06);background:rgba(5,5,10,.97)}
+.nav-mobile-panel.open{display:flex}
+.nav-mobile-panel a{color:var(--white-soft);text-decoration:none;font-size:15px;padding:11px 4px;border-bottom:1px solid rgba(255,255,255,.05)}
+.nav-mobile-panel a:last-child{border-bottom:none}
+.nav-mobile-panel a.nav-cta{margin-top:8px;text-align:center;border-radius:100px;background:var(--indigo);color:#fff;font-weight:600;border-bottom:none;padding:12px}
+@media(max-width:780px){
+  .nav-links a:not(.nav-cta){display:none}
+  .nav-links .nav-cta{display:none}
+  .nav-links .nav-dash{display:none}
+  .nav-burger{display:flex}
+}
+
+/* legal content */
+.legal{max-width:760px;margin:0 auto;padding:120px 24px 80px}
+.legal-title{font-family:var(--fd);font-weight:700;font-size:clamp(28px,4vw,40px);color:var(--white);margin-bottom:8px}
+.legal-date{font-size:14px;color:var(--white-faint);margin-bottom:48px}
+.legal h2{font-family:var(--fd);font-weight:600;font-size:20px;color:var(--white);margin:36px 0 12px}
+.legal p{color:var(--white-soft);line-height:1.8;margin-bottom:14px}
+.legal ul{color:var(--white-soft);line-height:1.8;padding-left:20px;margin-bottom:14px}
+.legal ul li{margin-bottom:6px}
+.legal a{color:var(--violet);text-decoration:underline;text-underline-offset:3px}
+.legal a:hover{color:var(--white)}
+
+/* footer */
+.container{max-width:var(--maxw);margin:0 auto;padding:0 24px}
+footer{border-top:1px solid rgba(255,255,255,.05);padding:72px 0 40px;margin-top:80px}
+.foot-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:48px;margin-bottom:48px}
+@media(max-width:720px){.foot-grid{grid-template-columns:1fr;gap:36px}}
+.foot-brand .wordmark{display:inline-block;margin-bottom:14px}
+.foot-brand p{font-size:14px;color:var(--white-soft);max-width:34ch;line-height:1.6;margin-bottom:14px}
+.foot-col h4{font-family:var(--fm);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--white-faint);margin-bottom:16px}
+.foot-col ul{list-style:none;display:flex;flex-direction:column;gap:11px}
+.foot-col a{color:var(--white-soft);text-decoration:none;font-size:14px;transition:color .2s}
+.foot-col a:hover{color:var(--violet)}
+.foot-bottom{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;padding-top:28px;border-top:1px solid rgba(255,255,255,.05);font-family:var(--fm);font-size:11px;color:var(--white-faint)}
+@media(max-width:560px){.foot-bottom{flex-direction:column;align-items:flex-start}}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="/" class="wordmark">BTW<span> Helper</span>.</a>
+    <div class="nav-links">
+      <a href="/#how">How it works</a>
+      <a href="/#features">Features</a>
+      <a href="/#pricing">Pricing</a>
+      <div class="nav-lang">
+        <button class="lang-btn" data-lang="nl">NL</button>
+        <span class="lang-sep">·</span>
+        <button class="lang-btn active" data-lang="en">EN</button>
+        <span class="lang-sep">·</span>
+        <button class="lang-btn" data-lang="es">ES</button>
+      </div>
+      <a href="https://app.btw-helper.nl/login" class="nav-dash">Log in</a>
+      <a href="https://app.btw-helper.nl/signup" class="nav-cta">Get started</a>
+    </div>
+    <button class="nav-burger" id="navBurger" aria-label="Open menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+  <div class="nav-mobile-panel" id="navMobilePanel">
+    <a href="/#how">How it works</a>
+    <a href="/#features">Features</a>
+    <a href="/#pricing">Pricing</a>
+    <a href="/#faq">FAQ</a>
+    <a href="https://app.btw-helper.nl/login">Log in →</a>
+    <a href="https://app.btw-helper.nl/signup" class="nav-cta">Get started</a>
+  </div>
+</nav>
+
+<main class="legal">
+  <h1 class="legal-title">Disclaimer</h1>
+  <p class="legal-date">Effective date: July 1, 2026</p>
+
+  <h2>Not tax advice</h2>
+  <p>BTW Helper is a software tool, not a licensed tax advisor or accountant. The calculations, classifications, and suggestions provided by BTW Helper — including those from The Helper AI assistant — are for informational purposes only and do not constitute legally binding tax advice.</p>
+  <p>You are responsible for verifying all numbers before submitting your BTW aangifte to the Belastingdienst. If you have complex tax situations, consult a qualified Dutch tax advisor (belastingadviseur) or accountant.</p>
+
+  <h2>AI limitations</h2>
+  <p>The Helper uses artificial intelligence to assist with BTW questions. AI can make mistakes. Always double-check AI responses against official Belastingdienst guidelines before acting on them.</p>
+
+  <h2>Accuracy of calculations</h2>
+  <p>While we strive for accuracy, BTW Helper's calculations depend on the data you provide. Incorrect or incomplete invoice data will result in incorrect calculations. BTW Helper is not liable for penalties, corrections, or fines resulting from errors in your BTW return.</p>
+
+  <h2>External links</h2>
+  <p>BTW Helper may link to external websites (e.g. Belastingdienst). We are not responsible for the content or availability of those sites.</p>
+
+  <h2>Governing law</h2>
+  <p>This disclaimer is governed by the laws of the Netherlands.</p>
+
+  <p>Questions? Contact <a href="mailto:hello@btw-helper.nl">hello@btw-helper.nl</a></p>
+</main>
+
+<footer>
+  <div class="container">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <a href="/" class="wordmark">BTW<span> Helper</span>.</a>
+        <p>Drop your invoices. The AI reads them, classifies every rubriek, and gets your BTW return ready to file.</p>
+      </div>
+      <div class="foot-col">
+        <h4>Product</h4>
+        <ul>
+          <li><a href="/#problem">The problem</a></li>
+          <li><a href="/#how">How it works</a></li>
+          <li><a href="/#pricing">Pricing</a></li>
+          <li><a href="/#faq">FAQ</a></li>
+          <li><a href="mailto:hello@btw-helper.nl">Contact</a></li>
+        </ul>
+      </div>
+      <div class="foot-col">
+        <h4>Legal</h4>
+        <ul>
+          <li><a href="/terms.html">Terms of Service</a></li>
+          <li><a href="/privacy.html">Privacy Policy</a></li>
+          <li><a href="/cookies.html">Cookie Policy</a></li>
+          <li><a href="/disclaimer.html">Disclaimer</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 BTW Helper. All rights reserved.</span>
+      <span>BTW Helper · Not affiliated with the Belastingdienst · Preview prototype</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+document.getElementById('navBurger').addEventListener('click', function() {
+  this.classList.toggle('open');
+  document.getElementById('navMobilePanel').classList.toggle('open');
+  this.setAttribute('aria-expanded', this.classList.contains('open'));
+});
+</script>
+</body>
+</html>
